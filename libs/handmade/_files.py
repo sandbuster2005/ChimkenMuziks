@@ -163,7 +163,6 @@ def change_extension(self):
     word = self.ask_list( option )
     if all_numbers( word, len( option ), 1 ):
         confirm = self.ask( "delete original (y/n)?" )
-        #if confirm == "y" :
         new = self.song.rsplit( ".",1 )[ 0 ] + option[ int( word ) ]
         self.external_call(f"ffmpeg -i '{self.song}' '{new}' " , shell = True)
         if confirm == "y":

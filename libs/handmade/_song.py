@@ -1,8 +1,11 @@
 #made by sand
 from random import randint
 from .utils import *
+from .ffiles import *
 import libs.midi2audio as midi2audio
 from os import listdir
+from os.path import isfile
+from libs.tinytag import TinyTag
 
 def init_song( self ):
     #SONG variables
@@ -65,7 +68,10 @@ def play( self ):
     elif self.played[ -1 ] != self.files.index( self.song ):# ajoute a l'historique si la chanson a changé
         self.played.append( self.files.index( self.song ) )
         
-    self.player.set_mrl( self.song )# charge la chanson
+    if ".mid" in self.song :
+        self.player.set_mrl( "appdata/cache/" + self.song.rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )
+    else:
+        self.player.set_mrl( self.song )# charge la chanson
     self.player.play()
     self.suspend( "display" )# affiche
     
@@ -108,20 +114,29 @@ def play_midi(self):
     word = self.ask_list(outs)
     if all_numbers( word, len( outs ), 1 ):
         print("appdata/midi_codec/" + outs[int(word)])
-        self.convert_midi()
+        self.convert_midi(  )
         
-def convert_midi(self,soundmap = ""  , destination = "appdata/cache/midi_cache.wav" ):
+def convert_midi(self,soundmap = ""  , destination = "appdata/cache/" ):
     if soundmap == "":
-        soundmap = self.base_soundmap 
-    fs = midi2audio.FluidSynth(soundmap)
-    song = self.song
-    self.song = destination
-    self.files.append( self.song )
-    fs.midi_to_audio(song ,destination )
+        soundmap = self.base_soundmap
+    destination = destination + self.song.rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav"
+    if not isfile(destination) :
+        fs = midi2audio.FluidSynth(soundmap)
+        fs.midi_to_audio(self.song ,destination )
         
 def default_midi(self):
     choice = listdir( "appdata/midi_codec" )
     word = self.ask_list(choice)
     if all_numbers( word, len(choice) , 1):
         self.base_soundmap = f"appdata/midi_codec/{ choice[ int( word ) ] }"
+        
+def get_metadata(self):
+    tag = TinyTag.get(self.song , image = True)
+    artist = tag.artist
+    image = tag.images.any
+    if image != None :
+        image = image.data
+        write_file("appdata/cache/preview", image , mode = "wb")
+        image = "appdata/cache/preview"
+    self.thumbnail = image
     

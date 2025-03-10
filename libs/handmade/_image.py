@@ -8,6 +8,7 @@ import importlib
 def init_image( self ):
     self.img_mode = "img"
     self.img_script = "appdata.scripts.test"
+    self.thumbnail = None
     self.screen = None
     self.path_to_img = "appdata/image/"# chemin du dosier image
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
@@ -15,10 +16,10 @@ def init_image( self ):
     self.show = 1# affiche ou non l'image selectionné
     
     if "64" in self.sys_architecture:
-        self.img_command = "./libs/x86/jp2a_x86 --fill --color-depth=8"
+        self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
         
     elif "arm" in self.sys_architecture:
-        self.img_command = "./libs/arm/jp2a_arm --fill --color-depth=8"
+        self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
         
     
     
@@ -51,11 +52,20 @@ def display_img( self ):
     les images doit étre dans le dossiers image du programme
     """
     if self.img_mode == "img":
-        if self.img != "":# une image est selectionné
-            self.external_call( [ f"{ self.img_command } { self.img }" ], True )# image selectionné
+        if not ".mid" in self.song:
+            self.get_metadata()
+        
+        if self.thumbnail != None:
+            image = self.thumbnail
+            
+        else:
+            image = self.img
+            
+        if self.img != "" or self.thumbnail != None:# une image est selectionné
+            self.external_call( [ f"{ self.img_command } { image }" ], True )# image selectionné
             print("")
             
-        if self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
+        elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             self.external_call( [ f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }" ], True )# image aléatoire
             print("")
             

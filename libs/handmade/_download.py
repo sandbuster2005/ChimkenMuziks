@@ -23,10 +23,15 @@ def yt_search( self ):
     word = self.ask_list( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])
     
     if all_numbers( word, 10, 1 ):
-        title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&"] , "_")#formatage pour eviter les crash
-        link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
-        print( link ) 
-        self.external_call( [ f"./yt-dlp -x --embed-thumbnail --audio-format mp3 -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
+        option = ["mp3", "m4a"]
+        word = self.ask_list( option )
+        
+        if all_numbers( word, len( option ), 1 ):
+            extension = option[ int( word ) ]
+            title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&"] , "_")#formatage pour eviter les crash
+            link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
+            print( link ) 
+            self.external_call( [ f"./yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
 
 
 def dl_yt_playlist( self ):

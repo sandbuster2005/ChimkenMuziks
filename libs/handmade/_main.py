@@ -176,7 +176,7 @@ def update( self ):
             
             if stop != 0:
                 stop -= 1 
-            if self.img_script != None and stop == 0:
+            if self.img_script != None and stop == 0 and self.img_mode == "script":
                 if int( monotonic() ) % self.Screen.framerate == 0:
                     save()
                     home()
