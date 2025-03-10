@@ -12,7 +12,7 @@ class App:
         self.init_song()
         self.init_display()
         self.init_letter()
-    from libs.handmade._external import external_call
+    from libs.handmade._external import external_call,external_return
     from libs.handmade._display import init_display,out,ask,ask_list,show_list,change_confirmation
     from libs.handmade._sound import init_sound,start_sound,change_sound_manager,get_volume,set_volume,deafen
     from libs.handmade._batterie import init_battery,battery_check,get_battery,get_battery_life

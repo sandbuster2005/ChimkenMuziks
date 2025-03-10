@@ -10,7 +10,7 @@ from libs.tinytag import TinyTag
 def init_song( self ):
     #SONG variables
     self.song = None# son aactuelle
-    self.mode = 0# 0:aleatoire 1:dans'l'ordre
+    self.mode = 1# 1:aleatoire 0:dans'l'ordre
     self.base_soundmap = "appdata/midi_codec/default.sf2"   
         
 def choose_song( self ):

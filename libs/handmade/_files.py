@@ -7,7 +7,7 @@ from .utils import *
 
 
 def init_file( self ):
-    self.path_to_file = r"/home/sand/Musique/musique/"# chemin du dossier musique
+    self.path_to_file = r"/home/sand/Musique/musiqe/"# chemin du dossier musique
     self.dirs = []# liste des dossier dans le chemin indiqué
     self.files = []# chanson chargé
     self.favorite = ""
@@ -90,8 +90,10 @@ def check_adress( self ):
     """
     if not isdir( self.path_to_file ):
         while not isdir( self.path_to_file ):
-            self.path_to_file = self.ask( "enter valid file path: " )
-            
+            try:
+                self.path_to_file = str(self.external_return(["xplr4"]))[2:-3]+"/"
+            except:
+                self.path_to_file = input("chemin du dossier musique: ")
     self.write_param()
     
     
