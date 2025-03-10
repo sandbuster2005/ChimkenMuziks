@@ -4,8 +4,8 @@ from .utils import *
 
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
+    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# commande defini par l'utilisateur ( modifiable )
+    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
     self.tooltips = {
             "h": "pour afficher le menu help",
             "q": "pour quitter le lecteur",
@@ -24,6 +24,7 @@ def init_command( self ):
             "f": "pour mettre un timer ",
             "c": "pour activer/desactiver des dossiers",
             "d": "pour mute/unmute le son",
+            "k": "pour vider la cache",
             "o": "pour selectionner l'instrumental par defaut des .midi",
             "e": "pour changer le message de choix",
             "g": "changer de gestionnaire de volume",
@@ -36,7 +37,7 @@ def init_command( self ):
             "w": "pour remetre les paramètre a 0",
             "z": "pour supprimer/deplacer/renommer un fichier"
             }
-    #abcdefghijlmnopqrstuvwxyz+- :list des commande utilisé de base
+    #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl
     
 def sort_command( self ):

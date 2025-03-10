@@ -3,12 +3,14 @@ from time import sleep,monotonic
 from libs.progress.bar import Bar
 from math import floor,ceil
 from time import sleep,strftime
+from os import listdir
 from .utils import *
+from .ffiles import *
 from .terminal import *
 import libs.vlc as vlc
 import threading
 import platform
-import os 
+import os
 
 def init_main( self ):
     self.sys_os = platform.system().lower()
@@ -386,3 +388,8 @@ def param_center( self ):
                 
 def manager_manager(self):
     pass
+
+def clear_cache(self):
+    for f in listdir("appdata/cache"):
+        rm_file("appdata/cache/" + f)
+    self.display()

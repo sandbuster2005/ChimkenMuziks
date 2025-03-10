@@ -109,7 +109,6 @@ def load_script(self):
     
     if self.img_script != "":
         self.Screen = importlib.import_module(self.img_script).Screen()
-        print(self.Screen)
         
 def screen_mode(self):
     choice = [ "image mode " , "script mode" ]

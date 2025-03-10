@@ -120,7 +120,10 @@ def y_f( self ):
 def z_f( self ):
     self.suspend( "mani_file" )
  
- 
+
+def k_f( self ):
+    self.clear_cache()
+    
 def h_f( self ):
     self.show_list( self.help_menu(), num=False )
 
