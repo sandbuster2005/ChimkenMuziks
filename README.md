@@ -22,6 +22,7 @@ required dependancy:
 - vlc
 - yt-dlp
 - fluidsynth
+- xplr
 - To use alsaaudio :
 - FOR ARCH    : alsa-lib
 - FOR UNBUNTU : libasound2-dev

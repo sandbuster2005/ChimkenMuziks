@@ -91,7 +91,7 @@ def check_adress( self ):
     if not isdir( self.path_to_file ):
         while not isdir( self.path_to_file ):
             try:
-                self.path_to_file = str(self.external_return(["xplr4"]))[2:-3]+"/"
+                self.path_to_file = str(self.external_return(["xplr"],))[2:-3]+"/"
             except:
                 self.path_to_file = input("chemin du dossier musique: ")
     self.write_param()
