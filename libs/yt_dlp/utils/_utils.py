@@ -5034,7 +5034,6 @@ class classproperty:
     def __get__(self, _, cls):
         if self._cache is None:
             print(cls)
-            if cls.__module__=="yt_dlp": cls.__module__ = "libs.yt-dlp"
             return self.func(cls)
         elif cls not in self._cache:
             self._cache[cls] = self.func(cls)

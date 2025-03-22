@@ -30,6 +30,7 @@ class LazyLoadExtractor(metaclass=LazyLoadMetaClass):
     @classproperty
     def real_class(cls):
         if '_real_class' not in cls.__dict__:
+            if cls._module == "yt_dlp" : cls._module = "libs.yt_dlp"
             cls._real_class = getattr(importlib.import_module(cls._module), cls.__name__)
         return cls._real_class
 
