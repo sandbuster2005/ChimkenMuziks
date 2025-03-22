@@ -31,7 +31,7 @@ def yt_search( self ):
             title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&"] , "_")#formatage pour eviter les crash
             link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
             print( link ) 
-            self.external_call( [ f"./yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
+            self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
 
 
 def dl_yt_playlist( self ):
@@ -47,7 +47,7 @@ def dl_yt_playlist( self ):
         for f in listdir( f"{ self.path_to_file }/download" ):
             lenght += 1
             
-        self.external_call( [ f"./yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ self.path_to_file }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
+        self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ self.path_to_file }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
         
         for f in listdir( f"{ self.path_to_file }/download" ):
             new_lenght += 1
