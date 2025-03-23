@@ -2,3 +2,4 @@ appdata/param.txt
 */__pycache__/*
 */cache/*
 !/appdata/cache/static
+update
