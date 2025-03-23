@@ -34,6 +34,53 @@ def str_lowerup(word:str,chrs:[str],mode=0):
     """
     return "".join([word[x]*(1-(word[x].lower() in chrs))+(word[x].lower())*(word[x].lower() in chrs )*(1-mode)+(word[x].upper())*(word[x] in chrs )*(mode) for x in range(len(word))])
 
+def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
+    pos = 0
+    if lenght <= 1 :
+        raise Exception("lenght should be above 1")
+    if not isinstance(word, str):
+        raise Exception("word should be a string")
+    if isinstance(chrs, str):
+        chrs = list(chrs)
+    if not isinstance(chrs, list):
+        raise Exception("chrs should be a list/string")
+    
+    for x in range(len(chrs)):
+        if not isinstance(chrs[x], str):
+            if isinstance(chrs[x], int):
+                chrs[x] = chr(chrs[x])
+            else :
+                raise Exception("inside chrs should be str")
+        
+        
+    
+    while pos+  lenght != len(word):
+        remove = True
+        
+        x = 0
+        while x < lenght and remove == True:
+            if word[pos+x] not in chrs:
+                remove = False
+            x += 1
+        
+        if remove :
+            replace = len(chrs) - 1
+            x = 0
+            
+            for x in range(lenght):
+                replace = min(replace, chrs.index(word[pos + x]))
+                
+            word = word[:pos] + chrs[replace] + word[pos + lenght:]
+            if pos !=0 :
+                pos -= 1
+        
+        else :
+            pos += 1
+    return word
+            
+                
+        
+
 def ask( self, text ):
     """
     cette fonction permet de demander une valeur a l'utilisateur

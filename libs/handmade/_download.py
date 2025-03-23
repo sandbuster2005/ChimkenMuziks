@@ -29,6 +29,8 @@ def yt_search( self ):
         if all_numbers( words, len( option ), 1 ):
             extension = option[ int( words ) ]
             title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
+            title = clear_adjacent(title,["-","_"],2)
+            title = replace(title ,["_"],"\ ")
             link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
             print( link ) 
             self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
