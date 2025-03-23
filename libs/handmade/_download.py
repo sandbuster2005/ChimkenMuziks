@@ -24,11 +24,11 @@ def yt_search( self ):
     
     if all_numbers( word, 10, 1 ):
         option = ["mp3", "m4a"]
-        word = self.ask_list( option )
+        words = self.ask_list( option )
         
-        if all_numbers( word, len( option ), 1 ):
+        if all_numbers( words, len( option ), 1 ):
             extension = option[ int( word ) ]
-            title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&"] , "_")#formatage pour eviter les crash
+            title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
             link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
             print( link ) 
             self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
