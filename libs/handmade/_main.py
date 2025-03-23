@@ -244,6 +244,13 @@ def display( self ):
         print( f"{ time[ 0 ] }:{ time[ 1 ] }   volume: { self.volume }%  " )# heure,volume
             
         print( f"Song: { self.files.index( self.song ) }:{ self.song.rsplit( a, 1 )[ 1 ] }" )# playlist,index,chanson
+        if self.timer != None:
+            save()
+            lup( 2 )
+            right( 20 )
+            out(f" timer :{ self.timer } mins ")
+            load()
+        
     else:
         if self.sound_manager != "base":
             print( f"volume :{self.volume}" )
