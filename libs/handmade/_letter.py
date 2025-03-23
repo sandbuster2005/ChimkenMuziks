@@ -125,5 +125,7 @@ def k_f( self ):
     self.clear_cache()
     
 def h_f( self ):
+    self.search = True
     self.show_list( self.help_menu(), num=False )
+    self.get_input()
 
