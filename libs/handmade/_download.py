@@ -27,7 +27,7 @@ def yt_search( self ):
         words = self.ask_list( option )
         
         if all_numbers( words, len( option ), 1 ):
-            extension = option[ int( word ) ]
+            extension = option[ int( words ) ]
             title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
             link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
             print( link ) 
