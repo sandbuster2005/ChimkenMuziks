@@ -1,3 +1,4 @@
+#!/bin/python
 #made by sand
 class App:
     def __init__( self ):
