@@ -1,5 +1,5 @@
 #made by sand
-def white(x:int=40):
+def white(x:int=60):
     """
     cette fonction passe un nombre x de ligne
     """
