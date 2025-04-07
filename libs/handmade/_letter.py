@@ -27,8 +27,9 @@ def g_f( self ):
 
 
 def i_f( self ):
-    self.suspend( "historic" )
-
+    self.search = True
+    self.historic()
+    self.get_input()
 
 def j_f( self ):
     self.suspend( "select_img" )
