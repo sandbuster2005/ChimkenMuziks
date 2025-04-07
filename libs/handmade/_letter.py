@@ -114,7 +114,7 @@ def x_f( self ):
 
 
 def y_f( self ):
-    self.change_main_path()
+    self.suspend("change_main_path")
 
 
 def z_f( self ):
