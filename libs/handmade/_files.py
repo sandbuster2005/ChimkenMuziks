@@ -42,7 +42,7 @@ def get_file( self, path, files = [] ):
         if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid":#le fichier est un audio
             files.append( path + "/" + f )
             
-    return files
+    return sorted(files,key=lambda x:x.rsplit("/",1)[1].lower())
 
 
 def select_dir( self ):

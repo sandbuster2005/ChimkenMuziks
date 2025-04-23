@@ -1,6 +1,8 @@
 #made by sand
 import os
 from os.path import isfile
+
+
 def write_file(file:str,data="", mode = "w",encoding="utf-8")-> None:
     """
     cette fonction permet de creer un fichier file et otionnement ecrire un texte data dans le fichier
