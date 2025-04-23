@@ -63,7 +63,9 @@ def m_f( self ):
 def d_f( self ):
     self.wind( 5 )
   
-  
+def bb_f( self ):
+    self.wind( 11 )
+    
 def t_f( self ):
     self.suspend("screen_mode")
  

@@ -365,6 +365,11 @@ def wind( self, mode, pause = True  ):
     
     if mode == 10:
         self.word = 1 - self.word
+        
+    if mode == 11:
+        self.player.set_time(0)
+        self.bar.index = 0
+        
     if pause:
         self.suspend( "display" )
         

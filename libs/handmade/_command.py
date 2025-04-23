@@ -4,8 +4,8 @@ from .utils import *
 
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
+    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# commande defini par l'utilisateur ( modifiable )
+    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
     self.tooltips = {
             "h": "pour afficher le menu help",
             "q": "pour quitter le lecteur",
@@ -35,7 +35,8 @@ def init_command( self ):
             "x": "pour télécharger une playlist youtube",
             "v": "pour modifier une commande",
             "w": "pour remetre les paramètre a 0",
-            "z": "pour supprimer/deplacer/renommer un fichier"
+            "z": "pour supprimer/deplacer/renommer un fichier",
+            "bb": "pour la musique en cours a 0"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl

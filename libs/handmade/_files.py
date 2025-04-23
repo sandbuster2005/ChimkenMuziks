@@ -4,7 +4,7 @@ from os.path import isdir,isfile
 from .ffiles import *
 from .ffiles import get_file as getfile
 from .utils import *
-
+import re
 
 def init_file( self ):
     self.path_to_file = r"/home/sand/Musique/musiqe/"# chemin du dossier musique
@@ -81,8 +81,15 @@ def find_file( self, word ):
     limite:
     toute les charactère sont considérée comme minuscule
     """
-    return [ [ self.files[ x ].rsplit( "/" )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].lower().rsplit( "/", 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules    
-
+    files = [ [ self.files[ x ].rsplit( "/" )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].lower().rsplit( "/", 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
+    if len(files) < 10 and len(word) > 3:
+        for y in range( len( word ) ):
+            for i,x in enumerate( self.files ):
+                if [x.rsplit( "/" )[ -1 ], i ] not in files:
+                    if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x.lower() ):
+                        files.append( [x.rsplit( "/" )[ -1 ], i ] )
+    
+    return sorted(files,key = lambda x: x[1] )
 
 def check_adress( self ):
     """
