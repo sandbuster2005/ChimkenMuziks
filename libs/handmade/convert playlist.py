@@ -1,14 +1,15 @@
 #made by sand
-def replace(word:str,chrs:list):return "".join([word[x]*(1-(word[x] in chrs)) for x in range(len(word))])
+from utils import replace
 from os import listdir
 import os
-path="/home/sand/Musique/download"
+path="/home/sand/Musique/musique/download"
 for f in listdir(path):
+    print(f)
     extension="."+f.rsplit(".",1)[1]
     #print(extension)
     file=f.rsplit("[",1)[0]
     #print(file)
-    file=replace(file,["(","'",'"',")"," ",":","|","&","[","]"])
+    #file=replace(file,["(","'",'"',")"," ",":","|","&","[","]"],"_")
     #print(path+"/"+file+extension)
     #print(path+"/"+f)
     #input()

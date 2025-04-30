@@ -1,3 +1,5 @@
 appdata/param.txt
-libs/__pycache__/
-libs/handmade/__pycache__/
+*/__pycache__
+*/cache/*
+!/appdata/cache/static
+update

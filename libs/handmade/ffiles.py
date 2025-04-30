@@ -1,18 +1,24 @@
 #made by sand
 import os
 from os.path import isfile
-def write_file(file:str,data="")-> None:
+
+
+def write_file(file:str,data="", mode = "w",encoding="utf-8")-> None:
     """
     cette fonction permet de creer un fichier file et otionnement ecrire un texte data dans le fichier
     """
-    with open(file,"w") as f:
-        f.write(data)
+    if not "b" in mode:
+        with open(file,mode,encoding = encoding ) as f:
+            f.write(data)
+    else :
+       with open(file,mode ) as f:
+            f.write(data)
 
-def get_file(file:str)-> str:
+def get_file(file:str ,encoding="utf-8")-> str:
     """
     cette fonction permet de recuperer le contenu d'un fichier texte
     """
-    with open(file,"r") as f:
+    with open(file,"r",encoding=encoding) as f:
         result=f.read()
     return result
 

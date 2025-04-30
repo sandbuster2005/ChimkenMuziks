@@ -28,6 +28,9 @@ def home():
 
 def wipe():
     out( '\x1b[2J' )
+    
+def wipe_line():
+    out( '\x1b[2K' )
 
 def save():
     out( "\x1b7" )
