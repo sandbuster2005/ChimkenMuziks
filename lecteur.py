@@ -32,7 +32,7 @@ class App:
         """
         self.search = 1
         getattr( self, fonction )()
-        <self.search = 0
+        self.search = 0
 
     #les fonctions sont relié a self.commands
     def q_f( self ):
