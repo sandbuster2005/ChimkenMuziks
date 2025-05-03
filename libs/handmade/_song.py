@@ -6,7 +6,6 @@ import libs.midi2audio as midi2audio
 from os import listdir
 from os.path import isfile
 from libs.tinytag import TinyTag
-
 def init_song( self ):
     #SONG variables
     self.song = None# son aactuelle
@@ -44,7 +43,7 @@ def play_song( self ):
     cette fonction lance le choix de chanson et la joue
     """
     if len( self.files ) != 0:
-        self.bar = None
+        #self.bar = None
         self.choose_song()
         self.get_words()
         if self.song[-4:] ==".mid":
@@ -105,8 +104,7 @@ def select( self ):
     result = self.find_file( str( INPUT ) )#recherche dans les fichiers
     
     self.show_list( [ f"{ result[ x ][ 1 ] } :{ result[ x ][ 0 ] }" for x in range( len( result ) ) ], num = False )
-        
-    self.get_input()
+    #self.get_input()
 
 def play_midi(self):
     outs = listdir("appdata/midi_codec")

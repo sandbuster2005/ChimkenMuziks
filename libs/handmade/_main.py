@@ -47,8 +47,8 @@ def main( self ):
         self.display()
         
     progress = threading.Thread( target = self.update )#create update thread
-    time = threading.Thread( target = self.check_time )
-    time.start()
+    #time = threading.Thread( target = self.check_time )
+    #time.start()
     progress.start()
     
     while self.stay != False:
@@ -66,28 +66,32 @@ def update( self ):
     cette fonction afiche la bar de progression et la mettre a jour ainsi que
     passer a la chason suivant a la fin de l'actuel 
     """
+    time_check = [False,0,0]
     time_changed = False
-    volume_changed = False
+    self.volume_changed = False
     timer_changed = False
     timer = None
-    base_time=strftime( '%H %M' ).split( " " )
+    last_update = monotonic()
+    tick = 0
+    base_time = strftime( '%H %M' ).split( " " )
     stop = 0
     
     while self.stay:
+        tick += 1
         time = self.player.get_time()#temps actuel
+        
         if not self.MainThread.is_alive():
             self.stay = False
             self.player.stop()#end
             self.write_param()#sauvegarde es parametre
             
         if self.timer != None:
-            if self.timer < 1:
+            if self.timer[1] < 1:
                 self.stay = False
                 self.player.stop()#end
                 self.write_param()
          
         if self.song != None:#chanson demarré
-            sleep(0.1)
             
             if self.bar != None:
                 if self.bar.max != floor( self.player.get_length() / 1000 ):
@@ -107,19 +111,24 @@ def update( self ):
             base_time = strftime( '%H %M' ).split( " " )
             time_changed = True
             
-            if self.timer != None:
-                self.timer -= 1
-        
-        if self.timer != timer:
-            timer = self.timer
-            timer_changed = True
-            
+        if self.timer != None:
+            if monotonic() > self.timer[0] + 60:
+                self.timer[0] += 1
+                self.timer[1] -= 1
+                timer_changed = True
+                
         if self.sound_manager == "alsa":
             if self.volume != self.get_volume():
                 self.volume = self.get_volume()
-                volume_changed = True
+                self.volume_changed = True
          
-        if self.bar != None and not self.search :#chason en cours et pas de pause/suspension     
+        if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
+            if time == self.player.get_time() and not self.pause and not time_check[0] :
+                time_check[0] = True
+                time_check[1] = self.player.get_time()
+                time_check[2] = monotonic()
+                
+                
             if time/1000 > self.bar.max:#idk really
                 continue
             
@@ -129,7 +138,9 @@ def update( self ):
             if time < 0:#en cas de reculer en desosus du debut
                 time = 0
                 
-            if time/1000 > self.bar.index:#la chanson a avancer
+            #if floor(time/1000) > self.bar.index:#la chanson a avancer
+            if last_update + 1 < monotonic() :
+                last_update += 1
                 self.bar.index = floor( time/1000 )
                 save()
                 up()
@@ -147,38 +158,52 @@ def update( self ):
                         self.words.remove(self.words[0])
                 
                 
-            if time_changed:
+            if time_check:
+                if time_check[2] + 5 < monotonic():
+                    if self.player.get_time() == time_check[1]:
+                        if not self.repeat:
+                            self.choose_song()
+            
+                        self.play()
+                        lup(0)
+                        sys.stdout.write(":")
+                        sys.stdout.flush()
+                        continue
+                    else:
+                        time_check=[False,0,0]
+            
+            if time_changed :
                 time_changed = False
                 save()
                 lup( 3 )
                 out( f"{ base_time[ 0 ] }:{base_time[ 1 ]}" )
                 load()
             
-            if timer_changed:
+            if timer_changed :
                 timer_changed = False
                 save()
                 lup( 3 )
                 right( 20 )
-                out(f" timer :{ self.timer } mins ")
+                out(f" timer :{ self.timer[1] } mins ")
                 load()
                 
-            if volume_changed:
-                volume_changed = False
+            if self.volume_changed :
+                self.volume_changed = False
                 save()
                 lup( 3 )
                 right( 16 )
                 
                 if self.volume < 10 :
-                    out( f"0{ self.volume }%" )
+                    out( f"0{ self.volume }%  " )
                     
                 else:
-                    out( f"{ self.volume }%" )
+                    out( f"{ self.volume }%  " )
                     
                 load()
             
             if stop != 0:
                 stop -= 1 
-            if self.img_script != None and stop == 0 and self.img_mode == "script":
+            if self.img_script != None and stop == 0 and self.img_mode == "script" and not self.search:
                 if int( monotonic() ) % self.Screen.framerate == 0:
                     save()
                     home()
@@ -198,8 +223,20 @@ def update( self ):
                 self.play()
                 sys.stdout.write(":")
                 sys.stdout.flush()
+
+def u_bar(self):
+    if self.bar:
+        save()
+        up()
+        self.bar.update()
+        load()
         
-        
+def n_input(self):
+    lup()
+    wipe_line()
+    
+
+"""        
 def check_time(self):
     
     while self.MainThread.is_alive() and self.stay :
@@ -221,6 +258,7 @@ def check_time(self):
                     sys.stdout.write(":")
                     sys.stdout.flush()
 
+"""
 
 def display( self ):
     """
@@ -248,13 +286,15 @@ def display( self ):
             save()
             lup( 2 )
             right( 20 )
-            out(f" timer :{ self.timer } mins ")
+            out(f" timer :{ self.timer[1] } mins ")
             load()
         
     else:
         if self.sound_manager != "base":
             print( f"volume :{self.volume}" )
     ldown()
+    #self.u_bar()
+    
     #load()
     
     
@@ -265,11 +305,11 @@ def get_input( self ):
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
     got = self.ask( ":" ).lower()#ignorer les majuscules
+    self.n_input()
     
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             white()
             self.search = False
-            self.bar = None
             self.song = self.files[ int(got) ]
             self.get_words()
             if self.song[-4:] ==".mid":
@@ -277,7 +317,10 @@ def get_input( self ):
             self.play()
             
     if self.search:#recherche terminé
+        self.suspend("display")
+        #ldown()
         self.search = False
+        
         
     if got == "" and self.song != None:#pause 
         self.wind( 6 )
@@ -312,7 +355,7 @@ def load_all( self ):
     self.get_img( self.path_to_img, start = 1 )
     
     
-def wind( self, mode, pause = True  ):
+def wind( self, mode, pause = False  ):
     """
     cette fonction permet de:
     avancer de 10 seconde : mode 1
@@ -333,33 +376,43 @@ def wind( self, mode, pause = True  ):
         if self.bar	!=	None: 
             self.player.set_time( min( self.player.get_length()-1000, self.player.get_time() + 10000 ) )
             self.bar.index = min( self.bar.max-1, self.bar.index + 10 )
-        
+            self.u_bar()
+            
     if mode == 2:
         if self.bar != None:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
             self.bar.index = max( 0, self.bar.index - 10 )
+        
     
     if mode == 3:
         self.volume = min( 100, self.volume + 5 )
         self.set_volume()
         
+        self.volume_changed = True
+        
+        
     if mode == 4:
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
+        self.volume_changed = True
+        
+        
         
     if mode == 5:
         self.deafen()
-    
+        self.n_input()
+        
     if mode == 6:
         self.pause = 1 - self.pause
         self.player.pause()
-    
+        #self.u_bar()
+        
     if mode == 7:
         self.show = 1 - self.show
-    
+        
     if mode == 8:
         self.repeat = 1 - self.repeat
-    
+        
     if mode == 9:
         self.mode = 1 - self.mode
     
@@ -369,7 +422,8 @@ def wind( self, mode, pause = True  ):
     if mode == 11:
         self.player.set_time(0)
         self.bar.index = 0
-        
+    
+    
     if pause:
         self.suspend( "display" )
         
@@ -378,7 +432,7 @@ def set_timer( self ):
     choice = self.ask( "shutdown in  x minutes :" )
     
     if all_numbers( choice ):
-        self.timer = int( choice )
+        self.timer = [monotonic(),int( choice )]
         
     else:
         self.timer = None 

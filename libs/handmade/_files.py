@@ -65,7 +65,6 @@ def select_dir( self ):
         if all_numbers( word, len( self.dirs ), 1 ):
             self.switch_dir( int( word ) )
 
-
 def switch_dir( self, word ):
     """
     cette fonction permet d'activer ou desactiver un dossier de la liste
@@ -119,6 +118,8 @@ def mani_file(self):
     et renommer le fichier actuel
     """
     if self.song != None:
+        print(self.files)
+        index = self.files.index(self.song)
         word = self.ask_list( [ "delete ", "move", "rename", "convert"] )
         if all_numbers( word, 3 ):
             if int( word ) == 0:
@@ -126,21 +127,26 @@ def mani_file(self):
                 
                 if choice == "y":
                     rm_file( self.song )
+                    self.files.remove(self.song)
                 
             if int( word ) == 1:
                 choice = self.ask_list( [ self.dirs[ x ][ 0 ] for x in range( len( self.dirs ) ) ] )
                 
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + "/" + self.song.rsplit( "/", 1 )[ 1 ] )
-                
+                    self.files[index] = self.dirs[ int( choice ) ][ 0 ] + "/" + self.song.rsplit( "/", 1 )[ 1 ]
+
             if int( word ) == 2:
                 choice = self.ask( "new_name :" )
                 mv_file( self.song, self.song.rsplit( "/",1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
-            
+                self.files[index] = self.song.rsplit( "/",1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
+                
             if int( word ) == 3:
                 self.change_extension()
-                
-            self.load_songs()
+            self.song = None
+            self.played = self.played[:-1]
+            self.player.stop()    
+            #self.load_songs()
             
 def get_words(self):
     self.words = []
