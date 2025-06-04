@@ -66,7 +66,7 @@ def update( self ):
     cette fonction afiche la bar de progression et la mettre a jour ainsi que
     passer a la chason suivant a la fin de l'actuel 
     """
-    time_check = [False,0,0]
+    time_check = [False,0,0,0]
     time_changed = False
     self.volume_changed = False
     timer_changed = False
@@ -123,7 +123,10 @@ def update( self ):
                 self.volume_changed = True
          
         if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
-            if time == self.player.get_time() and not self.pause and not time_check[0] :
+            if time_check[3]:
+                time_check[3] -= 1
+            
+            if time == self.player.get_time() and not time_check[3]:
                 time_check[0] = True
                 time_check[1] = self.player.get_time()
                 time_check[2] = monotonic()
@@ -158,7 +161,7 @@ def update( self ):
                         self.words.remove(self.words[0])
                 
                 
-            if time_check:
+            if time_check and not self.pause:
                 if time_check[2] + 5 < monotonic():
                     if self.player.get_time() == time_check[1]:
                         if not self.repeat:
@@ -170,7 +173,7 @@ def update( self ):
                         sys.stdout.flush()
                         continue
                     else:
-                        time_check=[False,0,0]
+                        time_check=[False,0,0,5]
             
             if time_changed :
                 time_changed = False
