@@ -15,9 +15,10 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 from __future__ import unicode_literals
-
+from math import log
 import sys
 
+from functools import partial
 from . import Progress
 from .colors import color
 
@@ -25,20 +26,26 @@ from .colors import color
 class Bar(Progress):
     width = 32
     suffix = '%(index)d/%(max)d'
-    bar_prefix = ' |'
-    bar_suffix = '| '
+    bar_prefix = ''
+    bar_suffix = ' '
     empty_fill = ' '
-    fill = '#'
+    fill = ' '
     color = None
+    addaptative_bar = True
 
     def update(self):
-        filled_length = int(self.width * self.progress)
-        empty_length = self.width - filled_length
+        if self.addaptative_bar:
+            filled_length = int(self.width*log(self.max,180) * self.progress)
+            empty_length = int(self.width*log(self.max,180)) - filled_length
+        else:
+            filled_length = int(self.width * self.progress)
+            empty_length = self.width - filled_length
 
         message = self.message % self
-        bar = color(self.fill * filled_length, fg=self.color)
-        empty = self.empty_fill * empty_length
-        suffix = self.suffix % self
+        bar = color(self.fill * filled_length ,bg ="red")
+        empty = color(self.empty_fill * empty_length, bg = "black")
+        if self.max > 0:
+            suffix = f"{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}"
         line = ''.join([message, self.bar_prefix, bar, empty, self.bar_suffix,
                         suffix])
         self.writeln(line)

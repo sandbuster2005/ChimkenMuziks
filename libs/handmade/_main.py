@@ -98,13 +98,13 @@ def update( self ):
                     Max = self.player.get_length()
                     down()
                     save()
-                    self.bar = Bar( "time(s)", max=floor( Max/1000 ), fill="■" )
+                    self.bar = Bar( "", max=floor( Max/1000 ))
                     load()
             else:
                 Max = self.player.get_length()
                 down()
                 save()
-                self.bar = Bar( "time(s)", max=floor( Max/1000 ), fill="■" )
+                self.bar = Bar( "", max=floor( Max/1000 ))
                 load()
         
         if base_time != strftime( '%H %M' ).split( " " ):
