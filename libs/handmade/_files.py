@@ -4,7 +4,7 @@ from os.path import isdir,isfile
 from .ffiles import *
 from .ffiles import get_file as getfile
 from .utils import *
-from .terminal import up
+from .terminal import up,wipe
 import re
 
 def init_file( self ):
@@ -65,7 +65,7 @@ def select_dir( self ):
             pass
         
     choose = []
-    for y in range(bottom):
+    for y in range(bottom + 1):
         choose.append([[ x[1],x[2] ] for x in select if x[0] == y])
     folder = self.path_to_file + ""
     pos = 0
@@ -73,6 +73,9 @@ def select_dir( self ):
     temp = choose[0]
     while word:
         white()
+        
+        
+        print("   " + folder.split(self.path_to_file)[1])
         
         for x in range( len( temp ) ):
             print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
@@ -82,7 +85,9 @@ def select_dir( self ):
         
         if all_numbers( word, len( self.dirs ), 1 ):
             if temp[int(word)][1] == "1":
-                up(2)
+                wipe()
+                print(int(word),temp[int(word)][0].split(folder,1)[1])
+                print("")
                 print("s: switch folder")
                 print("e: enter folder ")
                 nword = input("select option")

@@ -112,7 +112,7 @@ def update( self ):
             time_changed = True
             
         if self.timer != None:
-            if monotonic() > self.timer[0] + 60:
+            if monotonic() > self.timer[2] + (self.timer[0] * 60):
                 self.timer[0] += 1
                 self.timer[1] -= 1
                 timer_changed = True
@@ -435,7 +435,7 @@ def set_timer( self ):
     choice = self.ask( "shutdown in  x minutes :" )
     
     if all_numbers( choice ):
-        self.timer = [monotonic(),int( choice )]
+        self.timer = [1,int( choice ),monotonic()]
         
     else:
         self.timer = None 
