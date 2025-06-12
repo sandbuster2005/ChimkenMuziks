@@ -4,6 +4,7 @@ from os.path import isdir,isfile
 from .ffiles import *
 from .ffiles import get_file as getfile
 from .utils import *
+from .terminal import up
 import re
 
 def init_file( self ):
@@ -53,17 +54,66 @@ def select_dir( self ):
     limite:
     demande une valeur numérique a l'utilisateur pour selectionner un dossier/sous dossiers
     """
+    base = self.path_to_file.count("/")
+    bottom = 0
+    select = []
+    for x in self.dirs:
+        if self.path_to_file in x[0]:
+            bottom = max(bottom,x[0].count("/") - base)
+            select.append([x[0].count("/") - base ,x[0],x[1]])
+        else:
+            pass
+        
+    choose = []
+    for y in range(bottom):
+        choose.append([[ x[1],x[2] ] for x in select if x[0] == y])
+    folder = self.path_to_file + ""
+    pos = 0
     word = "0"
-    while all_numbers( word ):
+    temp = choose[0]
+    while word:
         white()
         
-        for x in range( len( self.dirs ) ):
-            print( x, self.dirs[ x ] )
+        for x in range( len( temp ) ):
+            print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
             
-        word = input( "switch folder on/off:" )
+        print("(b) to go back")
+        word = input( "select folder " )
         
         if all_numbers( word, len( self.dirs ), 1 ):
-            self.switch_dir( int( word ) )
+            if temp[int(word)][1] == "1":
+                up(2)
+                print("s: switch folder")
+                print("e: enter folder ")
+                nword = input("select option")
+                if "s" in nword :
+                    temp[int(word)][1] = "0"
+                    self.switch_dir( self.dirs.index([temp[int(word)][0],"1"]) )
+                
+                elif "e" in nword:
+                    if pos != bottom:
+                        pos += 1
+                        folder = temp[int(word)][0] + "/"
+                        temp = [ x for x in choose[pos] if folder in x[0]]
+                    
+           
+            else:
+                temp[int(word)][1] = "1"
+                self.switch_dir( self.dirs.index([temp[int(word)][0],"0"]) )
+            
+            
+            
+            #self.switch_dir( int( word ) )
+        
+        elif "b" in word :
+            if pos!=0:
+                folder = folder.rsplit("/",2)[0] + "/" 
+                pos -= 1
+                temp = [ x for x in choose[pos] if folder in x[0]]
+            else:
+                word = ""
+        else:
+            word = ""
 
 def switch_dir( self, word ):
     """
