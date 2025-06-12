@@ -17,7 +17,7 @@
 from __future__ import unicode_literals
 from math import log
 import sys
-
+import random
 from functools import partial
 from . import Progress
 from .colors import color
@@ -30,7 +30,8 @@ class Bar(Progress):
     bar_suffix = ' '
     empty_fill = ' '
     fill = ' '
-    color = None
+    color = "red"
+    bg_color = "black"
     addaptative_bar = True
 
     def update(self):
@@ -42,8 +43,8 @@ class Bar(Progress):
             empty_length = self.width - filled_length
 
         message = self.message % self
-        bar = color(self.fill * filled_length ,bg ="red")
-        empty = color(self.empty_fill * empty_length, bg = "black")
+        bar = color(self.fill * filled_length ,bg = self.color )
+        empty = color(self.empty_fill * empty_length, bg = self.bg_color)
         if self.max > 0:
             suffix = f"{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}"
         line = ''.join([message, self.bar_prefix, bar, empty, self.bar_suffix,

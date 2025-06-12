@@ -9,6 +9,7 @@ from .ffiles import *
 from .terminal import *
 import libs.vlc as vlc
 import threading
+import random
 import platform
 import os
 
@@ -95,16 +96,20 @@ def update( self ):
             
             if self.bar != None:
                 if self.bar.max != floor( self.player.get_length() / 1000 ):
+                    color = random.randint(0,252)
+                    color += 3 - (color % 3)
                     Max = self.player.get_length()
                     down()
                     save()
-                    self.bar = Bar( "", max=floor( Max/1000 ))
+                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color)
                     load()
             else:
+                color = random.randint(0,252)
+                color += 3 - (color % 3)
                 Max = self.player.get_length()
                 down()
                 save()
-                self.bar = Bar( "", max=floor( Max/1000 ))
+                self.bar = Bar( f"", max=floor( Max/1000 ), color = color)
                 load()
         
         if base_time != strftime( '%H %M' ).split( " " ):
@@ -284,7 +289,7 @@ def display( self ):
             
         print( f"{ time[ 0 ] }:{ time[ 1 ] }   volume: { self.volume }%  " )# heure,volume
             
-        print( f"Song: { self.files.index( self.song ) }:{ self.song.rsplit( a, 1 )[ 1 ] }" )# playlist,index,chanson
+        print( f"{ self.song.rsplit( a, 1 )[ 1 ] }" )# playlist,index,chanson
         if self.timer != None:
             save()
             lup( 2 )
