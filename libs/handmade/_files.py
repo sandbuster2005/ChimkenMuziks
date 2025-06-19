@@ -8,7 +8,7 @@ from .terminal import up,wipe
 import re
 
 def init_file( self ):
-    self.path_to_file = r"/home/sand/Musique/musiqe/"# chemin du dossier musique
+    self.path_to_file = r"/home/sand/Musique/musique/"# chemin du dossier musique
     self.dirs = []# liste des dossier dans le chemin indiqué
     self.files = []# chanson chargé
     self.favorite = ""

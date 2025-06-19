@@ -6,19 +6,19 @@ class App:
         self.init_sound()
         self.init_battery()
         self.init_command()
-        self.init_param()
         self.init_file()
         self.init_image()
         self.init_download()
         self.init_song()
         self.init_display()
+        self.init_param()
         #self.init_letter()
     from libs.handmade._external import external_call,external_return
     from libs.handmade._display import init_display,out,ask,ask_list,show_list,change_confirmation
     from libs.handmade._sound import init_sound,start_sound,change_sound_manager,get_volume,set_volume,deafen
     from libs.handmade._batterie import init_battery,battery_check,get_battery,get_battery_life
     from libs.handmade._command import init_command,sort_command,edit_command,help_menu      
-    from libs.handmade._param import init_param,get_param,write_param,reset 
+    from libs.handmade._param import init_param,get_param,write_param,reset
     from libs.handmade._files import init_file,get_file,select_dir,switch_dir,find_file,check_adress,change_main_path,mani_file,get_words,change_extension
     from libs.handmade._image import init_image,get_img,display_img,select_img,load_script,screen_mode
     from libs.handmade._download import init_download,yt_search,dl_yt_playlist  
@@ -85,7 +85,7 @@ class App:
         self.wind( 5 )
       
     def bb_f( self ):
-        self.wind( 11 )
+        self.wind( 15 )
         
     def t_f( self ):
         self.suspend("screen_mode")

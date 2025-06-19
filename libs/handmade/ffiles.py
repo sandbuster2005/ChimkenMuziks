@@ -81,4 +81,15 @@ def rm_file(file):
     
 def mv_file(file,newfile):
     os.rename(file,newfile)
-    
+
+
+def remove_list(liste:list) -> list:
+    if type(liste) is not list:
+        return liste
+    if len(liste) == 1:
+        if type(liste[0]) is not list:
+            return liste[0]
+        else:
+            return remove_list(liste[0])
+    else:
+        return [remove_list(x) for x in liste]

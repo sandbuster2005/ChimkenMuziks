@@ -27,6 +27,8 @@ def init_main( self ):
     self.timer = None
     self.word = 1
     self.words = None
+    self.addaptive_bar = 1
+    self.color = 1
    
 def main( self ):
     """
@@ -96,20 +98,26 @@ def update( self ):
             
             if self.bar != None:
                 if self.bar.max != floor( self.player.get_length() / 1000 ):
-                    color = random.randint(0,252)
-                    color += 3 - (color % 3)
+                    if self.color :
+                        color = random.randint(0,252)
+                        color += 3 - (color % 3)
+                    else:
+                        color = "white"
                     Max = self.player.get_length()
                     down()
                     save()
-                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color)
+                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
                     load()
             else:
-                color = random.randint(0,252)
-                color += 3 - (color % 3)
+                if self.color:
+                    color = random.randint(0,252)
+                    color += 3 - (color % 3)
+                else:
+                    color = "white"
                 Max = self.player.get_length()
                 down()
                 save()
-                self.bar = Bar( f"", max=floor( Max/1000 ), color = color)
+                self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
                 load()
         
         if base_time != strftime( '%H %M' ).split( " " ):
@@ -428,6 +436,12 @@ def wind( self, mode, pause = False  ):
         self.word = 1 - self.word
         
     if mode == 11:
+        self.addaptive_bar = 1 -  self.addaptive_bar
+    
+    if mode == 12:
+        self.color = 1 - self.color
+        
+    if mode == 15:
         self.player.set_time(0)
         self.bar.index = 0
     
@@ -454,7 +468,9 @@ def param_center( self ):
         tooltip=[[ "afficher l'image ", self.show ],
                  [ "jouer en boucle ", self.repeat ],
                  [ "jouer en random ", self.mode ],
-                 [ "afficher les fichier paroles", self.word ]
+                 [ "afficher les fichier paroles", self.word ],
+                 ["taille de la bar proportionnel", self.addaptive_bar],
+                 ["la bar change de couleur", self.color]
                 ]
         word = self.ask_list( tooltip )
         if all_numbers( word , len (tooltip ), 1 ):
