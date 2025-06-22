@@ -1,7 +1,7 @@
 #made by sand
 
 from .utils import *
-
+from .terminal import *
 
 def init_command( self ):
     self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# commande defini par l'utilisateur ( modifiable )
@@ -39,7 +39,7 @@ def init_command( self ):
             "bb": "pour la musique en cours a 0"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
-    #dl
+    #dl bb
     
 def sort_command( self ):
     """
@@ -52,6 +52,7 @@ def sort_command( self ):
     x = 0
     missing = ""
     while x < len( command ) and missing == "":
+        
         if len( command[ x ] ) == 1:
             missing = command[ x ]
             
@@ -68,8 +69,8 @@ def sort_command( self ):
     elif len( command[ 0 ] ) > 1:
         command += [ "h" ]
         
-    command=[self.holders.index(command[x]) for x in range(len(command))]
-    self.command=command
+    command = [self.holders.index(command[x]) for x in range(len(command))]
+    self.command = command
 
 
 def edit_command( self ):
@@ -77,22 +78,28 @@ def edit_command( self ):
     cette fonction permet de de modifier les commande du programme a
     l'exception de h(help)
     """
-    cmd = self.ask_list( self.help_menu(), text = "enter current command call :", num = False )#show current command 
-    if cmd=="h":
-        self.out( "help cannot be modified" )
-        return
+    cmd = "0"
     
-    if cmd in self.holders:
-        key = self.ask( "new command call :" )
+    while cmd:
+        self.show_list(self.help_menu(), num = False)
+        cmd = self.ask("enter current command call :")#show current command 
+        if cmd=="h":
+            self.out( "help cannot be modified" )
+            return
         
-        if not all_numbers( key ):
-             if key not in self.holders:#if key don't already exist
-                 self.holders[ self.holders.index( cmd ) ] = key
-                 self.write_param()
-                 self.sort_command()
-             
-             else:
-                 self.out( "key already exist" )
+        if cmd in self.holders:
+            key = self.ask( "new command call :" )
+            
+            if not all_numbers( key ):
+                 
+                 if key not in self.holders:#if key don't already exist
+                     
+                     print(f"{self.holders[ self.holders.index( cmd ) ]} changed to {key}")
+                     self.holders[ self.holders.index( cmd ) ] = key
+                     self.write_param()
+                     self.sort_command()
+                     
+            wipe()
 
 
 def help_menu( self ):

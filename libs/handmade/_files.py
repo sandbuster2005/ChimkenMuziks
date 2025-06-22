@@ -28,6 +28,7 @@ def get_file( self, path, files = [] ):
     self.song = None
     self.played = []
     self.player.stop()
+    
     for f in listdir( path ):
         if isdir( path + f ):
             
@@ -44,10 +45,14 @@ def get_file( self, path, files = [] ):
         if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid":#le fichier est un audio
             files.append( path + "/" + f )
             
-    return sorted(files,key=lambda x:x.rsplit("/",1)[1].lower())
+    return sorted( files ,key = lambda x: x.rsplit( "/", 1 )[ 1 ].lower() )
 
 
 def edit_dirs(self):
+    """
+    cette fonction permet a l'utilisateur d'activer/desactiver des dossiers
+    en suivant l'architecture de dossier en partant de la racine
+    """
     self.select_dir(self.switch_dir)
 
 def select_dir( self ,func =print , lim = -1 , retour = 0):
@@ -62,23 +67,26 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     base = self.path_to_file.count("/")
     bottom = 0
     select = []
+    
     for x in self.dirs:
+        
         if self.path_to_file in x[0]:
             bottom = max(bottom,x[0].count("/") - base)
             select.append([x[0].count("/") - base ,x[0],x[1]])
+            
         else:
             pass
         
     choose = []
     for y in range(bottom + 1):
         choose.append([[ x[1],x[2] ] for x in select if x[0] == y])
+        
     folder = self.path_to_file + ""
     pos = 0
     word = "0"
     temp = choose[0]
     while word and count!=lim :
         white()
-        
         
         print("   " + folder.split(self.path_to_file)[1])
         
@@ -131,7 +139,6 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                     folder = temp[int(word)][0] + "/"
                     temp = [ x for x in choose[pos] if folder in x[0]]
             
-            #self.switch_dir( int( word ) )
         
         elif "b" in word :
             
@@ -235,10 +242,15 @@ def mani_file(self):
             #self.load_songs()
             
 def get_words(self):
+    """
+    cette fonction permet de recuperer les paroles d'un fichier .lrc et de les passer
+    au lecteur
+    """
     self.words = []
     if self.song != None :
         file = self.song.rsplit( ".", 1 )[ 0 ] + ".lrc"
         print( isfile( file ) )
+        
         if isfile( file ):
             data = getfile( file )
             data = data.split("[" )
@@ -259,12 +271,17 @@ def get_words(self):
             self.words = data
             
 def change_extension(self):
+    """
+    cette fonction permet de convertir les fichier musique a l'aide de ffmpeg
+    """
     white()
     option = [".mp3", ".m4a", ".wav" , ".flac" ]
     word = self.ask_list( option )
+    
     if all_numbers( word, len( option ), 1 ):
         confirm = self.ask( "delete original (y/n)?" )
         new = self.song.rsplit( ".",1 )[ 0 ] + option[ int( word ) ]
         self.external_call(f"ffmpeg -i '{self.song}' '{new}' " , shell = True)
+        
         if confirm == "y":
-            rm_file(self.song)
+            rm_file( self.song )

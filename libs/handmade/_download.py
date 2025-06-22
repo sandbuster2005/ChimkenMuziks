@@ -42,10 +42,12 @@ def dl_yt_playlist( self ):
     elle verifie aussi si toute les chanson on été télécharger sans probléme
     """
     playlist = self.ask( "playlist/song url:" )
-    lenght = self.ask("lenght of playlist:")
-    new_lenght=0
+    lenght = self.ask( "lenght of playlist:" )
+    new_lenght = 0
+    
     if all_numbers( lenght ):
         lenght = int( lenght )
+        
         for f in listdir( f"{ self.path_to_file }/download" ):
             lenght += 1
             

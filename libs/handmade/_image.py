@@ -3,6 +3,8 @@ from os import listdir
 from os.path import isdir,isfile
 from random import randint
 from .utils import *
+from .terminal import *
+from ..readchar import readchar
 import importlib
 
 def init_image( self ):
@@ -84,11 +86,8 @@ def select_img( self ):
     
     word = "0"
     while all_numbers( word , len( self.imgs ) ):
-        for x in range( len( self.imgs ) ):
-            print( x, self.imgs[ x ] )
-            
-        print( len( self.imgs ), "random" )# index max +1
-        word = input( "select img:" )
+        wipe()
+        word = self.ask_list(self.imgs+["random"],"select img:" )
         
         if all_numbers( word, len( self.imgs ) ):
             if int( word ) == len( self.imgs ):
@@ -97,7 +96,8 @@ def select_img( self ):
             
             else:
                 self.external_call( [ f"{ self.img_command }  { self.imgs[ int( word ) ] }" ], True )
-                confirm = input( "y/n ?" )
+                out("y/n ?")
+                confirm = readchar(  )
                 
                 if confirm.lower() == "y":
                     self.img = self.imgs[ int( word ) ] # selection
@@ -106,11 +106,16 @@ def select_img( self ):
         self.display()
 
 def load_script(self):
-    
+    """
+    WIP
+    """
     if self.img_script != "":
         self.Screen = importlib.import_module(self.img_script).Screen()
         
 def screen_mode(self):
+    """
+    WIP
+    """
     choice = [ "image mode " , "script mode" ]
     word = self.ask_list(choice)
     

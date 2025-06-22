@@ -1,8 +1,8 @@
 from ..readchar import readchar
 
-def init_display(self):
-    self.graphic_manager="base"
-    self.confirmation="your choice: "
+def init_display( self ):
+    self.graphic_manager = "base"
+    self.confirmation = "your choice: "
     
     
 def out( self, text ):
@@ -47,8 +47,10 @@ def ask_list( self, liste, text = "" , num = True ):
         
     if self.graphic_manager == "base":
         self.show_list( liste, num )
-        if len(liste) < 11:
+        
+        if len( liste ) < 11:
             return readchar()
+        
         else:
             return self.ask( f"{ text }" )
     

@@ -50,8 +50,6 @@ def main( self ):
         self.display()
         
     progress = threading.Thread( target = self.update )#create update thread
-    #time = threading.Thread( target = self.check_time )
-    #time.start()
     progress.start()
     
     while self.stay != False:
@@ -89,6 +87,7 @@ def update( self ):
             self.write_param()#sauvegarde es parametre
             
         if self.timer != None:
+            
             if self.timer[1] < 1:
                 self.stay = False
                 self.player.stop()#end
@@ -97,12 +96,16 @@ def update( self ):
         if self.song != None:#chanson demarré
             
             if self.bar != None:
+                
                 if self.bar.max != floor( self.player.get_length() / 1000 ):
+                    
                     if self.color :
                         color = random.randint(0,252)
                         color += 3 - (color % 3)
+                    
                     else:
                         color = "white"
+                        
                     Max = self.player.get_length()
                     down()
                     save()
@@ -110,11 +113,14 @@ def update( self ):
                     self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
                     load()
             else:
+                
                 if self.color:
                     color = random.randint(0,252)
                     color += 3 - (color % 3)
+                
                 else:
                     color = "white"
+                    
                 Max = self.player.get_length()
                 down()
                 save()
@@ -127,17 +133,20 @@ def update( self ):
             time_changed = True
             
         if self.timer != None:
+            
             if monotonic() > self.timer[2] + (self.timer[0] * 60):
                 self.timer[0] += 1
                 self.timer[1] -= 1
                 timer_changed = True
                 
         if self.sound_manager == "alsa":
+            
             if self.volume != self.get_volume():
                 self.volume = self.get_volume()
                 self.volume_changed = True
          
         if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
+            
             if time_check[3]:
                 time_check[3] -= 1
             
@@ -156,7 +165,6 @@ def update( self ):
             if time < 0:#en cas de reculer en desosus du debut
                 time = 0
                 
-            #if floor(time/1000) > self.bar.index:#la chanson a avancer
             if last_update + 1 < monotonic() :
                 last_update += 1
                 self.bar.index = floor( time/1000 )
@@ -166,7 +174,9 @@ def update( self ):
                 load()
                 
             if self.word:
+                
                 if self.words != []:
+                    
                     if self.words[0][0] < time/1000 and self.words[0][0]:
                         save()
                         lup( 4 )
@@ -177,8 +187,11 @@ def update( self ):
                 
                 
             if time_check and not self.pause:
+                
                 if time_check[2] + 5 < monotonic():
+                    
                     if self.player.get_time() == time_check[1]:
+                        
                         if not self.repeat:
                             self.choose_song()
             
@@ -187,6 +200,7 @@ def update( self ):
                         sys.stdout.write(":")
                         sys.stdout.flush()
                         continue
+                    
                     else:
                         time_check=[False,0,0,5]
             
@@ -220,8 +234,10 @@ def update( self ):
                 load()
             
             if stop != 0:
-                stop -= 1 
+                stop -= 1
+                
             if self.img_script != None and stop == 0 and self.img_mode == "script" and not self.search:
+                
                 if int( monotonic() ) % self.Screen.framerate == 0:
                     save()
                     home()
@@ -236,13 +252,18 @@ def update( self ):
                     
                 self.bar = None
                 self.get_words()
+                
                 if self.song[-4:] ==".mid":
                     self.suspend("convert_midi")
+                    
                 self.play()
                 sys.stdout.write(":")
                 sys.stdout.flush()
 
 def u_bar(self):
+    """
+    cette fonction permet de mettre la bar a jour sans casser l'ecran
+    """
     if self.bar:
         save()
         up()
@@ -250,33 +271,11 @@ def u_bar(self):
         load()
         
 def n_input(self):
+    """
+    cette fonction permet de garder une méme ligne pour l'input 
+    """
     lup()
     wipe_line()
-    
-
-"""        
-def check_time(self):
-    
-    while self.MainThread.is_alive() and self.stay :
-        if self.song != None :
-            time0 = self.player.get_time()# temps actuel
-            sleep( 0.5 )
-            time = self.player.get_time()#temps actuel
-            
-            if time == time0:
-                sleep(5)
-                time = self.player.get_time()
-                
-                if time == time0 and not self.search and not self.pause:
-                    if not self.repeat:
-                        self.choose_song()
-            
-                    self.play()
-                    lup(0)
-                    sys.stdout.write(":")
-                    sys.stdout.flush()
-
-"""
 
 def display( self ):
     """
@@ -287,19 +286,21 @@ def display( self ):
     il est nécessaire qu'une chanson soit selectionné
     """
     lup()
+    
     if self.song != None:
         a = "/"
         sleep( 0.10 )
         white()
         self.volume = self.get_volume()
-        
         time=strftime( "%H %M" ).split( " " )# affiche l'heure au format standard
+        
         if self.show:
             self.display_img()
             
         print( f"{ time[ 0 ] }:{ time[ 1 ] }   volume: { self.volume }%  " )# heure,volume
             
         print( f"{ self.song.rsplit( a, 1 )[ 1 ] }" )# playlist,index,chanson
+        
         if self.timer != None:
             save()
             lup( 2 )
@@ -308,13 +309,12 @@ def display( self ):
             load()
         
     else:
+        
         if self.sound_manager != "base":
             print( f"volume :{self.volume}" )
+            
     ldown()
-    #self.u_bar()
-    
-    #load()
-    
+
     
     
     
@@ -452,11 +452,14 @@ def wind( self, mode, pause = False  ):
         self.suspend( "display" )
         
 def set_timer( self ):
+    """
+    cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
+    """
     self.out("enter nothing to delete current timer")
     choice = self.ask( "shutdown in  x minutes :" )
     
     if all_numbers( choice ):
-        self.timer = [1,int( choice ),monotonic()]
+        self.timer = [ 1, int( choice ),monotonic() ]
         
     else:
         self.timer = None 
@@ -464,9 +467,13 @@ def set_timer( self ):
     self.display()
 
 def param_center( self ):
+    """
+    cette fonction permet de gérer les différents paramétre boolean
+    """
     word = "0"
+    white()
+    
     while all_numbers( word ):
-        white()
         tooltip=[[ "afficher l'image ", self.show ],
                  [ "jouer en boucle ", self.repeat ],
                  [ "jouer en random ", self.mode ],
@@ -474,7 +481,10 @@ def param_center( self ):
                  ["taille de la bar proportionnel", self.addaptive_bar],
                  ["la bar change de couleur", self.color]
                 ]
+        
+        up(len(tooltip))
         word = self.ask_list( tooltip )
+        
         if all_numbers( word , len (tooltip ), 1 ):
                 self.wind( 7 + int( word ), pause = False )
                 
@@ -482,6 +492,10 @@ def manager_manager(self):
     pass
 
 def clear_cache(self):
+    """
+    cette fonction permet de suprimer les fichier temporaire (thumbnail , fichier généré a partir de midi...)
+    """
     for f in listdir("appdata/cache"):
         rm_file("appdata/cache/" + f)
+        
     self.display()
