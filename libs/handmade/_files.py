@@ -4,7 +4,8 @@ from os.path import isdir,isfile
 from .ffiles import *
 from .ffiles import get_file as getfile
 from .utils import *
-from .terminal import up,wipe
+from .terminal import up,wipe,out
+from ..readchar import readchar
 import re
 
 def init_file( self ):
@@ -46,7 +47,10 @@ def get_file( self, path, files = [] ):
     return sorted(files,key=lambda x:x.rsplit("/",1)[1].lower())
 
 
-def select_dir( self ):
+def edit_dirs(self):
+    self.select_dir(self.switch_dir)
+
+def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
     cette fonction permet d'activer/desactiver des dossiers de la liste de dossier sous dossier
     pour oculter les chanson qu'il contient
@@ -54,6 +58,7 @@ def select_dir( self ):
     limite:
     demande une valeur numérique a l'utilisateur pour selectionner un dossier/sous dossiers
     """
+    count = 0
     base = self.path_to_file.count("/")
     bottom = 0
     select = []
@@ -71,7 +76,7 @@ def select_dir( self ):
     pos = 0
     word = "0"
     temp = choose[0]
-    while word:
+    while word and count!=lim :
         white()
         
         
@@ -81,44 +86,67 @@ def select_dir( self ):
             print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
             
         print("(b) to go back")
-        word = input( "select folder " )
         
-        if all_numbers( word, len( self.dirs ), 1 ):
-            if temp[int(word)][1] == "1":
-                wipe()
-                print(int(word),temp[int(word)][0].split(folder,1)[1])
-                print("")
-                print("s: switch folder")
-                print("e: enter folder ")
-                nword = input("select option")
-                if "s" in nword :
-                    temp[int(word)][1] = "0"
-                    self.switch_dir( self.dirs.index([temp[int(word)][0],"1"]) )
+        if len(temp)< 11:
+            out("select folder")
+            word = readchar()
+        
+        else:
+            word = input( "select folder " )
+        
+        if all_numbers( word, len(temp), 1 ):
+            wipe()
+            print(int(word),temp[int(word)][0].split(folder,1)[1])
+            print("")
+            print("1: select folder")
+            print("2: enter folder ")
+            out("select option")
+            nword = readchar()
+            
+            if "1" in nword :
                 
-                elif "e" in nword:
-                    if pos != bottom:
-                        pos += 1
-                        folder = temp[int(word)][0] + "/"
-                        temp = [ x for x in choose[pos] if folder in x[0]]
+                if temp[int(word)][1] == "1":
                     
-           
-            else:
-                temp[int(word)][1] = "1"
-                self.switch_dir( self.dirs.index([temp[int(word)][0],"0"]) )
+                    if retour:
+                        return self.dirs.index([temp[int(word)][0],"1"])
+                    
+                    else:
+                        temp[int(word)][1] = "0"
+                        func( self.dirs.index([temp[int(word)][0],"1"]) )
+                        count += 1
+                    
+                else:
+                    
+                    if retour:
+                        return self.dirs.index([temp[int(word)][0],"0"])
+                    
+                    else:
+                        temp[int(word)][1] = "1"
+                        func( self.dirs.index([temp[int(word)][0],"0"]) )
+                        count += 1
             
-            
+            elif "2" in nword:
+                if pos != bottom:
+                    pos += 1
+                    folder = temp[int(word)][0] + "/"
+                    temp = [ x for x in choose[pos] if folder in x[0]]
             
             #self.switch_dir( int( word ) )
         
         elif "b" in word :
+            
             if pos!=0:
                 folder = folder.rsplit("/",2)[0] + "/" 
                 pos -= 1
                 temp = [ x for x in choose[pos] if folder in x[0]]
+            
             else:
                 word = ""
+                print("")
+        
         else:
             word = ""
+            print("")
 
 def switch_dir( self, word ):
     """
@@ -176,7 +204,9 @@ def mani_file(self):
         print(self.files)
         index = self.files.index(self.song)
         word = self.ask_list( [ "delete ", "move", "rename", "convert"] )
+        
         if all_numbers( word, 3 ):
+            
             if int( word ) == 0:
                 choice = self.ask( "are you sure (y/n)" )
                 
@@ -185,8 +215,7 @@ def mani_file(self):
                     self.files.remove(self.song)
                 
             if int( word ) == 1:
-                choice = self.ask_list( [ self.dirs[ x ][ 0 ] for x in range( len( self.dirs ) ) ] )
-                
+                choice = str( self.select_dir(retour = 1) )
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + "/" + self.song.rsplit( "/", 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + "/" + self.song.rsplit( "/", 1 )[ 1 ]
@@ -198,9 +227,11 @@ def mani_file(self):
                 
             if int( word ) == 3:
                 self.change_extension()
+                
             self.song = None
             self.played = self.played[:-1]
-            self.player.stop()    
+            self.player.stop()
+            print("")
             #self.load_songs()
             
 def get_words(self):

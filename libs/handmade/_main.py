@@ -106,6 +106,7 @@ def update( self ):
                     Max = self.player.get_length()
                     down()
                     save()
+                    wipe_line()
                     self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
                     load()
             else:
@@ -117,6 +118,7 @@ def update( self ):
                 Max = self.player.get_length()
                 down()
                 save()
+                wipe_line()
                 self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
                 load()
         
