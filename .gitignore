@@ -3,3 +3,4 @@ appdata/param.txt
 */cache/*
 !/appdata/cache/static
 update
+appdata/image/wallpapers/*
