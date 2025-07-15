@@ -64,6 +64,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     demande une valeur numérique a l'utilisateur pour selectionner un dossier/sous dossiers
     """
     count = 0
+    mode = "standard"
     base = self.path_to_file.count("/")
     bottom = 0
     select = []
@@ -87,13 +88,14 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     temp = choose[0]
     while word and count!=lim :
         white()
-        
+        print(f"mode : { str( mode ) }")
         print("   " + folder.split(self.path_to_file)[1])
         
         for x in range( len( temp ) ):
             print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
             
         print("(b) to go back")
+        print("(s) switch mode")
         
         if len(temp)< 11:
             out("select folder")
@@ -103,42 +105,71 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
             word = input( "select folder " )
         
         if all_numbers( word, len(temp), 1 ):
-            wipe()
-            print(int(word),temp[int(word)][0].split(folder,1)[1])
-            print("")
-            print("1: select folder")
-            print("2: enter folder ")
-            out("select option")
-            nword = readchar()
-            
-            if "1" in nword :
-                
+            if mode == "switch":
                 if temp[int(word)][1] == "1":
-                    
-                    if retour:
-                        return self.dirs.index([temp[int(word)][0],"1"])
-                    
-                    else:
-                        temp[int(word)][1] = "0"
-                        func( self.dirs.index([temp[int(word)][0],"1"]) )
-                        count += 1
-                    
+                        
+                        if retour:
+                            return self.dirs.index([temp[int(word)][0],"1"])
+                        
+                        else:
+                            temp[int(word)][1] = "0"
+                            func( self.dirs.index([temp[int(word)][0],"1"]) )
+                            count += 1
+                        
                 else:
+                        
+                        if retour:
+                            return self.dirs.index([temp[int(word)][0],"0"])
+                        
+                        else:
+                            temp[int(word)][1] = "1"
+                            func( self.dirs.index([temp[int(word)][0],"0"]) )
+                            count += 1    
+            
+            if mode == "standard":
+                wipe()
+                print(int(word),temp[int(word)][0].split(folder,1)[1])
+                print("")
+                print("1: select folder")
+                print("2: enter folder ")
+                out("select option")
+                nword = readchar()
+                
+                if "1" in nword :
                     
-                    if retour:
-                        return self.dirs.index([temp[int(word)][0],"0"])
-                    
+                    if temp[int(word)][1] == "1":
+                        
+                        if retour:
+                            return self.dirs.index([temp[int(word)][0],"1"])
+                        
+                        else:
+                            temp[int(word)][1] = "0"
+                            func( self.dirs.index([temp[int(word)][0],"1"]) )
+                            count += 1
+                        
                     else:
-                        temp[int(word)][1] = "1"
-                        func( self.dirs.index([temp[int(word)][0],"0"]) )
-                        count += 1
+                        
+                        if retour:
+                            return self.dirs.index([temp[int(word)][0],"0"])
+                        
+                        else:
+                            temp[int(word)][1] = "1"
+                            func( self.dirs.index([temp[int(word)][0],"0"]) )
+                            count += 1
+                
+                elif "2" in nword:
+                    if pos != bottom:
+                        pos += 1
+                        folder = temp[int(word)][0] + "/"
+                        temp = [ x for x in choose[pos] if folder in x[0]]
+                
             
-            elif "2" in nword:
-                if pos != bottom:
-                    pos += 1
-                    folder = temp[int(word)][0] + "/"
-                    temp = [ x for x in choose[pos] if folder in x[0]]
+        elif "s" in word:
+            if mode != "switch":
+                mode = "switch"
             
+            else:
+                mode = "standard"
         
         elif "b" in word :
             
