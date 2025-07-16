@@ -19,7 +19,7 @@ def init_image( self ):
     self.show = 1# affiche ou non l'image selectionné
     
     if sysname == 'nt':
-        self.img_command = "libs\\win\\win32-dist\\jp2a.exe --colors"
+        self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
 
     elif "64" in self.sys_architecture:
         self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
