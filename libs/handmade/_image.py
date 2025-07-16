@@ -53,7 +53,7 @@ def get_img( self, path, files = [], start = 0 ):
             
         elif self.sysname == 'nt':
             
-            if f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
+            if f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
                 
             if f[ -4: ] == ".png":# c'est une image non supporté par la librairie Windows
@@ -61,7 +61,7 @@ def get_img( self, path, files = [], start = 0 ):
        
         else:
             
-            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
+            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
     
     
