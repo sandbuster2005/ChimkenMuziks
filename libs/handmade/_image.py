@@ -13,7 +13,7 @@ def init_image( self ):
     self.img_script = "appdata.scripts.test"
     self.thumbnail = None
     self.screen = None
-    self.path_to_img = "appdata\\image\\"# chemin du dosier image
+    self.path_to_img = "appdata/image/"# chemin du dosier image
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
     self.img = ""# image actuel
     self.show = 1# affiche ou non l'image selectionné
@@ -22,10 +22,10 @@ def init_image( self ):
         self.img_command = "libs\\win\\win32-dist\\jp2a.exe --colors"
 
     elif "64" in self.sys_architecture:
-        self.img_command = "./libs/win/jp2a_x86.exe --chars=\ \  --fill --color-depth=8"
+        self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
         
     elif "arm" in self.sys_architecture:
-        self.img_command = "./libs/win/jp2a_arm.exe --chars=\ \  --fill --color-depth=8"
+        self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
     else:
         print("WARNING: Image module not initialized, could not recognize used system")
         
@@ -42,7 +42,7 @@ def get_img( self, path, files = [], start = 0 ):
     
     if sysname == 'nt':
         path=path.replace("/", "\\")
-
+    
     if start:
         self.imgs = []
         
@@ -52,7 +52,7 @@ def get_img( self, path, files = [], start = 0 ):
         else:
             separator = "/"
         if isdir( path + f ):# un sous dossier existe
-            self.get_img( (path + f + separator), [] )
+            self.get_img( path + f + separator , [] )
             
         elif sysname == 'nt':
             if f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
