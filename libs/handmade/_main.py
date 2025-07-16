@@ -16,7 +16,6 @@ import os
 
 def init_main( self ):
     self.sysname = sysname
-    
     if sysname == 'nt':
         self.separator = '\\'
         
@@ -454,6 +453,9 @@ def wind( self, mode, pause = False  ):
     if mode == 12:
         self.color = 1 - self.color
         
+    if mode == 13:
+        self.invert = 1 - self.invert
+        
     if mode == 15:
         self.player.set_time(0)
         self.bar.index = 0
@@ -490,7 +492,8 @@ def param_center( self ):
                  [ "jouer en random ", self.mode ],
                  [ "afficher les fichier paroles", self.word ],
                  ["taille de la bar proportionnel", self.addaptive_bar],
-                 ["la bar change de couleur", self.color]
+                 ["la bar change de couleur", self.color],
+                 ["inverse la couleur de l'image",self.invert]
                 ]
         
         up(len(tooltip))

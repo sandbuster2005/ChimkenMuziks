@@ -12,10 +12,10 @@ def init_sound( self ):
         import alsaaudio
         
     except:
-        self.audio_linux=False
+        self.audio_linux = False
         
     else:
-        self.audio_linux=True
+        self.audio_linux = True
     
 def start_sound( self ):
     """
@@ -39,7 +39,7 @@ def change_sound_manager( self ):
         
     if choice == "1":
         
-        if "linux" in self.sys_os:#si le systeme est compatible
+        if "posix" in self.sysname:#si le systeme est compatible
             
             if self.audio_linux:
                 self.mixer = alsaaudio.Mixer()
