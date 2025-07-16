@@ -288,7 +288,10 @@ def display( self ):
     lup()
     
     if self.song != None:
-        a = "/"
+        if os.name == 'nt':
+            a = '\\'
+        else:
+            a = '/'
         sleep( 0.10 )
         white()
         self.volume = self.get_volume()
