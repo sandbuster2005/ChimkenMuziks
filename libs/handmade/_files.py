@@ -50,7 +50,7 @@ def get_file( self, path, files = [] ):
                 files += self.get_file( path + f + separator, [] )
                 self.dirs.append( [ path + f, '1' ] )
                 
-        if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid":#le fichier est un audio
+        if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid" or f[ -4: ] == ".ogg":#le fichier est un audio
             files.append( path + separator + f )
             
     return sorted( files ,key = lambda x: x.rsplit( separator, 1 )[ 1 ].lower() )
