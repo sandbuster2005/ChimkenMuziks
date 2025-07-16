@@ -28,7 +28,8 @@ def get_file( self, path, files = [] ):
     """
     if sysname == 'nt':
         separator = '\\'
-        path=path+separator
+        path += separator
+        
     else:
         separator = '/'
 
@@ -72,6 +73,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
     if sysname == 'nt':
         separator = '\\'
+        
     else:
         separator = '/'
 
@@ -83,16 +85,16 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     
     for x in self.dirs:
         
-        if self.path_to_file in x[0]:
-            bottom = max(bottom,x[0].count(separator) - base)
-            select.append([x[0].count(separator) - base ,x[0],x[1]])
+        if self.path_to_file in x[ 0 ]:
+            bottom = max( bottom ,x[ 0 ].count( separator ) - base )
+            select.append( [ x[ 0 ].count( separator ) - base ,x[ 0 ],x[ 1 ] ] )
             
         else:
             pass
         
     choose = []
     for y in range(bottom + 1):
-        choose.append([[ x[1],x[2] ] for x in select if x[0] == y])
+        choose.append( [ [ x[ 1 ],x[ 2 ] ] for x in select if x[ 0 ] == y ] )
         
     folder = self.path_to_file + ""
     pos = 0
@@ -101,7 +103,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     while word and count!=lim :
         white()
         print(f"mode : { str( mode ) }")
-        print("   " + folder.split(self.path_to_file)[1])
+        print("   " + folder.split( self.path_to_file )[ 1 ] )
         
         for x in range( len( temp ) ):
             print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
@@ -118,29 +120,29 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         
         if all_numbers( word, len(temp), 1 ):
             if mode == "switch":
-                if temp[int(word)][1] == "1":
+                if temp[ int( word ) ][ 1 ] == "1":
                         
                         if retour:
-                            return self.dirs.index([temp[int(word)][0],"1"])
+                            return self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] )
                         
                         else:
-                            temp[int(word)][1] = "0"
-                            func( self.dirs.index([temp[int(word)][0],"1"]) )
+                            temp[ int( word ) ][ 1 ] = "0"
+                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] ) )
                             count += 1
                         
                 else:
                         
                         if retour:
-                            return self.dirs.index([temp[int(word)][0],"0"])
+                            return self.dirs.index([ temp[ int( word ) ][ 0 ], "0" ])
                         
                         else:
-                            temp[int(word)][1] = "1"
-                            func( self.dirs.index([temp[int(word)][0],"0"]) )
+                            temp[ int( word ) ][ 1 ] = "1"
+                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "0" ] ) )
                             count += 1    
             
             if mode == "standard":
                 wipe()
-                print(int(word),temp[int(word)][0].split(folder,1)[1])
+                print( int( word ), temp[ int( word ) ][ 0 ].split( folder, 1 )[ 1 ] )
                 print("")
                 print("1: select folder")
                 print("2: enter folder ")
@@ -149,31 +151,31 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                 
                 if "1" in nword :
                     
-                    if temp[int(word)][1] == "1":
+                    if temp[ int( word ) ][ 1 ] == "1":
                         
                         if retour:
-                            return self.dirs.index([temp[int(word)][0],"1"])
+                            return self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ])
                         
                         else:
                             temp[int(word)][1] = "0"
-                            func( self.dirs.index([temp[int(word)][0],"1"]) )
+                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] ) )
                             count += 1
                         
                     else:
                         
                         if retour:
-                            return self.dirs.index([temp[int(word)][0],"0"])
+                            return self.dirs.index( [temp[ int( word ) ][ 0 ], "0" ] )
                         
                         else:
-                            temp[int(word)][1] = "1"
-                            func( self.dirs.index([temp[int(word)][0],"0"]) )
+                            temp[ int( word) ][ 1 ] = "1"
+                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "0" ]) )
                             count += 1
                 
                 elif "2" in nword:
                     if pos != bottom:
                         pos += 1
-                        folder = temp[int(word)][0] + separator
-                        temp = [ x for x in choose[pos] if folder in x[0]]
+                        folder = temp[ int( word ) ][ 0 ] + separator
+                        temp = [ x for x in choose[ pos ] if folder in x[ 0 ] ]
                 
             
         elif "s" in word:
@@ -186,9 +188,9 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         elif "b" in word :
             
             if pos!=0:
-                folder = folder.rsplit(separator,2)[0] + separator
+                folder = folder.rsplit( separator, 2 )[ 0 ] + separator
                 pos -= 1
-                temp = [ x for x in choose[pos] if folder in x[0]]
+                temp = [ x for x in choose [pos ] if folder in x[ 0 ] ]
             
             else:
                 word = ""
@@ -215,6 +217,7 @@ def find_file( self, word ):
     """
     if sysname == 'nt':
         separator = '\\'
+   
     else:
         separator = '/'
 
@@ -224,7 +227,7 @@ def find_file( self, word ):
             for i,x in enumerate( self.files ):
                 if [x.rsplit( separator )[ -1 ], i ] not in files:
                     if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x.lower() ):
-                        files.append( [x.rsplit( separator )[ -1 ], i ] )
+                        files.append( [ x.rsplit( separator )[ -1 ], i ] )
     
     return sorted(files,key = lambda x: x[1] )
 
@@ -234,15 +237,17 @@ def check_adress( self ):
     """
     if sysname == 'nt':
         separator = '\\'
+    
     else:
         separator = '/'
 
     if not isdir( self.path_to_file ):
         while not isdir( self.path_to_file ):
             try:
-                self.path_to_file = str(self.external_return(["xplr"],))[2:-3]+separator
+                self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + separator
             except:
-                self.path_to_file = input("chemin du dossier musique: ")
+                self.path_to_file = input( "chemin du dossier musique: " )
+    
     self.write_param()
     
     
@@ -262,12 +267,13 @@ def mani_file(self):
     """
     if sysname == 'nt':
         separator = '\\'
+    
     else:
         separator = '/'
 
     if self.song != None:
-        print(self.files)
-        index = self.files.index(self.song)
+        print( self.files )
+        index = self.files.index( self.song )
         word = self.ask_list( [ "delete ", "move", "rename", "convert"] )
         
         if all_numbers( word, 3 ):
@@ -277,10 +283,10 @@ def mani_file(self):
                 
                 if choice == "y":
                     rm_file( self.song )
-                    self.files.remove(self.song)
+                    self.files.remove( self.song )
                 
             if int( word ) == 1:
-                choice = str( self.select_dir(retour = 1) )
+                choice = str( self.select_dir( retour = 1 ) )
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + separator + self.song.rsplit( separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + separator + self.song.rsplit( separator, 1 )[ 1 ]
@@ -288,7 +294,7 @@ def mani_file(self):
             if int( word ) == 2:
                 choice = self.ask( "new_name :" )
                 mv_file( self.song, self.song.rsplit( separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
-                self.files[index] = self.song.rsplit( separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
+                self.files[ index ] = self.song.rsplit( separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
             if int( word ) == 3:
                 self.change_extension()
@@ -312,19 +318,19 @@ def get_words(self):
         if isfile( file ):
             data = getfile( file )
             data = data.split("[" )
-            data = data[1:]
+            data = data[ 1: ]
             
-            for x in range(len(data)):
-                data[x] = replace(data[x],'\n').split("]",1)
+            for x in range( len( data ) ):
+                data[ x ] = replace( data[ x ], '\n' ).split("]", 1 )
             
             new_data = []
             for x in range(len(data)):
-                if  ":" in data[x][0] and  '.' in data[x][0] and len(data[x][0]) == 8:
-                    new_data.append(data[x])
+                if  ":" in data[ x ][0] and  '.' in data[ x ][ 0 ] and len(data[ x ][ 0 ] ) == 8:
+                    new_data.append( data[ x ] )
                     
             data = new_data
-            for x in range(len(data)):        
-                data[x][0] = int(data[x][0][:2]) * 60 + int(data[x][0][3:5]) + int(data[x][0][6:8]) / 100 
+            for x in range( len( data ) ):        
+                data[ x ][ 0 ] = int(data[ x ][ 0 ][ :2 ] ) * 60 + int( data[ x ][ 0 ][ 3:5 ] ) + int( data[ x ][ 0 ][ 6:8 ] ) / 100 
             
             self.words = data
             

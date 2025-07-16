@@ -26,6 +26,7 @@ def init_image( self ):
         
     elif "arm" in self.sys_architecture:
         self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
+   
     else:
         print("WARNING: Image module not initialized, could not recognize used system")
         
@@ -47,19 +48,26 @@ def get_img( self, path, files = [], start = 0 ):
         self.imgs = []
         
     for f in listdir( path ):
+        
         if sysname == 'nt':
             separator = "\\"
+            
         else:
             separator = "/"
+            
         if isdir( path + f ):# un sous dossier existe
             self.get_img( path + f + separator , [] )
             
         elif sysname == 'nt':
+            
             if f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
+                
             if f[ -4: ] == ".png":# c'est une image non supporté par la librairie Windows
-                print("WARNING: displaying PNG files is not supported on Windows. Please use JPG files instead.")
+                print( "WARNING: displaying PNG files is not supported on Windows. Please use JPG files instead." )
+       
         else:
+            
             if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
     
@@ -74,27 +82,34 @@ def display_img( self ):
     les images doit étre dans le dossiers image du programme
     """
     if self.img_mode == "img":
-        if not ".mid" in self.song:
+       
+       if not ".mid" in self.song:
             self.get_metadata()
         
-        if self.thumbnail != None:
+       if self.thumbnail != None:
             image = self.thumbnail
             
-        else:
+       else:
             image = self.img
             
-        if self.img != "" or self.thumbnail != None:# une image est selectionné
-            if sysname == 'nt':
+       if self.img != "" or self.thumbnail != None:# une image est selectionné
+            
+            if sysname == 'nt':    
                 self.external_call( f"{ self.img_command } { image }", True )# image selectionné
+            
             else:
                 self.external_call( [ f"{ self.img_command } { image }" ], True )# image selectionné
+           
             print("")
             
-        elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
+       elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
+            
             if sysname == 'nt':
                 self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
+            
             else:
                 self.external_call( [ f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }" ], True )# image aléatoire
+            
             print("")
             
     if self.img_mode == "script":
@@ -112,6 +127,7 @@ def select_img( self ):
     
     word = "0"
     while all_numbers( word , len( self.imgs ) ):
+        
         wipe()
         word = self.ask_list(self.imgs+["random"],"select img:" )
         
@@ -121,10 +137,13 @@ def select_img( self ):
                 word = ""
             
             else:
+                
                 if sysname == 'nt':
                     self.external_call(  f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
+                
                 else:
                     self.external_call( [ f"{ self.img_command }  { self.imgs[ int( word ) ] }" ], True )
+                
                 out("y/n ?")
                 confirm = readchar(  )
                 
