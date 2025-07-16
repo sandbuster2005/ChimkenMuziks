@@ -157,7 +157,6 @@ def get_metadata(self):
     else:
         for j in [splitext(self.song)[0], dirname(self.song)+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
-                print(i)
                 if isfile(i):
                     file = open(i, 'rb')
                     write_file("appdata/cache/preview", file.read(), mode = "wb")
