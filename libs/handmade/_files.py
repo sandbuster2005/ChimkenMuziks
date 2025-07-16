@@ -1,7 +1,6 @@
 #made by sand
 from os import listdir
 from os.path import isdir,isfile
-from os import name as sysname
 from .ffiles import *
 from .ffiles import get_file as getfile
 from .utils import *
@@ -26,12 +25,8 @@ def get_file( self, path, files = [] ):
     files est une liste qui peut contenir des chemin d'accés auquel l'utilisateur peut accéder au préalable
     renvoie les ficher déja inclus et ceux du dossier scanné
     """
-    if sysname == 'nt':
-        separator = '\\'
+    if self.sysname == 'nt':
         path += separator
-        
-    else:
-        separator = '/'
 
     self.song = None
     self.played = []
@@ -41,19 +36,19 @@ def get_file( self, path, files = [] ):
         if isdir( path + f ):
             
             if [ path + f, '1' ] in self.dirs:# le dossier est activé
-                files += self.get_file( path + f + separator, [] )
+                files += self.get_file( path + f + self.separator, [] )
             
             elif [ path + f, '0' ] in self.dirs:# le dossier est desactivé 
                 continue
             
             else:# le dossier n'est pas repertorié
-                files += self.get_file( path + f + separator, [] )
+                files += self.get_file( path + f + self.separator, [] )
                 self.dirs.append( [ path + f, '1' ] )
                 
         if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid" or f[ -4: ] == ".ogg":#le fichier est un audio
-            files.append( path + separator + f )
+            files.append( path + self.separator + f )
             
-    return sorted( files ,key = lambda x: x.rsplit( separator, 1 )[ 1 ].lower() )
+    return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )
 
 
 def edit_dirs(self):
@@ -71,23 +66,17 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     limite:
     demande une valeur numérique a l'utilisateur pour selectionner un dossier/sous dossiers
     """
-    if sysname == 'nt':
-        separator = '\\'
-        
-    else:
-        separator = '/'
-
     count = 0
     mode = "standard"
-    base = self.path_to_file.count(separator)
+    base = self.path_to_file.count( self.separator )
     bottom = 0
     select = []
     
     for x in self.dirs:
         
         if self.path_to_file in x[ 0 ]:
-            bottom = max( bottom ,x[ 0 ].count( separator ) - base )
-            select.append( [ x[ 0 ].count( separator ) - base ,x[ 0 ],x[ 1 ] ] )
+            bottom = max( bottom ,x[ 0 ].count( self.separator ) - base )
+            select.append( [ x[ 0 ].count( self.separator ) - base ,x[ 0 ],x[ 1 ] ] )
             
         else:
             pass
@@ -99,8 +88,8 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     folder = self.path_to_file + ""
     pos = 0
     word = "0"
-    temp = choose[0]
-    while word and count!=lim :
+    temp = choose[ 0 ]
+    while word and count != lim :
         white()
         print(f"mode : { str( mode ) }")
         print("   " + folder.split( self.path_to_file )[ 1 ] )
@@ -111,14 +100,14 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         print("(b) to go back")
         print("(s) switch mode")
         
-        if len(temp)< 11:
+        if len( temp )< 11:
             out("select folder")
             word = readchar()
         
         else:
             word = input( "select folder " )
         
-        if all_numbers( word, len(temp), 1 ):
+        if all_numbers( word, len( temp ), 1 ):
             if mode == "switch":
                 if temp[ int( word ) ][ 1 ] == "1":
                         
@@ -174,7 +163,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                 elif "2" in nword:
                     if pos != bottom:
                         pos += 1
-                        folder = temp[ int( word ) ][ 0 ] + separator
+                        folder = temp[ int( word ) ][ 0 ] + self.separator
                         temp = [ x for x in choose[ pos ] if folder in x[ 0 ] ]
                 
             
@@ -188,7 +177,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         elif "b" in word :
             
             if pos!=0:
-                folder = folder.rsplit( separator, 2 )[ 0 ] + separator
+                folder = folder.rsplit( self.separator, 2 )[ 0 ] + self.separator
                 pos -= 1
                 temp = [ x for x in choose [pos ] if folder in x[ 0 ] ]
             
@@ -215,19 +204,13 @@ def find_file( self, word ):
     limite:
     toute les charactère sont considérée comme minuscule
     """
-    if sysname == 'nt':
-        separator = '\\'
-   
-    else:
-        separator = '/'
-
-    files = [ [ self.files[ x ].rsplit( separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].lower().rsplit( separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
+    files = [ [ self.files[ x ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
     if len(files) < 10 and len(word) > 3:
         for y in range( len( word ) ):
             for i,x in enumerate( self.files ):
-                if [x.rsplit( separator )[ -1 ], i ] not in files:
+                if [x.rsplit( self.separator )[ -1 ], i ] not in files:
                     if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x.lower() ):
-                        files.append( [ x.rsplit( separator )[ -1 ], i ] )
+                        files.append( [ x.rsplit( self.separator )[ -1 ], i ] )
     
     return sorted(files,key = lambda x: x[1] )
 
@@ -235,16 +218,10 @@ def check_adress( self ):
     """
     cette fonction permet de verifier si l'adresse existe et est un dossier
     """
-    if sysname == 'nt':
-        separator = '\\'
-    
-    else:
-        separator = '/'
-
     if not isdir( self.path_to_file ):
         while not isdir( self.path_to_file ):
             try:
-                self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + separator
+                self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
             except:
                 self.path_to_file = input( "chemin du dossier musique: " )
     
@@ -265,12 +242,6 @@ def mani_file(self):
     cette fonction permet de supprimer , deplacer(dans les dossiers connu)
     et renommer le fichier actuel
     """
-    if sysname == 'nt':
-        separator = '\\'
-    
-    else:
-        separator = '/'
-
     if self.song != None:
         print( self.files )
         index = self.files.index( self.song )
@@ -288,13 +259,13 @@ def mani_file(self):
             if int( word ) == 1:
                 choice = str( self.select_dir( retour = 1 ) )
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
-                    mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + separator + self.song.rsplit( separator, 1 )[ 1 ] )
-                    self.files[index] = self.dirs[ int( choice ) ][ 0 ] + separator + self.song.rsplit( separator, 1 )[ 1 ]
+                    mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
+                    self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
             if int( word ) == 2:
                 choice = self.ask( "new_name :" )
-                mv_file( self.song, self.song.rsplit( separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
-                self.files[ index ] = self.song.rsplit( separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
+                mv_file( self.song, self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
+                self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
             if int( word ) == 3:
                 self.change_extension()

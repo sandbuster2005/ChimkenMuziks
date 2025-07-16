@@ -4,6 +4,7 @@ from libs.progress.bar import Bar
 from math import floor,ceil
 from time import sleep,strftime
 from os import listdir
+from os import name as sysname
 from .utils import *
 from .ffiles import *
 from .terminal import *
@@ -14,7 +15,14 @@ import platform
 import os
 
 def init_main( self ):
-    self.sys_os = platform.system().lower()
+    self.sysname = sysname
+    
+    if sysname == 'nt':
+        self.separator = '\\'
+        
+    else:
+        self.separator = '/'
+        
     self.sys_architecture = platform.machine()
     self.repeat = 0 #1 pour repeter en boucle la chanson
     self.stay = True  # False pour quiter le lecteur

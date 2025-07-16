@@ -1,7 +1,6 @@
 #made by sand
 from os import listdir
 from os.path import isdir,isfile
-from os import name as sysname
 from random import randint
 from .utils import *
 from .terminal import *
@@ -18,7 +17,7 @@ def init_image( self ):
     self.img = ""# image actuel
     self.show = 1# affiche ou non l'image selectionné
     
-    if sysname == 'nt':
+    if self.sysname == 'nt':
         self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
 
     elif "64" in self.sys_architecture:
@@ -41,24 +40,18 @@ def get_img( self, path, files = [], start = 0 ):
     cette fonction d'accéde pas au sous dossier
     """
     
-    if sysname == 'nt':
-        path=path.replace("/", "\\")
+    if self.sysname == 'nt':
+        path = path.replace("/", "\\")
     
     if start:
         self.imgs = []
         
     for f in listdir( path ):
         
-        if sysname == 'nt':
-            separator = "\\"
-            
-        else:
-            separator = "/"
-            
         if isdir( path + f ):# un sous dossier existe
-            self.get_img( path + f + separator , [] )
+            self.get_img( path + f + self.separator , [] )
             
-        elif sysname == 'nt':
+        elif self.sysname == 'nt':
             
             if f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
@@ -94,22 +87,12 @@ def display_img( self ):
             
        if self.img != "" or self.thumbnail != None:# une image est selectionné
             
-            if sysname == 'nt':    
-                self.external_call( f"{ self.img_command } { image }", True )# image selectionné
-            
-            else:
-                self.external_call( [ f"{ self.img_command } { image }" ], True )# image selectionné
-           
+            self.external_call( f"{ self.img_command } { image }", True )# image selectionné
             print("")
             
        elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             
-            if sysname == 'nt':
-                self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
-            
-            else:
-                self.external_call( [ f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }" ], True )# image aléatoire
-            
+            self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
             print("")
             
     if self.img_mode == "script":
@@ -137,12 +120,7 @@ def select_img( self ):
                 word = ""
             
             else:
-                
-                if sysname == 'nt':
-                    self.external_call(  f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
-                
-                else:
-                    self.external_call( [ f"{ self.img_command }  { self.imgs[ int( word ) ] }" ], True )
+                self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 
                 out("y/n ?")
                 confirm = readchar(  )
