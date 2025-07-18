@@ -154,7 +154,8 @@ def get_metadata(self):
         image = image.data
         write_file("appdata/cache/preview", image , mode = "wb")
         image = "appdata/cache/preview"
-    else:
+        
+    elif tag.album != None:
         for j in [splitext(self.song)[0], dirname(self.song)+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
                 if isfile(i):
