@@ -85,13 +85,13 @@ def display_img( self ):
        else:
             image = self.img
             
-       if self.img != "" or self.thumbnail != None:# une image est selectionné
+       if image != "" or self.thumbnail != None:# une image est selectionné
             
             #self.external_call( f"{ self.img_command } { image }", True )# image selectionné
             self.print_image_to_screen(image, 5)
             print("")
             
-       elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
+       elif image == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             
             #self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
             self.print_image_to_screen( self.imgs[ randint( 0, len( self.imgs ) - 1) ] , 5)
