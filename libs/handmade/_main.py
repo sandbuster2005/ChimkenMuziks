@@ -382,7 +382,7 @@ def load_all( self ):
     self.player.stop()
     self.load_songs()
     self.get_img( self.path_to_img, start = 1 )
-    
+    self.write_param()
     
 def wind( self, mode, pause = False  ):
     """
