@@ -68,13 +68,16 @@ def print_image_to_screen(self, path, top_offset=0):
     
     #heightprint = height
     #widthprint = height*2
-    
+    width = imwidth/widthprint
+    height = imheight/heightprint
+
     for i in range(heightprint): # height
         for j in range(widthprint): # width
-            left = (imwidth/widthprint)*j
-            up = (imheight/heightprint)*i
-            right = left+(imwidth/widthprint)
-            down = up+(imheight/heightprint)
+            left = (width) * j
+            up = (height) * i
+            right = left + (width)
+            down = up + (height)
+            
             pixel = image[int(up):int(down)+1, int(left):int(right)+1]
             #cv2.imshow('test', pixel)
             #cv2.waitKey(0)
