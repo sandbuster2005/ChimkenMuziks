@@ -19,8 +19,7 @@ def init_param( self ):
                    "word",
                    "base_soundmap",
                    "addaptive_bar",
-                   "color",
-                   "invert"
+                   "color"
                    ]
     
 

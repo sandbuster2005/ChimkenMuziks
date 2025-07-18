@@ -16,7 +16,6 @@ def init_image( self ):
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
     self.img = ""# image actuel
     self.show = 1# affiche ou non l'image selectionné
-    self.invert = 0
     
     if self.sysname == 'nt':
         self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
@@ -85,20 +84,20 @@ def display_img( self ):
             
        else:
             image = self.img
-       print(f"{ self.img_command } {self.invert * '-i'} { image }")     
+            
        if self.img != "" or self.thumbnail != None:# une image est selectionné
             
-            self.external_call( f"{ self.img_command } {self.invert * '-i'} { image }", True )# image selectionné
+            self.external_call( f"{ self.img_command } { image }", True )# image selectionné
             print("")
             
        elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             
-            self.external_call( f"{ self.img_command } {self.invert * '-i'} { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
+            self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
             print("")
             
     if self.img_mode == "script":
         self.Screen.display()
-       
+        
 def select_img( self ):
     """
     cette fonction permet de choisir une image parmit la galerie ou de choisir aléatoire
@@ -121,7 +120,7 @@ def select_img( self ):
                 word = ""
             
             else:
-                self.external_call( f"{ self.img_command } {self.invert * '-i'} { self.imgs[ int( word ) ] }" , True )
+                self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 
                 out("y/n ?")
                 confirm = readchar(  )
