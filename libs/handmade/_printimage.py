@@ -1,11 +1,13 @@
 import os
 import sys
+from .terminal import out
 sys.path.append(os.path.abspath("libs"))
 
 import cv2
 import numpy
 
 def init_printer(self):
+    self.true_color = True
     self.color_codes = [(12,12,12),
                (197,15,31),
                (19,161,14),
@@ -81,6 +83,10 @@ def print_image_to_screen(self, path, top_offset=0):
                 print('\033[42mERROR: Empty pixel.\033[0m')
                 print(pixel, i, j, size, left, up, right, down)
             colors.append(average_color)
-            print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
+            if not self.true_color:
+                print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
+            else:
+                
+                out(f'\x1b[48;2;{int(average_color[2])};{int(average_color[1])};{int(average_color[0])}m ')
         print('\033[0m')
 
