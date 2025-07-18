@@ -26,7 +26,7 @@ def get_file( self, path, files = [] ):
     renvoie les ficher déja inclus et ceux du dossier scanné
     """
     if self.sysname == 'nt':
-        path += separator
+        path += self.separator
 
     self.song = None
     self.played = []

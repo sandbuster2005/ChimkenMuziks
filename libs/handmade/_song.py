@@ -4,7 +4,7 @@ from .utils import *
 from .ffiles import *
 import libs.midi2audio as midi2audio
 from os import listdir
-from os.path import isfile
+from os.path import isfile, splitext, dirname
 from libs.tinytag import TinyTag
 def init_song( self ):
     #SONG variables
@@ -154,6 +154,13 @@ def get_metadata(self):
         image = image.data
         write_file("appdata/cache/preview", image , mode = "wb")
         image = "appdata/cache/preview"
-        
+    else:
+        for j in [splitext(self.song)[0], dirname(self.song)+self.separator+tag.album]:
+            for i in [j+'.jpg', j+'.jpeg', j+'.png']:
+                if isfile(i):
+                    file = open(i, 'rb')
+                    write_file("appdata/cache/preview", file.read(), mode = "wb")
+                    image = "appdata/cache/preview"
+                    file.close()
     self.thumbnail = image
     

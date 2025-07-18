@@ -17,17 +17,17 @@ def init_image( self ):
     self.img = ""# image actuel
     self.show = 1# affiche ou non l'image selectionné
     
-    if self.sysname == 'nt':
-        self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
+    #if self.sysname == 'nt':
+    #    self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
 
-    elif "64" in self.sys_architecture:
-        self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
+    #elif "64" in self.sys_architecture:
+    #    self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
         
-    elif "arm" in self.sys_architecture:
-        self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
+    #elif "arm" in self.sys_architecture:
+    #    self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
    
-    else:
-        print("WARNING: Image module not initialized, could not recognize used system")
+    #else:
+    #    print("WARNING: Image module not initialized, could not recognize used system")
         
     
     
@@ -51,17 +51,17 @@ def get_img( self, path, files = [], start = 0 ):
         if isdir( path + f ):# un sous dossier existe
             self.get_img( path + f + self.separator , [] )
             
-        elif self.sysname == 'nt':
-            
-            if f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
-                self.imgs.append( path + f )
-                
-            if f[ -4: ] == ".png":# c'est une image non supporté par la librairie Windows
-                print( "WARNING: displaying PNG files is not supported on Windows. Please use JPG files instead." )
+        #elif self.sysname == 'nt':
+        #    
+        #    if f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
+        #        self.imgs.append( path + f )
+        #        
+        #    if f[ -4: ] == ".png":# c'est une image précédemment non supporté par la librairie Windows
+        #        self.imgs.append( path + f )
        
         else:
             
-            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg":# c'est une image supporté par la librairie
+            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
                 self.imgs.append( path + f )
     
     
@@ -87,12 +87,14 @@ def display_img( self ):
             
        if self.img != "" or self.thumbnail != None:# une image est selectionné
             
-            self.external_call( f"{ self.img_command } { image }", True )# image selectionné
+            #self.external_call( f"{ self.img_command } { image }", True )# image selectionné
+            self.print_image_to_screen(image, 5)
             print("")
             
        elif self.img == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             
-            self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
+            #self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
+            self.print_image_to_screen(image, 5)
             print("")
             
     if self.img_mode == "script":
@@ -120,8 +122,9 @@ def select_img( self ):
                 word = ""
             
             else:
-                self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
-                
+                #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
+                self.print_image_to_screen(self.imgs[ int( word ) ], 5)
+
                 out("y/n ?")
                 confirm = readchar(  )
                 
