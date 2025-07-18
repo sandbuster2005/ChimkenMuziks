@@ -454,6 +454,9 @@ def wind( self, mode, pause = False  ):
     if mode == 12:
         self.color = 1 - self.color
         
+    if mode == 13:
+        self.true_color = 1 - self.true_color
+        
     if mode == 15:
         self.player.set_time(0)
         self.bar.index = 0
@@ -490,7 +493,8 @@ def param_center( self ):
                  [ "jouer en random ", self.mode ],
                  [ "afficher les fichier paroles", self.word ],
                  ["taille de la bar proportionnel", self.addaptive_bar],
-                 ["la bar change de couleur", self.color]
+                 ["la bar change de couleur", self.color],
+                 ["passe les image en true color",self.true_color]
                 ]
         
         up(len(tooltip))

@@ -7,7 +7,7 @@ import cv2
 import numpy
 
 def init_printer(self):
-    self.true_color = True
+    self.true_color = 1
     self.color_codes = [(12,12,12),
                (197,15,31),
                (19,161,14),
