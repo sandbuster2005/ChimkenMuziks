@@ -85,7 +85,7 @@ def display_img( self ):
        else:
             image = self.img
             
-       if image != "" or self.thumbnail != None:# une image est selectionné
+       if image != "" :# une image est selectionné
             
             #self.external_call( f"{ self.img_command } { image }", True )# image selectionné
             self.print_image_to_screen(image, 5)
