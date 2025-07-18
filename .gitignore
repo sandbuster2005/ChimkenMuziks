@@ -1,6 +1,6 @@
-appdata\param.txt
-**\__pycache__\
-*\cache\*
-!\appdata\cache\static
+appdata/param.txt
+__pycache__/
+**/cache/**
+!/appdata/cache/static
 update
-appdata\image\wallpapers\
+appdata/image/wallpapers/
