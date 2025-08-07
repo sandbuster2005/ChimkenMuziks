@@ -2,10 +2,13 @@ import os
 import sys
 from .terminal import out
 sys.path.append(os.path.abspath("libs"))
-
-import cv2
-import numpy
-
+import imageio as iio
+try:
+    import numpy
+except:
+    raise importerror("numpy not installed ")
+else:
+    pass
 def init_printer(self):
     self.true_color = 1
     self.color_codes = [(12,12,12),
@@ -45,17 +48,21 @@ def init_printer(self):
 def closest(colors,color):
     colors = numpy.array(colors)
     color = numpy.array(color)
-    distances = numpy.sqrt(numpy.sum((colors-color)**2,axis=1))
-    index_of_smallest = numpy.where(distances==numpy.amin(distances))
-    smallest_distance = colors[index_of_smallest]
-    return index_of_smallest
+    try :
+        distances = numpy.sqrt(numpy.sum((colors-color)**2,axis=1))
+        index_of_smallest = numpy.where(distances==numpy.amin(distances))
+        smallest_distance = colors[index_of_smallest]
+    except:
+        return [[0]]
+    else:
+        return index_of_smallest
 
 def print_image_to_screen(self, path, top_offset=0):
     size = os.get_terminal_size()
     height = size.lines - top_offset
     width = size.columns/2
     
-    image = cv2.imread(path)
+    image = iio.imread(path)
     imheight, imwidth, *_ = image.shape
     
     colors = []
@@ -83,8 +90,9 @@ def print_image_to_screen(self, path, top_offset=0):
             #cv2.waitKey(0)
             average_color = numpy.mean(pixel, axis=(0,1))
             if len(pixel) == 0:
-                print('\033[42mERROR: Empty pixel.\033[0m')
-                print(pixel, i, j, size, left, up, right, down)
+                #print('\033[42mERROR: Empty pixel.\033[0m')
+                #print(pixel, i, j, size, left, up, right, down)
+                pass
             colors.append(average_color)
             if not self.true_color:
                 print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')

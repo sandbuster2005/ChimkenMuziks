@@ -48,7 +48,7 @@ def write_param( self , param = ""):
     data = join_list( data, [ "|||", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
     self.sort_command()
-  
+
 def reset( self ):
     """
     cette fonction permet de remmetre a 0 les parrametre actuel et

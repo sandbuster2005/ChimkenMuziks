@@ -25,7 +25,7 @@ def get_file( self, path, files = [] ):
     files est une liste qui peut contenir des chemin d'accés auquel l'utilisateur peut accéder au préalable
     renvoie les ficher déja inclus et ceux du dossier scanné
     """
-    if True:
+    if self.sysname == 'nt':
         path += self.separator
 
     self.song = None
