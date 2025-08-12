@@ -98,6 +98,6 @@ def print_image_to_screen(self, path, top_offset=0):
                 print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
             else:
                 
-                out(f'\x1b[48;2;{int(average_color[2])};{int(average_color[1])};{int(average_color[0])}m ')
+                out(f'\x1b[48;2;{int(average_color[0])};{int(average_color[1])};{int(average_color[2])}m ')
         print('\033[0m')
 

@@ -4,7 +4,7 @@ from os.path import isdir,exists
 from os import listdir,makedirs,remove,rmdir
 
 mode = "o"
-depth = 0
+depth = 1
 #a:add o:overwrite
 
 
