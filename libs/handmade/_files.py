@@ -222,7 +222,8 @@ def check_adress( self ):
                 self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
             except:
                 self.path_to_file = input( "chemin du dossier musique: " )
-                self.path_to_file += self.separator
+                if self.path_to_file[-1] != self.separator:
+                    self.path_to_file += self.separator
     
     self.write_param()
     
