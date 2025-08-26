@@ -46,7 +46,7 @@ class Bar(Progress):
         bar = color(self.fill * filled_length ,bg = self.color )
         empty = color(self.empty_fill * empty_length, bg = self.bg_color)
         if self.max > 0:
-            suffix = f"{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}    "
+            suffix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}    '
         line = ''.join([message, self.bar_prefix, bar, empty, self.bar_suffix,
                         suffix])
         self.writeln(line)
