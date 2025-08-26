@@ -37,6 +37,7 @@ def init_main( self ):
     self.words = None
     self.addaptive_bar = 1
     self.color = 1
+    self.nearest = 0
    
 def main( self ):
     """
@@ -456,6 +457,9 @@ def wind( self, mode, pause = False  ):
         
     if mode == 13:
         self.true_color = 1 - self.true_color
+    
+    if mode == 14:
+        self.nearest = 1 - self.nearest
         
     if mode == 15:
         self.player.set_time(0)
@@ -494,7 +498,8 @@ def param_center( self ):
                  [ "afficher les fichier paroles", self.word ],
                  ["taille de la bar proportionnel", self.addaptive_bar],
                  ["la bar change de couleur", self.color],
-                 ["passe les image en true color",self.true_color]
+                 ["passe les image en true color",self.true_color],
+                 ["utilise nearest neighbor pour accélérer l'affichage de l'image",self.nearest]
                 ]
         
         up(len(tooltip))

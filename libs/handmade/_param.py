@@ -20,7 +20,8 @@ def init_param( self ):
                    "base_soundmap",
                    "addaptive_bar",
                    "color",
-                   "true_color"
+                   "true_color",
+                   "nearest"
                    ]
     
 

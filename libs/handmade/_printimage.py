@@ -88,7 +88,10 @@ def print_image_to_screen(self, path, top_offset=0):
             pixel = image[int(up):int(down)+1, int(left):int(right)+1]
             #cv2.imshow('test', pixel)
             #cv2.waitKey(0)
-            average_color = numpy.mean(pixel, axis=(0,1))
+            if self.nearest:
+                average_color = pixel[0][0]
+            else:
+                average_color = numpy.mean(pixel, axis=(0,1))
             if len(pixel) == 0:
                 #print('\033[42mERROR: Empty pixel.\033[0m')
                 #print(pixel, i, j, size, left, up, right, down)
