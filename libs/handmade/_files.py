@@ -25,7 +25,6 @@ def get_file( self, path, files = [] ):
     files est une liste qui peut contenir des chemin d'accés auquel l'utilisateur peut accéder au préalable
     renvoie les ficher déja inclus et ceux du dossier scanné
     """
-    path += self.separator
 
     self.song = None
     self.played = []
@@ -72,7 +71,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     select = []
     
     for x in self.dirs:
-        
+        print(x)
         if self.path_to_file in x[ 0 ]:
             bottom = max( bottom ,x[ 0 ].count( self.separator ) - base )
             select.append( [ x[ 0 ].count( self.separator ) - base ,x[ 0 ],x[ 1 ] ] )
@@ -223,6 +222,7 @@ def check_adress( self ):
                 self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
             except:
                 self.path_to_file = input( "chemin du dossier musique: " )
+                self.path_to_file += self.separator
     
     self.write_param()
     
