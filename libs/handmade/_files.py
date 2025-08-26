@@ -290,7 +290,6 @@ def get_words(self):
             data = getfile( file )
             data = data.split("[" )
             data = data[ 1: ]
-            print(data)
             
             for x in range( len( data ) ):
                 data[ x ] = replace( data[ x ], '\n' ).split("]", 1 )
