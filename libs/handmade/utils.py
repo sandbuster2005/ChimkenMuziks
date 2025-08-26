@@ -1,4 +1,5 @@
 #made by sand
+from math import ceil
 def white(x:int=60):
     """
     cette fonction passe un nombre x de ligne
@@ -108,3 +109,21 @@ def ask_list(liste, text = "" , num = True ):
     """
     self.show_list( liste, num )
     return self.ask( f"{ text }" )
+
+def closest(num:int ,liste:sorted) -> int:
+    """
+    cette fonction renvoie l'index du nombre le plus proche dans une liste rangé
+    """
+    last_pos = 0
+    pos = 0
+    low = 0
+    high = len(liste) - 1
+    while 1:
+        last_pos = pos
+        pos = int( (high + low ) / 2 ) 
+        if num > liste[pos]:
+            low = pos 
+        if num < liste[pos] :
+            high = pos
+        if pos == last_pos: 
+            return pos

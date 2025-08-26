@@ -58,6 +58,7 @@ def closest(colors,color):
         return index_of_smallest
 
 def print_image_to_screen(self, path, top_offset=0):
+    self.search = True
     size = os.get_terminal_size()
     height = size.lines - top_offset
     width = size.columns/2
@@ -103,4 +104,4 @@ def print_image_to_screen(self, path, top_offset=0):
                 
                 out(f'\x1b[48;2;{int(average_color[0])};{int(average_color[1])};{int(average_color[2])}m ')
         print('\033[0m')
-
+    self.search = False

@@ -74,6 +74,7 @@ def update( self ):
     """
     time_check = [False,0,0,0]
     time_changed = False
+    last_word = -1
     self.volume_changed = False
     timer_changed = False
     timer = None
@@ -178,17 +179,6 @@ def update( self ):
                 self.bar.update()
                 load()
                 
-            if self.word:
-                
-                if self.words != []:
-                    
-                    if self.words[0][0] < time/1000 and self.words[0][0]:
-                        save()
-                        lup( 4 )
-                        wipe_line()
-                        out( self.words[0][1] )
-                        load()
-                        self.words.remove(self.words[0])
                 
                 
             if time_check and not self.pause:
@@ -208,6 +198,20 @@ def update( self ):
                     
                     else:
                         time_check=[False,0,0,5]
+           
+            if self.word:
+                if self.words:
+                    
+                    if self.words != []:
+                        
+                        if  closest( time / 1000, [ x[ 0 ] for x in self.words ]) != last_word:
+                            last_word = closest( time / 1000, [ x[ 0 ] for x in self.words ])
+                            save()
+                            lup( 4 )
+                            wipe_line()
+                            out( self.words[ last_word ][ 1 ] )
+                            load()
+            
             
             if time_changed :
                 time_changed = False
@@ -334,13 +338,14 @@ def get_input( self ):
     self.n_input()
     
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
+            self.search = True
             white()
-            self.search = False
             self.song = self.files[ int(got) ]
             self.get_words()
             if self.song[-4:] ==".mid":
-                self.suspend("convert_midi")
+                self.convert_midi()
             self.play()
+            self.search = False
             
     if self.search:#recherche terminé
         self.suspend("display")
@@ -398,6 +403,7 @@ def wind( self, mode, pause = False  ):
     limite:
     le volume du son est compris entre 0 et 100%
     """
+    self.search = True
     if mode == 1:
         if self.bar	!=	None: 
             self.player.set_time( min( self.player.get_length()-1000, self.player.get_time() + 10000 ) )
@@ -432,36 +438,12 @@ def wind( self, mode, pause = False  ):
         self.pause = 1 - self.pause
         self.player.pause()
         #self.u_bar()
-        
-    if mode == 7:
-        self.show = 1 - self.show
-        
-    if mode == 8:
-        self.repeat = 1 - self.repeat
-        
-    if mode == 9:
-        self.mode = 1 - self.mode
-    
-    if mode == 10:
-        self.word = 1 - self.word
-        
-    if mode == 11:
-        self.addaptive_bar = 1 -  self.addaptive_bar
-    
-    if mode == 12:
-        self.color = 1 - self.color
-        
-    if mode == 13:
-        self.true_color = 1 - self.true_color
-    
-    if mode == 14:
-        self.nearest = 1 - self.nearest
-        
+
     if mode == 15:
         self.player.set_time(0)
         self.bar.index = 0
     
-    
+    self.search = False
     if pause:
         self.suspend( "display" )
         
