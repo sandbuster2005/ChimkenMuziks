@@ -12,10 +12,7 @@ def init_image( self ):
     self.img_script = "appdata.scripts.test"
     self.thumbnail = None
     self.screen = None
-    self.path_to_img = "appdata/image/"# chemin du dosier image
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
-    self.img = ""# image actuel
-    self.show = 1# affiche ou non l'image selectionné
     
     #if self.sysname == 'nt':
     #    self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"

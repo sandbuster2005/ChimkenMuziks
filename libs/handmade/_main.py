@@ -24,7 +24,6 @@ def init_main( self ):
         self.separator = '/'
         
     self.sys_architecture = platform.machine()
-    self.repeat = 0 #1 pour repeter en boucle la chanson
     self.stay = True  # False pour quiter le lecteur
     self.pause = 0  # pour mettre en pause le lecteur+la barre
     self.bar = None   # la barre de progression du temps de la chanson 
@@ -33,11 +32,8 @@ def init_main( self ):
     self.played = []  # historique
     self.MainThread = threading.currentThread()
     self.timer = None
-    self.word = 1
     self.words = None
-    self.addaptive_bar = 1
-    self.color = 1
-    self.nearest = 0
+ 
    
 def main( self ):
     """
@@ -490,23 +486,18 @@ def param_center( self ):
     """
     word = "0"
     white()
+    #tooltip , name , type
+    param = [ [x[1],x[0],x[3]]  for x in self.params if x[4]]
+    #print(param)
     
     while all_numbers( word ):
-        tooltip=[[ "afficher l'image ", self.show ],
-                 [ "jouer en boucle ", self.repeat ],
-                 [ "jouer en random ", self.mode ],
-                 [ "afficher les fichier paroles", self.word ],
-                 ["taille de la bar proportionnel", self.addaptive_bar],
-                 ["la bar change de couleur", self.color],
-                 ["passe les image en true color",self.true_color],
-                 ["utilise nearest neighbor pour accélérer l'affichage de l'image",self.nearest]
-                ]
+        tooltip=[ [x[0], getattr(self,x[1])] for x in param]
         
         up(len(tooltip))
         word = self.ask_list( tooltip )
         
         if all_numbers( word , len (tooltip ), 1 ):
-                self.wind( 7 + int( word ), pause = False )
+                setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] )
                 
 def manager_manager(self):
     pass

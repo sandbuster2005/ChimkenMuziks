@@ -2,6 +2,7 @@
 #made by sand
 class App:
     def __init__( self ):
+        self.init_param()
         self.init_main()
         self.init_sound()
         self.init_battery()
@@ -11,7 +12,6 @@ class App:
         self.init_download()
         self.init_song()
         self.init_display()
-        self.init_param()
         self.init_printer()
         #self.init_letter()
     from libs.handmade._external import external_call,external_return

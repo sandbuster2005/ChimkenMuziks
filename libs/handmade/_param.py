@@ -4,26 +4,29 @@ from .ffiles import *
 
 def init_param( self ):
     self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
+    #              [ param name, tooltip ,defaut value ,type ,param center ?]
     self.params =  [
-                   "path_to_file",
-                   "path_to_img",
-                   "mode",
-                   "sound_manager",
-                   "img",
-                   "repeat",
-                   "dirs",
-                   "holders",
-                   "graphic_manager",
-                   "confirmation",
-                   "show",
-                   "word",
-                   "base_soundmap",
-                   "addaptive_bar",
-                   "color",
-                   "true_color",
-                   "nearest"
+                   [ "path_to_file", "chemin vers le dossier source musique", "" ,"folder", False ],
+                   [ "path_to_img", "chemin vers le dossier source image", "appdata/image/", 'folder', False ],
+                   [ "mode", "jouer en random", 0 , "bool" , True ],
+                   [ "sound_manager", "gestionnaire de son", "base", "string", False ],
+                   [ "img", "image actuel" ,"" , "file", False ],
+                   [ "repeat", "jouer en boucle ", 0 , "bool", True ],
+                   [ "dirs" ,"liste des dossiers / sous dossiers", [], "list", False ],
+                   [ "holders", "commandes", -1 , "list", False ],
+                   [ "graphic_manager", "mode d'affichage", "base" , "string", False ],
+                   [ "confirmation", "message de choix", "Your choice", "message", False ],
+                   [ "show", "afficher l'image ", 1 ,"bool", True ],
+                   [ "word", "afficher les fichier paroles", 1 ,"bool", True ],
+                   [ "base_soundmap", "codec midi par default" , "appdata/midi_codec/default.sf2" ,"file", False ],
+                   [ "addaptive_bar", "taille de la bar proportionnel", 1, "bool", True ],
+                   [ "color", "la bar change de couleur", 0 , "bool", True ],
+                   [ "true_color", "passe les image en true color", 1 ,"bool", True ],
+                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ]
                    ]
-    
+    for x in self.params:
+        if x[2]!= -1:
+            setattr(self,x[0],x[2])
 
 def get_param( self , param = ""):
     """
@@ -45,7 +48,7 @@ def write_param( self , param = ""):
     """
     cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
-    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int else [ x, getattr( self , x ) ] for x in self.params ]
+    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] ]
     data = join_list( data, [ "|||", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
     self.sort_command()

@@ -1,9 +1,7 @@
 from ..readchar import readchar
 
 def init_display( self ):
-    self.graphic_manager = "base"
-    self.confirmation = "your choice: "
-    
+    pass
     
 def out( self, text ):
     """

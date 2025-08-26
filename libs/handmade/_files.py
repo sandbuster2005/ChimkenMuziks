@@ -9,8 +9,6 @@ from ..readchar import readchar
 import re
 
 def init_file( self ):
-    self.path_to_file = r"/home/sand/Musique/musique/"# chemin du dossier musique
-    self.dirs = []# liste des dossier dans le chemin indiqué
     self.files = []# chanson chargé
     self.favorite = ""
         
@@ -216,7 +214,7 @@ def check_adress( self ):
     """
     cette fonction permet de verifier si l'adresse existe et est un dossier
     """
-    if not isdir( self.path_to_file ):
+    if not isdir( self.path_to_file ) or self.path_to_file == "":
         while not isdir( self.path_to_file ):
             try:
                 self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator

@@ -5,7 +5,6 @@ except:
     pass
 
 def init_sound( self ):
-    self.sound_manager = "base"#either base for linux and windows or alsa for linux 
     self.mute = 0
     
     try :
