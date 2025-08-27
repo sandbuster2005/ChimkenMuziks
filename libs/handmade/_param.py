@@ -22,7 +22,8 @@ def init_param( self ):
                    [ "addaptive_bar", "taille de la bar proportionnel", 1, "bool", True ],
                    [ "color", "la bar change de couleur", 0 , "bool", True ],
                    [ "true_color", "passe les image en true color", 1 ,"bool", True ],
-                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ]
+                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ],
+                   [ "invert", "inverse les couleurs des images", 0, "bool", True]
                    ]
     for x in self.params:
         if x[2]!= -1:
