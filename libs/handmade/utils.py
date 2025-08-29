@@ -110,20 +110,26 @@ def ask_list(liste, text = "" , num = True ):
     self.show_list( liste, num )
     return self.ask( f"{ text }" )
 
-def closest(num:int ,liste:sorted) -> int:
+def dumb_closest(num:int ,liste:sorted) -> int:
     """
     cette fonction renvoie l'index du nombre le plus proche dans une liste rangé
     """
-    last_pos = 0
+    while ( pos:= ( ( high := ( high := [ len(liste) if not "high" in ( var := locals() ) else high ][0] ) * ( _ := ( num > liste[ ( pos := [0 if "pos" not in var  else pos ][0] ) ] ) ) + pos * (1 - _) ) + (low := ( low := [ 0 if not "low" in var  else low ][0] ) * (1 - _ ) + pos * _  ) ) // 2) != low :
+        pass
+            
+    return pos
+        
+def closest(num:int , liste:sorted) -> int:
     pos = 0
+    high = len(liste)
     low = 0
-    high = len(liste) - 1
-    while 1:
-        last_pos = pos
-        pos = int( (high + low ) / 2 ) 
-        if num > liste[pos]:
-            low = pos 
-        if num < liste[pos] :
+    while (pos := (high + low)//2 ) != low:
+        
+        if liste[pos] > num:
             high = pos
-        if pos == last_pos: 
-            return pos
+        
+        else:
+            low = pos
+            
+    return pos
+        

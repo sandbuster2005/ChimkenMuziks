@@ -205,7 +205,7 @@ def update( self ):
                     if self.words != []:
                         
                         if  closest( time / 1000, [ x[ 0 ] for x in self.words ]) != last_word:
-                            last_word = closest( time / 1000, [ x[ 0 ] for x in self.words ])
+                            last_word = closest( time / 1000, [ x[ 0 ] for x in self.words])
                             save()
                             lup( 4 )
                             wipe_line()
