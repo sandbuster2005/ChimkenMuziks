@@ -84,6 +84,7 @@ def play_last( self ):
     if len(self.played) > 1:
         self.played.pop()
         self.song = self.files[ self.played[ -1 ] ]
+        self.get_words()
         self.play()
         
         
