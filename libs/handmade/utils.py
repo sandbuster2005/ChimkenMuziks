@@ -23,7 +23,7 @@ def all_numbers(word,lim=0,mode=0):
     mode doit étre compris entre 0 et 1 inclut
     """
     
-    return all(test in "0123456789" for test in word)==(word!="")==True==(int("".join([str(max(0,int(ord(word[x])-48))) for x in range(len(word))]))*lim<lim*lim-mode+1)
+    return all(test in "0123456789" for test in word)==(word!="")==True==(int("".join([str(max(0,int(ord(str(word)[x])-48))) for x in range(len(str(word)))]))*lim<lim*lim-mode+1)
 
 def str_lowerup(word:str,chrs:[str],mode=0):
     """
