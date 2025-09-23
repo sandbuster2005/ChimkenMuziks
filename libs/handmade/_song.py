@@ -62,12 +62,13 @@ def play( self ):
     limite:
     une musique doit étre selectionné au préalable 
     """
-    
+    self.write_song_database( self.song )
     if self.played == []:
         self.played.append( self.files.index( self.song ) )# ajoute a l'historique
         
     elif self.played[ -1 ] != self.files.index( self.song ):# ajoute a l'historique si la chanson a changé
         self.played.append( self.files.index( self.song ) )
+        
         
     if ".mid" in self.song :
         self.player.set_mrl( "appdata/cache/" + self.song.rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )

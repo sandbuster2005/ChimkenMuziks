@@ -1,6 +1,6 @@
 #made by sand
 from .ffiles import *
-
+import sqlite3
 
 def init_param( self ):
     self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
@@ -61,3 +61,24 @@ def reset( self ):
     """
     self.__init__()#remise a 0
     self.write_param()
+
+
+def write_song_database(self,song):
+    base =  sqlite3.connect("appdata/data.db")
+    cursor = base.cursor()
+    requete = """
+    insert into song
+    Values( ?,"1")
+    ON CONFLICT(nom)
+    DO UPDATE  SET played = played +1
+    """
+    cursor.execute(requete,[ song ])
+    base.commit()
+    base.close()
+
+def create_song_database(self):
+    base = sqlite3.connect("appdata/data.db")
+    cursor = base.cursor()
+    cursor.execute("create table song(nom UNIQUE NOT NULL ,played INTEGER NOT NULL)")
+    base.commit()
+    base.close()
