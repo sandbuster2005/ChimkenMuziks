@@ -64,7 +64,7 @@ def main( self ):
            self.stay = False
             
     self.player.stop()#end
-    self.write_param()#sauvegarde es parametre
+    self.write_param()#sauvegarde est parametre
     
     
 def update( self ):
@@ -171,8 +171,8 @@ def update( self ):
             if time < 0:#en cas de reculer en desosus du debut
                 time = 0
                 
-            if last_update + 1 < monotonic() :
-                last_update += 1
+            if last_update + 0.5 < monotonic() :
+                last_update += 0.5
                 self.bar.index = floor( time/1000 )
                 save()
                 up()
@@ -187,13 +187,9 @@ def update( self ):
                     
                     if self.player.get_time() == time_check[1]:
                         
-                        if not self.repeat:
-                            self.choose_song()
-            
-                        self.play()
+                        self.play_song( (1 - self.repeat) )
                         lup(0)
-                        sys.stdout.write(":")
-                        sys.stdout.flush()
+                        out(":")
                         continue
                     
                     else:
@@ -256,18 +252,8 @@ def update( self ):
                     
             if ceil( time/1000 ) >= self.bar.max : #la chanson est fini# la chason est bien fini et ne vien pas de commencer
                 
-                if not self.repeat:
-                    self.choose_song()
-                    
-                self.bar = None
-                self.get_words()
-                
-                if self.song[-4:] ==".mid":
-                    self.suspend("convert_midi")
-                    
-                self.play()
-                sys.stdout.write(":")
-                sys.stdout.flush()
+                self.play_song((1-self.repeat))
+                out(":")
 
 def u_bar(self):
     """
@@ -338,14 +324,8 @@ def get_input( self ):
     self.n_input()
     
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
-            self.search = True
-            white()
             self.song = self.files[ int(got) ]
-            self.get_words()
-            if self.song[-4:] ==".mid":
-                self.convert_midi()
-            self.play()
-            self.search = False
+            self.play_song()
             
     if self.search:#recherche terminé
         self.suspend("display")

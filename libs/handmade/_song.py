@@ -37,13 +37,15 @@ def load_songs( self ):
     self.song = None
 
 
-def play_song( self ):
+def play_song( self ,choose = 1):
     """
     cette fonction lance le choix de chanson et la joue
     """
     if len( self.files ) != 0:
         #self.bar = None
-        self.choose_song()
+        if choose:
+            self.choose_song()
+            
         self.get_words()
         
         if self.song[-4:] ==".mid":
@@ -84,8 +86,7 @@ def play_last( self ):
     if len(self.played) > 1:
         self.played.pop()
         self.song = self.files[ self.played[ -1 ] ]
-        self.get_words()
-        self.play()
+        self.play_song(choose = 0)
         
         
 def historic( self ):
