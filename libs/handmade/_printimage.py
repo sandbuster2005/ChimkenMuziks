@@ -63,14 +63,20 @@ def print_image_to_screen(self, path, top_offset=0):
     height = size.lines - top_offset
     width = size.columns/2
     
+    centerspace = ''
+    
     image = iio.imread(path)
     imheight, imwidth, *_ = image.shape
     
     colors = []
-    if height/imheight < width/imwidth:
+    if height/imheight < width/imwidth: # snap avec la hauteur
         heightprint = height
         widthprint = int(heightprint*(imwidth/imheight)*2)
-    else:
+        
+        if self.center:
+            centerspace = (' '*((size.columns-widthprint)//2))
+    
+    else: # snap avec la largeur
         widthprint = size.columns
         heightprint = int(widthprint*(imheight/imwidth)/2)
     
@@ -80,6 +86,7 @@ def print_image_to_screen(self, path, top_offset=0):
     height = imheight/heightprint
 
     for i in range(heightprint): # height
+        out(centerspace)
         for j in range(widthprint): # width
             left = (width) * j
             up = (height) * i

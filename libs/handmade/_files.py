@@ -301,6 +301,14 @@ def get_words(self):
             data = new_data
             for x in range( len( data ) ): 
                 data[ x ][ 0 ] = int(data[ x ][ 0 ][ :2 ] ) * 60 + int( data[ x ][ 0 ][ 3:5 ] ) + int( data[ x ][ 0 ][ 6:8 ] ) / 100 
+                
+                # enlever espace au début
+                if data[x][1][0] == ' ':
+                    data[x][1] = data[x][1][1:]
+                
+                # centrer paroles
+                if self.center:
+                    data[x][1] = (' '*((os.get_terminal_size()[0]-len(data[x][1]))//2))+data[x][1]
             
             self.words = data
             
