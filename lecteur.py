@@ -19,7 +19,7 @@ class App:
     from libs.handmade._sound import init_sound,start_sound,change_sound_manager,get_volume,set_volume,deafen
     from libs.handmade._batterie import init_battery,battery_check,get_battery,get_battery_life
     from libs.handmade._command import init_command,sort_command,edit_command,help_menu      
-    from libs.handmade._param import init_param,get_param,write_param,reset,write_song_database
+    from libs.handmade._param import init_param,get_param,write_param,reset,write_song_database,create_song_database
     from libs.handmade._files import init_file,get_file,select_dir,switch_dir,find_file,check_adress,change_main_path,mani_file,get_words,change_extension,edit_dirs
     from libs.handmade._image import init_image,get_img,display_img,select_img,load_script,screen_mode
     from libs.handmade._download import init_download,yt_search,dl_yt_playlist  

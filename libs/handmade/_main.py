@@ -357,6 +357,7 @@ def get_input( self ):
                 command = self.commands[ self.command[ x ] ] + "_f"
                 
             getattr( self,command )()#lancer la function souhaité
+            
             stop = True
             
         x+=1

@@ -64,7 +64,8 @@ def reset( self ):
 
 
 def write_song_database(self,song):
-    base =  sqlite3.connect("appdata/data.db")
+    self.create_song_database()
+    base =  sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     requete = """
     insert into song
@@ -77,8 +78,8 @@ def write_song_database(self,song):
     base.close()
 
 def create_song_database(self):
-    base = sqlite3.connect("appdata/data.db")
+    base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("create table song(nom UNIQUE NOT NULL ,played INTEGER NOT NULL)")
+    cursor.execute("create table if not exists song(nom UNIQUE NOT NULL ,played INTEGER NOT NULL)")
     base.commit()
     base.close()
