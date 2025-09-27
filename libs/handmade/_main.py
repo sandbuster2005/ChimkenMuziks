@@ -74,7 +74,6 @@ def update( self ):
     """
     time_check = [False,0,0,0]
     time_changed = False
-    last_word = -1
     self.volume_changed = False
     timer_changed = False
     timer = None
@@ -200,12 +199,12 @@ def update( self ):
                     
                     if self.words != []:
                         
-                        if  closest( time / 1000, [ x[ 0 ] for x in self.words ]) != last_word:
-                            last_word = closest( time / 1000, [ x[ 0 ] for x in self.words])
+                        if  ( close := closest( time / 1000, [ x[ 0 ] for x in self.words ] ) ) != self.last_word and self.words[close][0] - time / 1000 < 1:
+                            self.last_word = close
                             save()
                             lup( 4 )
                             wipe_line()
-                            out( self.words[ last_word ][ 1 ] )
+                            out( self.words[ self.last_word ][ 1 ] )
                             load()
             
             
@@ -305,7 +304,13 @@ def display( self ):
             right( 20 )
             out(f" timer :{ self.timer[1] } mins ")
             load()
-        
+            
+        if self.word and self.words != [] and self.last_word != -1:
+            save()
+            lup(3)
+            out( self.words[ self.last_word ][ 1 ] )
+            load()
+   
     else:
         
         if self.sound_manager != "base":
@@ -325,7 +330,8 @@ def get_input( self ):
     
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.song = self.files[ int(got) ]
-            self.play_song()
+            self.search = True
+            self.play_song(0)
             
     if self.search:#recherche terminé
         self.suspend("display")

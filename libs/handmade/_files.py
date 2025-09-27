@@ -279,6 +279,7 @@ def get_words(self):
     cette fonction permet de recuperer les paroles d'un fichier .lrc et de les passer
     au lecteur
     """
+    self.last_word = -1
     self.words = []
     if self.song != None :
         file = self.song.rsplit( ".", 1 )[ 0 ] + ".lrc"

@@ -9,7 +9,8 @@ from libs.tinytag import TinyTag
 def init_song( self ):
     #SONG variables
     self.song = None# son aactuelle
-        
+    self.last_word = -1 
+     
 def choose_song( self ):
     """
     cette fonction permet de:
@@ -41,6 +42,7 @@ def play_song( self ,choose = 1):
     """
     cette fonction lance le choix de chanson et la joue
     """
+    
     if len( self.files ) != 0:
         #self.bar = None
         if choose:

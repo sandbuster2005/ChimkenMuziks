@@ -63,7 +63,7 @@ class App:
 
 
     def n_f( self ):
-        self.play_song()
+        self.suspend("play_song")
 
     def e_f( self ):
         self.change_confirmation()
@@ -115,7 +115,7 @@ class App:
 
 
     def b_f( self ):
-        self.play_last()
+        self.suspend("play_last")
 
 
     def dl_f( self ):
