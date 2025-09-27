@@ -75,6 +75,8 @@ def update( self ):
     time_check = [False,0,0,0]
     time_changed = False
     self.volume_changed = False
+    self.display_changed = False
+    self.word_changed = False
     timer_changed = False
     timer = None
     last_update = monotonic()
@@ -201,13 +203,64 @@ def update( self ):
                         
                         if  ( close := closest( time / 1000, [ x[ 0 ] for x in self.words ] ) ) != self.last_word and self.words[close][0] - time / 1000 < 1:
                             self.last_word = close
-                            save()
-                            lup( 4 )
-                            wipe_line()
-                            out( self.words[ self.last_word ][ 1 ] )
-                            load()
+                            self.word_changed = True
             
             
+            if self.word_changed:
+                space = floor( os.get_terminal_size().columns/2 - len( self.words[ self.last_word ][ 1 ] ) / 2)
+                save()
+                lup(4)
+                wipe_line()
+                out( f"{" "*space * self.center}{self.words[ self.last_word ][ 1 ]}" )
+                load()
+                self.word_changed = False
+                
+            if time_changed or timer_changed or self.volume_changed or self.display_changed:
+            
+                time_string = f"{ base_time[ 0 ] }:{base_time[ 1 ]}"
+                
+                self.volume = self.get_volume()
+                volume_string = f"{ self.volume }%"
+               
+                if self.volume < 10:
+                     volume_string = "0" + volume_string
+                
+                if self.timer :
+                    timer_string = f"timer :{ self.timer[1] } mins"
+            
+                string =  time_string + "   " + volume_string
+                if self.timer:
+                    string += "  "+ timer_string
+                
+                space = floor( (os.get_terminal_size().columns - len(string)) / 2) 
+                
+                if os.name == 'nt':
+                    a = '\\'
+                else:
+                    a = '/'
+                
+                name = self.song.rsplit( a, 1 )[ 1 ]
+                space_name = floor((os.get_terminal_size().columns - len(name) )/ 2 )
+                
+                self.bar.bar_prefix = " " * floor((os.get_terminal_size().columns - 32 )/ 2 ) * self.center
+                
+                save()
+                lup( 3 )
+                
+                out(f"{" " * space * self.center}{string}")
+                
+                ldown()
+                
+                out( f"{" " * space_name * self.center}{name}" )
+                
+                load()
+                
+                time_changed = False
+                timer_changed = False
+                self.volume_changed = False
+                self.display_changed = False
+                
+            """
             if time_changed :
                 time_changed = False
                 save()
@@ -236,6 +289,7 @@ def update( self ):
                     out( f"{ self.volume }%  " )
                     
                 load()
+            """
             
             if stop != 0:
                 stop -= 1
@@ -282,41 +336,15 @@ def display( self ):
     lup()
     
     if self.song != None:
-        if os.name == 'nt':
-            a = '\\'
-        else:
-            a = '/'
-        sleep( 0.10 )
         white()
-        self.volume = self.get_volume()
-        time=strftime( "%H %M" ).split( " " )# affiche l'heure au format standard
         
         if self.show:
             self.display_img()
-            
-        print( f"{ time[ 0 ] }:{ time[ 1 ] }   volume: { self.volume }%  " )# heure,volume
-            
-        print( f"{ self.song.rsplit( a, 1 )[ 1 ] }" )# playlist,index,chanson
-        
-        if self.timer != None:
-            save()
-            lup( 2 )
-            right( 20 )
-            out(f" timer :{ self.timer[1] } mins ")
-            load()
-            
+        self.display_changed = True
         if self.word and self.words != [] and self.last_word != -1:
-            save()
-            lup(3)
-            out( self.words[ self.last_word ][ 1 ] )
-            load()
-   
-    else:
-        
-        if self.sound_manager != "base":
-            print( f"volume :{self.volume}" )
-            
-    ldown()
+            self.word_changed = True
+                 
+    ldown(3)
 
     
     

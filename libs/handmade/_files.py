@@ -305,11 +305,7 @@ def get_words(self):
                 # enlever espace au début
                 if data[x][1][0] == ' ':
                     data[x][1] = data[x][1][1:]
-                
-                # centrer paroles
-                if self.center:
-                    data[x][1] = (' '*((os.get_terminal_size()[0]-len(data[x][1]))//2))+data[x][1]
-            
+                           
             self.words = data
             
 def change_extension(self):
