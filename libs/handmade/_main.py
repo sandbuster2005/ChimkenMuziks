@@ -102,7 +102,7 @@ def update( self ):
                 self.player.stop()#end
                 self.write_param()
          
-        if self.song != None:#chanson demarré
+        if self.song != None and not self.search:#chanson demarré
             
             if self.bar != None:
                 
