@@ -74,6 +74,7 @@ def update( self ):
     """
     time_check = [False,0,0,0]
     time_changed = False
+    self.term_size = os.get_terminal_size()
     self.volume_changed = False
     self.display_changed = False
     self.word_changed = False
@@ -117,7 +118,7 @@ def update( self ):
                     down()
                     save()
                     wipe_line()
-                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
+                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar ,center = self.center)
                     load()
             else:
                 
@@ -132,7 +133,7 @@ def update( self ):
                 down()
                 save()
                 wipe_line()
-                self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar)
+                self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar , center = self.center)
                 load()
         
         if base_time != strftime( '%H %M' ).split( " " ):
@@ -153,6 +154,10 @@ def update( self ):
                 self.volume_changed = True
          
         if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
+            
+            if self.term_size != ( _ := os.get_terminal_size()) :
+                self.term_size = _
+                self.display()
             
             if time_check[3]:
                 time_check[3] -= 1
@@ -207,11 +212,12 @@ def update( self ):
             
             
             if self.word_changed:
-                space = floor( os.get_terminal_size().columns/2 - len( self.words[ self.last_word ][ 1 ] ) / 2)
+                lyrics = self.words[ self.last_word ][ 1 ]
+                space = floor( self.term_size.columns/2 - len( word ) / 2)
                 save()
                 lup(4)
                 wipe_line()
-                out( f"{" "*space * self.center}{self.words[ self.last_word ][ 1 ]}" )
+                out( f"{" "*space * self.center}{ lyrics }" )
                 load()
                 self.word_changed = False
                 
@@ -232,7 +238,7 @@ def update( self ):
                 if self.timer:
                     string += "  "+ timer_string
                 
-                space = floor( (os.get_terminal_size().columns - len(string)) / 2) 
+                space = floor( (self.term_size.columns - len(string)) / 2) 
                 
                 if os.name == 'nt':
                     a = '\\'
@@ -240,9 +246,9 @@ def update( self ):
                     a = '/'
                 
                 name = self.song.rsplit( a, 1 )[ 1 ]
-                space_name = floor((os.get_terminal_size().columns - len(name) )/ 2 )
+                space_name = floor((self.term_size.columns - len(name) )/ 2 )
                 
-                self.bar.bar_prefix = " " * floor((os.get_terminal_size().columns - 32 )/ 2 ) * self.center
+                self.bar.center = self.center
                 
                 save()
                 lup( 3 )

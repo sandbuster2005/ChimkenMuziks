@@ -15,8 +15,9 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 from __future__ import unicode_literals
-from math import log
+from math import log, floor
 import sys
+import os
 import random
 from functools import partial
 from . import Progress
@@ -26,8 +27,9 @@ from .colors import color
 class Bar(Progress):
     width = 32
     suffix = '%(index)d/%(max)d'
-    bar_prefix = ''
-    bar_suffix = ' '
+    center = False
+    prefix = ''
+    suffix = ' '
     empty_fill = ' '
     fill = ' '
     color = "red"
@@ -46,9 +48,15 @@ class Bar(Progress):
         bar = color(self.fill * filled_length ,bg = self.color )
         empty = color(self.empty_fill * empty_length, bg = self.bg_color)
         if self.max > 0:
-            suffix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}    '
-        line = ''.join([message, self.bar_prefix, bar, empty, self.bar_suffix,
-                        suffix])
+            if not self.center:
+                self.suffix = f' {self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}    '
+            else:
+                self.prefix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} '
+                self.suffix = f' {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}'
+                self.prefix = f"{" " * floor((os.get_terminal_size().columns - len(self.suffix) -len(self.prefix) - self.width )/2) }{self.prefix}"
+                
+      
+        line = ''.join([message, self.prefix, bar, empty, self.suffix])
         self.writeln(line)
 
 
