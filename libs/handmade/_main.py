@@ -74,6 +74,7 @@ def update( self ):
     """
     time_check = [False,0,0,0]
     time_changed = False
+    save_cooldown = 0
     self.term_size = os.get_terminal_size()
     self.volume_changed = False
     self.display_changed = False
@@ -159,6 +160,14 @@ def update( self ):
                 self.term_size = _
                 self.display()
             
+            if not save_cooldown and self.bar.index == int( self.bar.max/2 ):
+                save_cooldown = monotonic() +5
+                self.write_song_database( self.song )
+                
+            if save_cooldown:
+                if save_cooldown - monotonic() <0:
+                    save_cooldown = 0
+            
             if time_check[3]:
                 time_check[3] -= 1
             
@@ -199,7 +208,7 @@ def update( self ):
                         continue
                     
                     else:
-                        time_check=[False,0,0,5]
+                        time_check=[False,0,0,60]
            
             if self.word:
                 if self.words:

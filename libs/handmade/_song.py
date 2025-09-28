@@ -64,7 +64,6 @@ def play( self ):
     limite:
     une musique doit étre selectionné au préalable 
     """
-    self.write_song_database( self.song )
     if self.played == []:
         self.played.append( self.files.index( self.song ) )# ajoute a l'historique
         
