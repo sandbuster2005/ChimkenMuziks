@@ -222,7 +222,7 @@ def update( self ):
             
             if self.word_changed:
                 lyrics = self.words[ self.last_word ][ 1 ]
-                space = floor( self.term_size.columns/2 - len( word ) / 2)
+                space = floor( self.term_size.columns/2 - len( lyrics ) / 2)
                 save()
                 lup(4)
                 wipe_line()
