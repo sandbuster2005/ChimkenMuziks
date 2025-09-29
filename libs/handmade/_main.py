@@ -102,6 +102,25 @@ def update( self ):
                 self.player.stop()#end
                 self.write_param()
          
+        if not time_changed :
+            if base_time != strftime( '%H %M' ).split( " " ):
+                base_time = strftime( '%H %M' ).split( " " )
+                time_changed = True
+            
+        if self.timer != None:
+            
+            if not timer_changed:
+                if monotonic() > self.timer[2] + (self.timer[0] * 60):
+                    self.timer[0] += 1
+                    self.timer[1] -= 1
+                    timer_changed = True
+                
+        if self.sound_manager == "alsa":
+            
+            if self.volume != self.get_volume():
+                self.volume = self.get_volume()
+                self.volume_changed = True
+       
         if self.song != None and not self.search:#chanson demarré
             
             if self.bar != None:
@@ -136,23 +155,6 @@ def update( self ):
                 wipe_line()
                 self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar , center = self.center)
                 load()
-        
-        if base_time != strftime( '%H %M' ).split( " " ):
-            base_time = strftime( '%H %M' ).split( " " )
-            time_changed = True
-            
-        if self.timer != None:
-            
-            if monotonic() > self.timer[2] + (self.timer[0] * 60):
-                self.timer[0] += 1
-                self.timer[1] -= 1
-                timer_changed = True
-                
-        if self.sound_manager == "alsa":
-            
-            if self.volume != self.get_volume():
-                self.volume = self.get_volume()
-                self.volume_changed = True
          
         if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
             
@@ -355,6 +357,7 @@ def display( self ):
         
         if self.show:
             self.display_img()
+            
         self.display_changed = True
         if self.word and self.words != [] and self.last_word != -1:
             self.word_changed = True
