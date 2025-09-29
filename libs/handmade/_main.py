@@ -233,7 +233,11 @@ def update( self ):
                 self.word_changed = False
                 
             if time_changed or timer_changed or self.volume_changed or self.display_changed:
-            
+        
+                if self.show:
+                    self.display_img()
+                ldown(3)
+                
                 time_string = f"{ base_time[ 0 ] }:{base_time[ 1 ]}"
                 
                 self.volume = self.get_volume()
@@ -354,10 +358,7 @@ def display( self ):
     
     if self.song != None:
         white()
-        
-        if self.show:
-            self.display_img()
-            
+        sleep(0.1)  
         self.display_changed = True
         if self.word and self.words != [] and self.last_word != -1:
             self.word_changed = True
