@@ -56,7 +56,6 @@ def main( self ):
         
     progress = threading.Thread( target = self.update )#create update thread
     progress.start()
-    
     while self.stay != False:
         self.get_input()#interface
         
@@ -205,7 +204,6 @@ def update( self ):
                     if self.player.get_time() == time_check[1]:
                         
                         self.play_song( (1 - self.repeat) )
-                        lup(0)
                         out(":")
                         continue
                     
@@ -235,6 +233,7 @@ def update( self ):
             if time_changed or timer_changed or self.volume_changed or self.display_changed:
         
                 if self.show:
+                    white()
                     self.display_img()
                 ldown(3)
                 
@@ -275,7 +274,8 @@ def update( self ):
                 out( f"{' ' * space_name * self.center}{name}" )
                 
                 load()
-                
+                out(":")
+    
                 time_changed = False
                 timer_changed = False
                 self.volume_changed = False
@@ -327,7 +327,6 @@ def update( self ):
             if ceil( time/1000 ) >= self.bar.max : #la chanson est fini# la chason est bien fini et ne vien pas de commencer
                 
                 self.play_song((1-self.repeat))
-                out(":")
 
 def u_bar(self):
     """
@@ -357,7 +356,6 @@ def display( self ):
     lup()
     
     if self.song != None:
-        white()
         sleep(0.1)  
         self.display_changed = True
         if self.word and self.words != [] and self.last_word != -1:
@@ -372,7 +370,7 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    got = self.ask( ":" ).lower()#ignorer les majuscules
+    got = self.ask(":").lower()#ignorer les majuscules
     self.n_input()
     
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
