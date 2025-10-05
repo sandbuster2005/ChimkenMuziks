@@ -19,7 +19,12 @@ def choose_song( self ):
     """
     
     if self.play_favorite:
-        files = self.favorite
+        if self.favorite:
+            files = self.favorite
+        else:
+            self.play_favorite = 0
+            files = self.files
+            input(" no favorite press any button to continue")
         
     else:
         files = self.files

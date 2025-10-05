@@ -19,7 +19,7 @@ def init_command( self ):
             "p": "pour monter le son de 10%",
             "m": "pour baisser le son de 10%",
             "a": "pour recharger le catalogue de chanson et d'image",
-            "b": "pour charger la  chanson précédente",
+            "b": "pour charger la chanson précédente",
             "i": "pour afficher l'historique",
             "f": "pour mettre un timer ",
             "c": "pour activer/desactiver des dossiers",
