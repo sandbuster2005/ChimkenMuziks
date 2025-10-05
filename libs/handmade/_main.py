@@ -260,6 +260,8 @@ def update( self ):
                     a = '/'
                 
                 name = self.song.rsplit( a, 1 )[ 1 ]
+                if self.song in self.favorite:
+                    name = "*" + name + "*"
                 space_name = floor((self.term_size.columns - len(name) )/ 2 )
                 
                 self.bar.center = self.center
@@ -416,6 +418,7 @@ def load_all( self ):
     self.player.stop()
     self.load_songs()
     self.get_img( self.path_to_img, start = 1 )
+    self.check_favorite()
     self.write_param()
     
 def wind( self, mode, pause = False  ):
@@ -508,8 +511,11 @@ def param_center( self ):
         tooltip=[ [x[0], getattr(self,x[1])] for x in param]
         
         up(len(tooltip)+1)
-
         word = self.ask_list( tooltip )
+        lup()
+        out(" "*(len(tooltip)+3))
+        ldown()
+        
         
         if all_numbers( word , len (tooltip ), 1 ):
                 setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] )

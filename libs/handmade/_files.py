@@ -10,7 +10,6 @@ import re
 
 def init_file( self ):
     self.files = []# chanson chargé
-    self.favorite = ""
         
 def get_file( self, path, files = [] ):
     """
@@ -241,11 +240,10 @@ def mani_file(self):
     et renommer le fichier actuel
     """
     if self.song != None:
-        print( self.files )
         index = self.files.index( self.song )
-        word = self.ask_list( [ "delete ", "move", "rename", "convert"] )
+        word = self.ask_list( [ "delete ", "move", "rename", "convert","add to /remove from favorite"] )
         
-        if all_numbers( word, 3 ):
+        if all_numbers( word, 4 ):
             
             if int( word ) == 0:
                 choice = self.ask( "are you sure (y/n)" )
@@ -268,11 +266,21 @@ def mani_file(self):
             if int( word ) == 3:
                 self.change_extension()
                 
-            self.song = None
-            self.played = self.played[:-1]
-            self.player.stop()
-            print("")
-            #self.load_songs()
+            if int( word ) == 4:
+                print(self.favorite)
+                if not self.song in self.favorite:
+                    self.favorite.append(self.song)
+                else:
+                    self.favorite.remove(self.song)
+             
+            if int(word) < 4 : 
+                self.song = None
+                self.played = self.played[:-1]
+                self.player.stop()
+                print("")
+                #self.load_songs()
+            else:
+                self.display()
             
 def get_words(self):
     """
@@ -323,3 +331,8 @@ def change_extension(self):
         
         if confirm == "y":
             rm_file( self.song )
+
+def check_favorite(self):
+    self.favorite = [ x for x in self.favorite if x in self.files]
+    
+    

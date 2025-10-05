@@ -17,16 +17,22 @@ def choose_song( self ):
     choisir une chanson aléatoire : mode 0
     choisit la chanson qui suit dans la liste : mode 1 
     """
+    
+    if self.play_favorite:
+        files = self.favorite
+        
+    else:
+        files = self.files
     if self.mode == 1:
-        self.song = self.files[ randint( 0, len( self.files ) - 1 ) ]#chanson aleatoire
+        self.song = files[ randint( 0, len( files ) - 1 ) ]#chanson aleatoire
         
     if self.mode == 0:
         
         if self.song == None:
-            self.song = self.files[ 0 ]# si pas de chanson joué avant prendre la premiére
+            self.song = files[ 0 ]# si pas de chanson joué avant prendre la premiére
             
         else:
-            self.song = self.files[ ( self.files.index( self.song ) + 1 ) % len( self.files ) ]#chanson suivante : index+1
+            self.song = files[ ( files.index( self.song ) + 1 ) % len( files ) ]#chanson suivante : index+1
 
 
 def load_songs( self ):
