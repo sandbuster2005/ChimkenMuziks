@@ -228,7 +228,7 @@ def update( self ):
                 save()
                 lup(4)
                 wipe_line()
-                out( f"{" "*space * self.center}{ lyrics }" )
+                out( f"{' '*space * self.center}{ lyrics }" )
                 load()
                 self.word_changed = False
                 
@@ -268,11 +268,11 @@ def update( self ):
                 save()
                 lup( 3 )
                 
-                out(f"{" " * space * self.center}{string}")
+                out(f"{' ' * space * self.center}{string}")
                 
                 ldown()
                 
-                out( f"{" " * space_name * self.center}{name}" )
+                out( f"{' ' * space_name * self.center}{name}" )
                 
                 load()
                 

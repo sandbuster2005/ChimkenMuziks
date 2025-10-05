@@ -55,7 +55,7 @@ class Bar(Progress):
             else:
                 self.prefix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} '
                 self.suffix = f' {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}'
-                self.prefix = f"{" " * floor((os.get_terminal_size().columns - len(self.suffix) -len(self.prefix) - real_width )/2) }{self.prefix}"
+                self.prefix = f"{' ' * floor((os.get_terminal_size().columns - len(self.suffix) -len(self.prefix) - real_width )/2) }{self.prefix}"
                 
       
         line = ''.join([message, self.prefix, bar, empty, self.suffix])
