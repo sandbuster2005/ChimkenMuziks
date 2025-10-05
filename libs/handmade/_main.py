@@ -507,7 +507,8 @@ def param_center( self ):
     while all_numbers( word ):
         tooltip=[ [x[0], getattr(self,x[1])] for x in param]
         
-        up(len(tooltip))
+        up(len(tooltip)+1)
+
         word = self.ask_list( tooltip )
         
         if all_numbers( word , len (tooltip ), 1 ):
