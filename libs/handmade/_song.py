@@ -29,7 +29,14 @@ def choose_song( self ):
     else:
         files = self.files
     if self.mode == 1:
+        if self.fchoose and self.favorite and self.song not in self.favorite:
+            num = randint(1 , min(100 , 50 + len(self.favorite)*5) )
+            if num > 50:
+                files = self.favorite
+                
         self.song = files[ randint( 0, len( files ) - 1 ) ]#chanson aleatoire
+        
+                
         
     if self.mode == 0:
         

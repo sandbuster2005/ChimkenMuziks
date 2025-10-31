@@ -241,7 +241,14 @@ def mani_file(self):
     """
     if self.song != None:
         index = self.files.index( self.song )
-        word = self.ask_list( [ "delete ", "move", "rename", "convert","add to /remove from favorite"] )
+        
+        if self.song in self.favorite:
+            fav = "remove to favorite"
+        
+        else:
+            fav = "add from favorite"
+            
+        word = self.ask_list( [ "delete ", "move", "rename", "convert",fav] )
         
         if all_numbers( word, 4 ):
             
@@ -267,11 +274,13 @@ def mani_file(self):
                 self.change_extension()
                 
             if int( word ) == 4:
-                print(self.favorite)
                 if not self.song in self.favorite:
-                    self.favorite.append(self.song)
+                    self.favorite.append( self.song )
+                    self.update_favorite_database(1)
+                
                 else:
-                    self.favorite.remove(self.song)
+                    self.favorite.remove( self.song )
+                    self.update_favorite_database(0)
              
             if int(word) < 4 : 
                 self.song = None

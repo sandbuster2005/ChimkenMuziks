@@ -12,8 +12,8 @@ def init_param( self ):
                    [ "img", "image actuel" ,"" , "str", False ],
                    [ "repeat", "jouer en boucle ", 0 , "bool", True ],
                    [ "dirs" ,"liste des dossiers / sous dossiers", [], "list", False ],
-                   [ "favorite", "liste des favoris", [], "list", False],
                    [ "play_favorite", "joue les favoris", 0 , "bool", True],
+                   ["fchoose", "augmente la frequence des favoris", 0 , "bool" , True],
                    [ "holders", "commandes", -1 , "list", False ],
                    [ "graphic_manager", "mode d'affichage", "base" , "str", False ],
                    [ "confirmation", "message de choix", "Your choice", "str", False ],
@@ -36,7 +36,7 @@ def get_param( self , param = ""):
     """
     cette fonction permet de recuperer les variables cité dans le fichier  param si presence de celle si
     """
-    data = get_data( self.param, [ "|||", ",,,", "###", ";;;" ] )
+    data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
     data = remove_list( data )
     co = [ data[ x ][ 0 ] for x in range( len( data ) ) ]
     param = [ x[0] for x in self.params]
@@ -56,13 +56,15 @@ def get_param( self , param = ""):
         else:
             setattr(self,x,data[y][1])
     
+    self.load_favorite_database()
+    
 def write_param( self , param = ""):
     """
     cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
     data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int  else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] ]
     
-    data = join_list( data, [ "|||", ",,,", "###", ";;;" ] )
+    data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
     self.sort_command()
 

@@ -90,7 +90,7 @@ def join_list(data:str,chrs:[str],depth:int=0,lenght:int=0)-> str:
             new_data+=join_list(data[x],chrs,depth+1,len(data)-(x+1))
             
         else:
-            new_data+=data[x]+(chrs[0+depth]*(x!=len(data)-1))
+            new_data+=str(data[x])+(chrs[0+depth]*(x!=len(data)-1))
             
     return new_data+(chrs[depth-1]*(lenght!=0))
 

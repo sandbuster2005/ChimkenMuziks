@@ -24,6 +24,7 @@ def create_song_database(self):
     id_song INTEGER UNIQUE NOT NULL,
     nom TEXT UNIQUE NOT NULL ,
     played INTEGER NOT NULL,
+    favorite INTEGER NOT NULL,
     PRIMARY KEY(id_song AUTOINCREMENT)
     )
     """
@@ -39,8 +40,25 @@ def update_song_database(self):
     
     for x in self.get_file( self.path_to_file, [] ):
         print(x)
-        cursor.execute( ' INSERT OR IGNORE INTO song (nom,played) VALUES (?,"0")',[x])
+        cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
         
+    base.commit()
+    base.close()
+    
+def update_favorite_database(self,mode):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute( "UPDATE song SET favorite = ? where nom = ?",[ mode, self.song[ 1 ] ] )
+    base.commit()
+    base.close()
+    
+def load_favorite_database(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
+    result = cursor.fetchall()
+    self.favorite = [  [ x[0],x[1] ] for x in result ]
+    print( self.favorite )
     base.commit()
     base.close()
     

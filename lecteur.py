@@ -27,7 +27,7 @@ class App:
     from libs.handmade._song import init_song,choose_song,load_songs,play_song,play_last,historic,select,play,play_midi,convert_midi,default_midi,get_metadata
     from libs.handmade._main import init_main,main,update,get_input,load_all,wind,display,set_timer,param_center,clear_cache,u_bar,n_input
     from libs.handmade._printimage import print_image_to_screen, init_printer
-    from libs.handmade._data import init_data,write_song_database,create_song_database,update_song_database,get_index_data
+    from libs.handmade._data import init_data,write_song_database,create_song_database,update_song_database,get_index_data,update_favorite_database,load_favorite_database
     import libs.colorama.__init__ as colorama
     colorama.init()
 
