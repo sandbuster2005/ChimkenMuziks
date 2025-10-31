@@ -28,8 +28,8 @@ class Bar(Progress):
     width = 32
     suffix = '%(index)d/%(max)d'
     center = False
-    prefix = ''
-    suffix = ' '
+    prefix = '    '
+    suffix = '    '
     empty_fill = ' '
     fill = ' '
     color = "red"
