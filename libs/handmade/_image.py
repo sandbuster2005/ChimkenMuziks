@@ -121,7 +121,7 @@ def select_img( self ):
             else:
                 #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 self.print_image_to_screen(self.imgs[ int( word ) ], 5)
-
+                self.search = True
                 out("y/n ?")
                 confirm = readchar(  )
                 
@@ -150,3 +150,4 @@ def screen_mode(self):
         
     if word == "1":
         self.img_mode = "script"
+    self.display()

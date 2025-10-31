@@ -36,15 +36,12 @@ def change_sound_manager( self ):
     if choice == "0":
         self.sound_manager = "base"
         
-    if choice == "1":
-        
-        if "linux" in self.sys_os:#si le systeme est compatible
-            
-            if self.audio_linux:
-                self.mixer = alsaaudio.Mixer()
-                self.volume = self.get_volume()
-                self.sound_manager = "alsa"
-                self.display()
+    if choice == "1": 
+        if self.audio_linux:
+            self.mixer = alsaaudio.Mixer()
+            self.volume = self.get_volume()
+            self.sound_manager = "alsa"
+            self.display()
     
     
 def get_volume( self ):

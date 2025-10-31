@@ -199,13 +199,13 @@ def find_file( self, word ):
     limite:
     toute les charactère sont considérée comme minuscule
     """
-    files = [ [ self.files[ x ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
+    files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
     if len(files) < 10 and len(word) > 3:
         for y in range( len( word ) ):
             for i,x in enumerate( self.files ):
-                if [x.rsplit( self.separator )[ -1 ], i ] not in files:
-                    if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x.lower() ):
-                        files.append( [ x.rsplit( self.separator )[ -1 ], i ] )
+                if [x[1].rsplit( self.separator )[ -1 ], i ] not in files:
+                    if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x[ 1 ].lower() ):
+                        files.append( [ x [1] .rsplit( self.separator )[ -1 ], i ] )
     
     return sorted(files,key = lambda x: x[1] )
 
@@ -249,18 +249,18 @@ def mani_file(self):
                 choice = self.ask( "are you sure (y/n)" )
                 
                 if choice == "y":
-                    rm_file( self.song )
+                    rm_file( self.song[ 1 ] )
                     self.files.remove( self.song )
                 
             if int( word ) == 1:
                 choice = str( self.select_dir( retour = 1 ) )
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
-                    mv_file( self.song, self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
+                    mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
             if int( word ) == 2:
                 choice = self.ask( "new_name :" )
-                mv_file( self.song, self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
+                mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
                 self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
             if int( word ) == 3:
@@ -290,7 +290,7 @@ def get_words(self):
     self.last_word = -1
     self.words = []
     if self.song != None :
-        file = self.song.rsplit( ".", 1 )[ 0 ] + ".lrc"
+        file = self.song[1].rsplit( ".", 1 )[ 0 ] + ".lrc"
         print( isfile( file ) )
         
         if isfile( file ):

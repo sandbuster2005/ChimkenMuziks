@@ -8,7 +8,7 @@ from os.path import isfile, splitext, dirname
 from libs.tinytag import TinyTag
 def init_song( self ):
     #SONG variables
-    self.song = None# son aactuelle
+    self.song = None# son actuelle
     self.last_word = -1 
      
 def choose_song( self ):
@@ -38,6 +38,7 @@ def choose_song( self ):
             
         else:
             self.song = files[ ( files.index( self.song ) + 1 ) % len( files ) ]#chanson suivante : index+1
+        
 
 
 def load_songs( self ):
@@ -46,6 +47,9 @@ def load_songs( self ):
     et de remmetre a 0 le lecteur
     """     
     self.files = self.get_file( self.path_to_file, [] )
+    self.indexs = self.get_index_data( self.files )
+    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]
+    #print(self.files)
     self.song = None
 
 
@@ -63,7 +67,7 @@ def play_song( self ,choose = 1):
         
         if self.song[-4:] ==".mid":
             self.suspend("play_midi")
-            
+        
         self.play()
         self.pause = 0
     
@@ -76,17 +80,17 @@ def play( self ):
     une musique doit étre selectionné au préalable 
     """
     if self.played == []:
-        self.played.append( self.files.index( self.song ) )# ajoute a l'historique
+        self.played.append(  self.song  )# ajoute a l'historique
         
-    elif self.played[ -1 ] != self.files.index( self.song ):# ajoute a l'historique si la chanson a changé
-        self.played.append( self.files.index( self.song ) )
+    elif self.played[ -1 ] != self.song :# ajoute a l'historique si la chanson a changé
+        self.played.append(  self.song  )
         
-        
-    if ".mid" in self.song :
-        self.player.set_mrl( "appdata/cache/" + self.song.rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )
-    
+    #print(self.song)    
+    if ".mid" in self.song[1] :
+        self.player.set_mrl( "appdata/cache/" + self.song[1].rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )
+     
     else:
-        self.player.set_mrl( self.song )# charge la chanson
+        self.player.set_mrl( self.song[1] )# charge la chanson
         
     self.player.play()
     self.suspend( "display" )# affiche
@@ -98,7 +102,7 @@ def play_last( self ):
     """
     if len(self.played) > 1:
         self.played.pop()
-        self.song = self.files[ self.played[ -1 ] ]
+        self.song = self.played[ -1 ]
         self.play_song(choose = 0)
         
         
@@ -106,7 +110,7 @@ def historic( self ):
     """
     cette fonction affiche l'historique d'écoute de la session 
     """
-    self.show_list( [ f"{ self.played[ x ] }: { self.files[ self.played [ x ] ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom  
+    self.show_list( [ f"{ self.played[ x ][ 0 ] }: {  self.played [ x ][ 1 ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom  
 
 def select( self ):
     """
@@ -159,7 +163,7 @@ def get_metadata(self):
     """
     cette fonction permet de recuperer la miniature d'un fichier si elle existe 
     """
-    tag = TinyTag.get(self.song , image = True)
+    tag = TinyTag.get(self.song[1] , image = True)
     artist = tag.artist
     image = tag.images.any
     
@@ -169,7 +173,7 @@ def get_metadata(self):
         image = "appdata/cache/preview"
         
     elif tag.album != None:
-        for j in [splitext(self.song)[0], dirname(self.song)+self.separator+tag.album]:
+        for j in [splitext(self.song[1] )[0], dirname(self.song[1])+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
                 if isfile(i):
                     file = open(i, 'rb')

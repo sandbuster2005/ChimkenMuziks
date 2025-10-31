@@ -42,8 +42,10 @@ def main( self ):
     self.get_param()#get param from file if it exist else create it
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
     self.check_adress()#see if current file adress exist
+    self.update_song_database()
     self.load_songs()#try to load the song
     self.load_script()
+    print(self.files)
     
     while len( self.files ) == 0:# if folder is empty
         self.out( "no song in folder" )
@@ -56,6 +58,7 @@ def main( self ):
         
     progress = threading.Thread( target = self.update )#create update thread
     progress.start()
+    
     while self.stay != False:
         self.get_input()#interface
         
@@ -163,7 +166,7 @@ def update( self ):
             
             if not save_cooldown and self.bar.index == int( self.bar.max/2 ):
                 save_cooldown = monotonic() +5
-                self.write_song_database( self.song )
+                self.write_song_database( self.song[ 1 ] )
                 
             if save_cooldown:
                 if save_cooldown - monotonic() <0:
@@ -259,7 +262,7 @@ def update( self ):
                 else:
                     a = '/'
                 
-                name = self.song.rsplit( a, 1 )[ 1 ]
+                name = self.song[1].rsplit( a, 1 )[ 1 ]
                 if self.song in self.favorite:
                     name = "*" + name + "*"
                 space_name = floor((self.term_size.columns - len(name) )/ 2 )
@@ -282,37 +285,6 @@ def update( self ):
                 timer_changed = False
                 self.volume_changed = False
                 self.display_changed = False
-                
-            """
-            if time_changed :
-                time_changed = False
-                save()
-                lup( 3 )
-                out( f"{ base_time[ 0 ] }:{base_time[ 1 ]}" )
-                load()
-            
-            if timer_changed :
-                timer_changed = False
-                save()
-                lup( 3 )
-                right( 20 )
-                out(f" timer :{ self.timer[1] } mins ")
-                load()
-                
-            if self.volume_changed :
-                self.volume_changed = False
-                save()
-                lup( 3 )
-                right( 16 )
-                
-                if self.volume < 10 :
-                    out( f"0{ self.volume }%  " )
-                    
-                else:
-                    out( f"{ self.volume }%  " )
-                    
-                load()
-            """
             
             if stop != 0:
                 stop -= 1
@@ -328,7 +300,7 @@ def update( self ):
                     
             if ceil( time/1000 ) >= self.bar.max : #la chanson est fini# la chason est bien fini et ne vien pas de commencer
                 
-                self.play_song((1-self.repeat))
+                self.play_song( (1 - self.repeat) )
 
 def u_bar(self):
     """
@@ -382,7 +354,6 @@ def get_input( self ):
             
     if self.search:#recherche terminé
         self.suspend("display")
-        #ldown()
         self.search = False
         
         
@@ -440,7 +411,7 @@ def wind( self, mode, pause = False  ):
     """
     self.search = True
     if mode == 1:
-        if self.bar	!=	None: 
+        if self.bar	!= None: 
             self.player.set_time( min( self.player.get_length()-1000, self.player.get_time() + 10000 ) )
             self.bar.index = min( self.bar.max-1, self.bar.index + 10 )
             self.u_bar()
@@ -467,12 +438,10 @@ def wind( self, mode, pause = False  ):
         
     if mode == 5:
         self.deafen()
-        self.n_input()
         
     if mode == 6:
         self.pause = 1 - self.pause
         self.player.pause()
-        #self.u_bar()
 
     if mode == 15:
         self.player.set_time(0)
@@ -505,7 +474,6 @@ def param_center( self ):
     white()
     #tooltip , name , type
     param = [ [x[1],x[0],x[3]]  for x in self.params if x[4]]
-    #print(param)
     
     while all_numbers( word ):
         tooltip=[ [x[0], getattr(self,x[1])] for x in param]
