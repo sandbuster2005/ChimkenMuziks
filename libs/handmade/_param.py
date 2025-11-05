@@ -46,7 +46,7 @@ def get_param( self , param = ""):
         if data[y][1] =="":
             continue
         
-        print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
+        #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
         if self.params[param.index(x)][3] == "list" and type(data[y][1]) != list:
             setattr(self,x, [ data[y][1] ])
         

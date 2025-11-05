@@ -14,7 +14,9 @@ import random
 import platform
 import os
 
-def init_main( self ):
+def init_main( self , song):
+    self.exterior = song
+    
     self.sysname = sysname
     
     if sysname == 'nt':
@@ -45,7 +47,6 @@ def main( self ):
     self.update_song_database()
     self.load_songs()#try to load the song
     self.load_script()
-    print(self.files)
     
     while len( self.files ) == 0:# if folder is empty
         self.out( "no song in folder" )
@@ -58,6 +59,9 @@ def main( self ):
         
     progress = threading.Thread( target = self.update )#create update thread
     progress.start()
+    if self.exterior:
+        self.song = self.add_song_database(self.exterior)
+        self.play()
     
     while self.stay != False:
         self.get_input()#interface

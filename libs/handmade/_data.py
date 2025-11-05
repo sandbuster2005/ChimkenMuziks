@@ -1,4 +1,5 @@
 import sqlite3
+from .utils import *
 
 def init_data(self):
     pass
@@ -31,7 +32,19 @@ def create_song_database(self):
     cursor.execute(requete)
     base.commit()
     base.close()
-    
+
+def add_song_database(self, song):
+    self.create_song_database()
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    s = clear_adjacent(song,["/"],2)
+    s= "//".join( s.rsplit("/",1) )
+    cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[s])        
+    base.commit()
+    cursor.execute( " SELECT id_song,nom FROM song WHERE nom = ?", [s])
+    result = cursor.fetchall()
+    print(result)
+    return result[ 0 ]
 
 def update_song_database(self):
     self.create_song_database()
@@ -39,7 +52,6 @@ def update_song_database(self):
     cursor = base.cursor()
     
     for x in self.get_file( self.path_to_file, [] ):
-        print(x)
         cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
         
     base.commit()
@@ -58,7 +70,6 @@ def load_favorite_database(self):
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
     result = cursor.fetchall()
     self.favorite = [  [ x[0],x[1] ] for x in result ]
-    print( self.favorite )
     base.commit()
     base.close()
     
