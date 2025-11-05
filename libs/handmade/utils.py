@@ -132,4 +132,38 @@ def closest(num:int , liste:sorted) -> int:
             low = pos
             
     return pos
+
+def remove_list(liste:list) -> list:
+    """
+    cette fonction permet de retirer les etage de liste inutile (contenant 1 element)
+    """
+    if type(liste) is not list:
+        return liste
+    
+    if len(liste) == 1:
         
+        if type(liste[0]) is not list:
+            return liste[0]
+        
+        else:
+            return remove_list(liste[0])
+        
+    else:
+        return [remove_list(x) for x in liste]
+    
+def rotate_tableau(liste, add = True, val = None):
+    """
+    cette fonction permet de tourner le tableau de 90°
+    """
+    lenght = max( [ len(x) for x in liste ] )
+    result = [ [] for x in range( len(liste) ) ]
+    
+    for index in range( lenght ):
+        for elem in liste:
+            if len( elem ) > index:
+                result[ index ].append( elem[ index ] )
+                
+            elif add:
+                 result[ index ].append( val )
+                 
+    return result
