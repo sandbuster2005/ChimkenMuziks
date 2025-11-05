@@ -27,7 +27,8 @@ def init_param( self ):
                    [ "invert", "inverse les couleurs des images", 0, "bool", True],
                    [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],
                    [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True],
-                   [ "last_song", "derniere chanson joué", "", "str",False]
+                   [ "last_song", "derniere chanson joué", "", "str",False],
+                   [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool",True]
                    ]
     for x in self.params:
         if x[2]!= -1:
@@ -57,7 +58,6 @@ def get_param( self , param = ""):
         else:
             setattr(self,x,data[y][1])
     
-    print(self.last_song)
     self.load_favorite_database()
     
 def write_param( self , param = ""):

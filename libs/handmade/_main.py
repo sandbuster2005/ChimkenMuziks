@@ -61,7 +61,7 @@ def main( self ):
     if self.exterior:
         self.song = self.add_song_database(self.exterior)
         self.play()
-    elif self.last_song:
+    elif self.last_song and self.auto_last_song:
         self.song = self.last_song
         self.play()
     while self.stay != False:
