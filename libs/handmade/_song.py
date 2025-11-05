@@ -91,8 +91,7 @@ def play( self ):
         
     elif self.played[ -1 ] != self.song :# ajoute a l'historique si la chanson a changé
         self.played.append(  self.song  )
-        
-    #print(self.song)    
+    
     if ".mid" in self.song[1] :
         self.player.set_mrl( "appdata/cache/" + self.song[1].rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )
      

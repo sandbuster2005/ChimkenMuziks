@@ -26,7 +26,8 @@ def init_param( self ):
                    [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, b"ool", True ],
                    [ "invert", "inverse les couleurs des images", 0, "bool", True],
                    [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],
-                   [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True]
+                   [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True],
+                   [ "last_song", "derniere chanson joué", "", "str",False]
                    ]
     for x in self.params:
         if x[2]!= -1:
@@ -56,12 +57,19 @@ def get_param( self , param = ""):
         else:
             setattr(self,x,data[y][1])
     
+    print(self.last_song)
     self.load_favorite_database()
     
 def write_param( self , param = ""):
     """
     cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
+    if not self.stay:
+        if type(self.song) == list:
+            self.last_song = self.song
+        else:
+            self.last_song = ""
+    
     data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int  else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] ]
     
     data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )

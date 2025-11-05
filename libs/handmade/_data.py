@@ -44,7 +44,7 @@ def add_song_database(self, song):
     cursor.execute( " SELECT id_song,nom FROM song WHERE nom = ?", [s])
     result = cursor.fetchall()
     print(result)
-    return result[ 0 ]
+    return [result[ 0 ][0],result[ 0 ][1]]
 
 def update_song_database(self):
     self.create_song_database()

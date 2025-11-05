@@ -47,7 +47,6 @@ def main( self ):
     self.update_song_database()
     self.load_songs()#try to load the song
     self.load_script()
-    
     while len( self.files ) == 0:# if folder is empty
         self.out( "no song in folder" )
         self.change_main_path()
@@ -62,7 +61,9 @@ def main( self ):
     if self.exterior:
         self.song = self.add_song_database(self.exterior)
         self.play()
-    
+    elif self.last_song:
+        self.song = self.last_song
+        self.play()
     while self.stay != False:
         self.get_input()#interface
         
