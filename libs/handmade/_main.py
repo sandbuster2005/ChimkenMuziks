@@ -14,8 +14,9 @@ import random
 import platform
 import os
 
-def init_main( self , song):
-    self.exterior = song
+def init_main( self, directory, song ):
+    self.exterior = directory
+    self.exterior_song = song
     
     self.sysname = sysname
     
@@ -59,12 +60,21 @@ def main( self ):
     progress = threading.Thread( target = self.update )#create update thread
     progress.start()
     if self.exterior:
-        self.song = self.add_song_database(self.exterior)
-        self.play()
+        if self.exterior_song:
+            self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
+            self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
+            self.song = [ self.get_index_data( [ self.exterior_song ] )[0], self.exterior_song ]
+            self.play()
+        #self.files = 
+        #self.song = self.add_song_database(self.exterior)
+        #self.play()
+        pass
+        
     elif self.last_song and self.auto_last_song:
         self.last_song[0] = int( self.last_song[0] )
         self.song = self.last_song
         self.play()
+        
     while self.stay != False:
         self.get_input()#interface
         

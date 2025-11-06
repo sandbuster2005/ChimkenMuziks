@@ -29,7 +29,7 @@ def choose_song( self ):
     else:
         files = self.files
     if self.mode == 1:
-        if self.fchoose and self.favorite and self.song not in self.favorite:
+        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior:
             num = randint(1 , min(100 , 50 + len(self.favorite)*5) )
             if num > 50:
                 files = self.favorite
@@ -52,8 +52,12 @@ def load_songs( self ):
     """
     cette fonction permet de charge en memoire les chanson de la playlist selectionné/toute
     et de remmetre a 0 le lecteur
-    """     
-    self.files = self.get_file( self.path_to_file, [] )
+    """
+    if self.exterior:
+        self.files = self.get_file( self.exterior, [] )
+    else:    
+        self.files = self.get_file( self.path_to_file, [] )
+        
     self.indexs = self.get_index_data( self.files )
     self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]
     self.song = None

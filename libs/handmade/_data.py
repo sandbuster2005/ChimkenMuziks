@@ -51,8 +51,12 @@ def update_song_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     
-    for x in self.get_file( self.path_to_file, [] ):
-        cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
+    if self.exterior:
+        for x in self.get_file( self.exterior, [] ):
+            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
+    else:
+        for x in self.get_file( self.path_to_file, [] ):
+            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
         
     base.commit()
     base.close()

@@ -1,11 +1,11 @@
 #!/bin/python
 #made by sand
 import argparse
-
+import sys
 class App:
-    def __init__( self, song = ""):
+    def __init__( self, directory = "" , song = ""):
         self.init_param()
-        self.init_main( song )
+        self.init_main( directory , song)
         self.init_sound()
         self.init_battery()
         self.init_command()
@@ -162,11 +162,14 @@ class App:
         self.get_input()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-s","--song")
+parser.add_argument('-s', "--song")
+parser.add_argument("--dir", required="--song" in sys.argv)
+
+
 
 args = parser.parse_args()
-if args.song:
-    app = App(args.song)
+if args.dir:
+    app = App(args.dir,args.song)
 else:
     app = App()
 app.main()
