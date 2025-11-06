@@ -56,7 +56,6 @@ def load_songs( self ):
     self.files = self.get_file( self.path_to_file, [] )
     self.indexs = self.get_index_data( self.files )
     self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]
-    #print(self.files)
     self.song = None
 
 
