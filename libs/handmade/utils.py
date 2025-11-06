@@ -6,10 +6,10 @@ def white(x:int=60):
     """
     for z in range(x):
         print("")
-
 def replace(word:str,chrs:list,new:str="") -> str:
-    return "".join([word[x]*(1-(word[x] in chrs))+ new*(word[x] in chrs) for x in range(len(word))])
-
+    
+    return [ word := f"{new}".join( word.split( x ) ) for x in chrs ][ -1 ]
+    
 def all_numbers(word,lim=0,mode=0):
     """
     cette fonction permet de :

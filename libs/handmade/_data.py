@@ -65,6 +65,7 @@ def update_favorite_database(self,mode):
     base.close()
     
 def load_favorite_database(self):
+    self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")

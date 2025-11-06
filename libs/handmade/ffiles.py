@@ -31,6 +31,8 @@ def get_info(data:str,chrs:[str])-> list:
     cette fonction permet de transforer une chaine de charactére avec des separateur en liste de profondeur maximal egal
     au nombre de caractére dans chrs 
     """
+    if '"' in data and data.count('"') % 2 == 0:
+        data = "".join([ replace(x,chrs,",")*(y % 2 )+ x *((y + 1 )%2) for y,x in enumerate(data.split('"'))])
     data=data.split(chrs[0])
     new_data=[]
     
@@ -124,3 +126,12 @@ def remove_list(liste:list) -> list:
         
     else:
         return [remove_list(x) for x in liste]
+
+def replace(word:str,chrs:list,new:str="") -> str:
+    
+    return [ word := f"{new}".join( word.split( x ) ) for x in chrs ][ -1 ]
+    
+    #return "".join([word[x]*(1-(word[x] in chrs))+ new*(word[x] in chrs) for x in range(len(word))])
+
+
+
