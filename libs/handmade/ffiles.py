@@ -33,6 +33,7 @@ def get_info(data:str,chrs:[str])-> list:
     """
     if '"' in data and data.count('"') % 2 == 0:
         data = "".join([ replace(x,chrs,",")*(y % 2 )+ x *((y + 1 )%2) for y,x in enumerate(data.split('"'))])
+    
     data=data.split(chrs[0])
     new_data=[]
     
@@ -66,6 +67,7 @@ def edit_data(file,chrs,edit:str,position:[int])-> None:
     """
     data=get_data(file,chrs)
     data.remove([""])
+    
     if data!=[]:
         new_data=["" for x in range(len(position)+1)]
         new_data[0]=data
@@ -86,6 +88,7 @@ def join_list(data:str,chrs:[str],depth:int=0,lenght:int=0)-> str:
     cette fonction permet a partir d'une liste de former une chaine de caractére avec des separateurs 
     """
     new_data=""
+    
     for x in range(len(data)):
         
         if type(data[x])==list:

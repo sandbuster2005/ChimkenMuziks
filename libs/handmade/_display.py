@@ -1,6 +1,7 @@
 from ..readchar import readchar
 from math import ceil,floor
 from .utils import white
+
 def init_display( self ):
     pass
     
@@ -55,6 +56,7 @@ def ask_list( self, liste, text = "" , num = True ):
                 self.show_list(["p : previous page","n : next page"], num = False)
                 word = self.ask( f"{ text }" )
                 white()
+                
                 if word == "n":
                     n = min(n+1, ceil( len(liste) / (size-2) ) - 1 )
                     

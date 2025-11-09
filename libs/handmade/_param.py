@@ -33,9 +33,10 @@ def init_param( self ):
                    [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
                    [ "playlist_type","type de playlist", "", "str" , False]
                    ]
+    
     for x in self.params:
-        if x[2]!= -1:
-            setattr(self,x[0],x[2])
+        if x[ 2 ] != -1:
+            setattr(self,x[ 0 ], x[ 2 ] )
 
 def get_param( self , param = ""):
     """
@@ -44,22 +45,22 @@ def get_param( self , param = ""):
     data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
     data = remove_list( data )
     co = [ data[ x ][ 0 ] for x in range( len( data ) ) ]
-    param = [ x[0] for x in self.params]
-    print("param :",co)
-    for y,x in enumerate(co):
+    param = [ x[ 0 ] for x in self.params ]
+    print( "param :", co )
+    for y,x in enumerate( co ):
         
-        if data[y][1] =="":
+        if data[ y ][ 1 ] =="":
             continue
         
         #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
-        if self.params[param.index(x)][3] == "list" and type(data[y][1]) != list:
-            setattr(self,x, [ data[y][1] ])
+        if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
+            setattr( self, x, [ data[ y ][ 1 ] ])
         
-        elif data[y][1] =="0" or data[y][1] =="1":
-            setattr(self,x,int(data[y][1]))
+        elif data[ y ][ 1 ] == "0" or data[ y ][ 1 ] == "1":
+            setattr( self, x, int( data[ y ][ 1 ] ) )
            
         else:
-            setattr(self,x,data[y][1])
+            setattr( self, x, data[ y ][ 1 ] )
     
     self.load_favorite_database()
     if len( self.commands ) != len( self.holders ):
@@ -70,8 +71,9 @@ def write_param( self , param = ""):
     cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
     if not self.stay:
-        if type(self.song) == list:
+        if type( self.song ) == list:
             self.last_song = self.song
+            
         else:
             self.last_song = ""
     

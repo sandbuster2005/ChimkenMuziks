@@ -48,6 +48,7 @@ def add_to_playlist(self):
             
 def playlist_manager(self):
     word = self.ask_list( ["select playlist"," add playlist","remove playlist","return to file mode"])
+    
     if all_numbers( word, 4 ,1):
         playlists = self.get_column()
         
@@ -65,9 +66,11 @@ def playlist_manager(self):
             albums = self.get_albums()
             artists = self.get_artists()
             self.tooltips = []
+            
             if playlists or albums or artists:
                 white()
                 new = self.ask_list(["playlist","album","artist"])
+                
                 if all_numbers(new , 3 , 1):
                     
                     if new == "0" and playlists:
@@ -97,6 +100,7 @@ def playlist_manager(self):
         elif word =="1":
             white()
             new = self.ask_list( playlists )
+            
             if all_numbers(new , len( playlists ) , 1):
                  if self.playlist!= playlist [ int( new ) ]:
                     self.drop_column( playlists[ int( new ) ] )
@@ -111,8 +115,10 @@ def playlist_manager(self):
 def get_song_info(self,song):
     try:
         tag = TinyTag.get(song , image = True)
+        
     except:
         return [ None , None ]
+    
     else:
         return [tag.artist , tag.album]
 

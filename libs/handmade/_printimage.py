@@ -48,12 +48,15 @@ def init_printer(self):
 def closest(colors,color):
     colors = numpy.array(colors)
     color = numpy.array(color)
+    
     try :
         distances = numpy.sqrt(numpy.sum((colors-color)**2,axis=1))
         index_of_smallest = numpy.where(distances==numpy.amin(distances))
         smallest_distance = colors[index_of_smallest]
+    
     except:
         return [[0]]
+    
     else:
         return index_of_smallest
 
@@ -69,6 +72,7 @@ def print_image_to_screen(self, path, top_offset=0):
     imheight, imwidth, *_ = image.shape
     
     colors = []
+    
     if height/imheight < width/imwidth: # snap avec la hauteur
         heightprint = height
         widthprint = int(heightprint*(imwidth/imheight)*2)
@@ -87,6 +91,7 @@ def print_image_to_screen(self, path, top_offset=0):
 
     for i in range(heightprint): # height
         out(centerspace)
+        
         for j in range(widthprint): # width
             left = (width) * j
             up = (height) * i
@@ -111,10 +116,13 @@ def print_image_to_screen(self, path, top_offset=0):
                 #print('\033[42mERROR: Empty pixel.\033[0m')
                 #print(pixel, i, j, size, left, up, right, down)
                 pass
+            
             colors.append(average_color)
             if not self.true_color:
                 print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
+            
             else:
                 Tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
+        
         print('\033[0m')
     self.search = False

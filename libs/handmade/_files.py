@@ -51,7 +51,7 @@ def edit_dirs(self):
     cette fonction permet a l'utilisateur d'activer/desactiver des dossiers
     en suivant l'architecture de dossier en partant de la racine
     """
-    self.select_dir(self.switch_dir)
+    self.select_dir( self.switch_dir )
 
 def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
@@ -68,7 +68,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
     select = []
     
     for x in self.dirs:
-        print(x)
+        print( x )
         if self.path_to_file in x[ 0 ]:
             bottom = max( bottom ,x[ 0 ].count( self.separator ) - base )
             select.append( [ x[ 0 ].count( self.separator ) - base ,x[ 0 ],x[ 1 ] ] )
@@ -200,6 +200,7 @@ def find_file( self, word ):
     toute les charactère sont considérée comme minuscule
     """
     files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
+    
     if len(files) < 10 and len(word) > 3:
         for y in range( len( word ) ):
             for i,x in enumerate( self.files ):
@@ -221,6 +222,7 @@ def check_adress( self ):
             
             except:
                 self.path_to_file = input( "chemin du dossier musique: " )
+                
                 if self.path_to_file[-1] != self.separator:
                     self.path_to_file += self.separator
     
@@ -280,9 +282,12 @@ def mani_file(self):
                 self.played = self.played[:-1]
                 self.player.stop()
                 print("")
-                #self.load_songs()
+            
             else:
                 self.display()
+        
+        else:
+            self.display()
             
 def get_words(self):
     """
@@ -291,9 +296,9 @@ def get_words(self):
     """
     self.last_word = -1
     self.words = []
+    
     if self.song != None :
         file = self.song[1].rsplit( ".", 1 )[ 0 ] + ".lrc"
-        print( isfile( file ) )
         
         if isfile( file ):
             data = getfile( file )
@@ -304,11 +309,13 @@ def get_words(self):
                 data[ x ] = replace( data[ x ], '\n' ).split("]", 1 )
             
             new_data = []
+            
             for x in range(len(data)):
                 if  ":" in data[ x ][0] and  '.' in data[ x ][ 0 ] and (len(data[ x ][ 0 ] ) == 8 or len(data[ x ][ 0 ] ) == 9):
                     new_data.append( data[ x ] )
                     
             data = new_data
+            
             for x in range( len( data ) ): 
                 data[ x ][ 0 ] = int(data[ x ][ 0 ][ :2 ] ) * 60 + int( data[ x ][ 0 ][ 3:5 ] ) + int( data[ x ][ 0 ][ 6:8 ] ) / 100 
                 

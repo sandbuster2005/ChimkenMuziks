@@ -41,7 +41,7 @@ def init_command( self ):
             "add":"permet d'ajouter la chanson a une playlist / au favoris"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
-    #dl bb
+    #dl bb pl add
     
 def sort_command( self ):
     """
@@ -54,6 +54,7 @@ def sort_command( self ):
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
     missing = ""
+    
     while x < len( command ) and missing == "":
         
         if len( command[ x ] ) == 1:
@@ -86,6 +87,7 @@ def edit_command( self ):
     while cmd:
         self.show_list(self.help_menu(), num = False)
         cmd = self.ask("enter current command call :")#show current command 
+        
         if cmd=="h":
             self.out( "help cannot be modified" )
             return

@@ -6,6 +6,7 @@ def white(x:int=60):
     """
     for z in range(x):
         print("")
+        
 def replace(word:str,chrs:list,new:str="") -> str:
     
     return [ word := f"{new}".join( word.split( x ) ) for x in chrs ][ -1 ]
@@ -39,10 +40,13 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
     pos = 0
     if lenght <= 1 :
         raise Exception("lenght should be above 1")
+    
     if not isinstance(word, str):
         raise Exception("word should be a string")
+    
     if isinstance(chrs, str):
         chrs = list(chrs)
+        
     if not isinstance(chrs, list):
         raise Exception("chrs should be a list/string")
     
@@ -50,6 +54,7 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
         if not isinstance(chrs[x], str):
             if isinstance(chrs[x], int):
                 chrs[x] = chr(chrs[x])
+                
             else :
                 raise Exception("inside chrs should be str")
         
@@ -62,6 +67,7 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
         while x < lenght and remove == True:
             if word[pos+x] not in chrs:
                 remove = False
+            
             x += 1
         
         if remove :
@@ -72,11 +78,13 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
                 replace = min(replace, chrs.index(word[pos + x]))
                 
             word = word[:pos] + chrs[replace] + word[pos + lenght:]
+            
             if pos !=0 :
                 pos -= 1
         
         else :
             pos += 1
+            
     return word
             
                 
@@ -123,6 +131,7 @@ def closest(num:int , liste:sorted) -> int:
     pos = 0
     high = len(liste)
     low = 0
+    
     while (pos := (high + low)//2 ) != low:
         
         if liste[pos] > num:

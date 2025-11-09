@@ -56,6 +56,7 @@ def update_song_database(self):
     if self.exterior:
         for x in self.get_file( self.exterior, [] ):
             cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
+    
     else:
         for x in self.get_file( self.path_to_file, [] ):
             if x not in noms:
@@ -96,9 +97,11 @@ def get_index_data(self,nom):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     result = []
+    
     for x in nom:
         cursor.execute("SELECT id_song FROM song WHERE nom = ?" ,[x])
         result.append(cursor.fetchone()[0])
+        
     return result
 
 def add_column(self,column):
@@ -138,6 +141,7 @@ def is_in_playlist(self,playlist):
     result =  cursor.fetchone()[0]
     base.commit()
     base.close()
+    
     if result == 1:
         return 1
     
@@ -189,3 +193,5 @@ def load_artist_database(self):
     base.commit()
     base.close()
     self.playlist_files =  [  [ x[0],x[1] ] for x in result ]
+    
+    

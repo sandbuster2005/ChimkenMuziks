@@ -108,6 +108,7 @@ def select_img( self ):
     """
     
     word = "0"
+    
     while all_numbers( word , len( self.imgs ) ):
         
         wipe()
@@ -119,6 +120,7 @@ def select_img( self ):
                 word = ""
             
             else:
+                
                 #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 self.print_image_to_screen(self.imgs[ int( word ) ], 5)
                 self.search = True
@@ -135,19 +137,22 @@ def load_script(self):
     """
     WIP
     """
+    
     if self.img_script != "":
-        self.Screen = importlib.import_module(self.img_script).Screen()
+        self.Screen = importlib.import_module( self.img_script ).Screen()
         
 def screen_mode(self):
     """
     WIP
     """
+    
     choice = [ "image mode " , "script mode" ]
-    word = self.ask_list(choice)
+    word = self.ask_list( choice )
     
     if word == "0":
         self.img_mode = "img"
         
     if word == "1":
         self.img_mode = "script"
+        
     self.display()
