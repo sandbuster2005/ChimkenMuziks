@@ -1,5 +1,6 @@
 from ..readchar import readchar
-
+from math import ceil,floor
+from .utils import white
 def init_display( self ):
     pass
     
@@ -20,7 +21,7 @@ def ask( self, text ):
         return input( f"{ text }" )
 
 
-def show_list( self, liste, num = True ):
+def show_list( self, liste, num = True , start = 0):
     """
     cette fonction permet d afficher les elements d'une liste un
     par un ,numeroté ou non
@@ -28,7 +29,7 @@ def show_list( self, liste, num = True ):
     if self.graphic_manager == "base":
         if num == True:
             for x in range( len( liste ) ):
-                print( x, liste[x] )
+                print( x + start, liste[x] )
         
         else:
             for x in liste:
@@ -44,13 +45,32 @@ def ask_list( self, liste, text = "" , num = True ):
         text = self.confirmation
         
     if self.graphic_manager == "base":
-        self.show_list( liste, num )
-        
-        if len( liste ) < 11:
-            return readchar()
+        if len( liste ) > self.term_size.lines:
+            n = 0
+            word = "n"
+            size = self.term_size.lines
+            
+            while word == "n" or word == "p":
+                self.show_list( liste[ n * (size-2) : ( n + 1 ) * (size - 2)] , start = n*(size - 2 ) )
+                self.show_list(["p : previous page","n : next page"], num = False)
+                word = self.ask( f"{ text }" )
+                white()
+                if word == "n":
+                    n = min(n+1, ceil( len(liste) / (size-2) ) - 1 )
+                    
+                if word == "p":
+                    n = max(n-1,0)
+                    
+            return word
         
         else:
-            return self.ask( f"{ text }" )
+            self.show_list( liste, num )
+            
+            if len( liste ) < 11:
+                return readchar()    
+            
+            else:
+                return self.ask( f"{ text }" )
     
 
 

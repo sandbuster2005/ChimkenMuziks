@@ -244,13 +244,7 @@ def mani_file(self):
     if self.song != None:
         index = self.files.index( self.song )
         
-        if self.song in self.favorite:
-            fav = "remove to favorite"
-        
-        else:
-            fav = "add from favorite"
-        
-        tooltip = [ "delete ", "move", "rename", "convert",fav]
+        tooltip = [ "delete ", "move", "rename", "convert"]
         
         if self.get_column():
             tooltip.append("add to playlist")
@@ -280,33 +274,7 @@ def mani_file(self):
                 
             elif int( word ) == 3:
                 self.change_extension()
-                
-            elif int( word ) == 4:
-                if not self.song in self.favorite:
-                    self.favorite.append( self.song )
-                    self.update_favorite_database(1)
-                
-                else:
-                    self.favorite.remove( self.song )
-                    self.update_favorite_database(0)
-            
-            elif int( word ) == 5:
-                white()
-                playlists = self.get_column()
-                tooltip = []
-                value = []
-                
-                for x in playlists:
-                    value.append(1 - self.is_in_playlist(x) )
-                    tooltip.append( f": { 'not'* value[-1] } in {x}")
-                    
-                new = self.ask_list( tooltip )
-                if all_numbers(new, len( playlists ), 1):
-                    self.update_playlist_database(playlists[ int( new ) ], value[ int( new ) ] )
-                
-            
-            
-            
+                 
             if int(word) < 4 : 
                 self.song = None
                 self.played = self.played[:-1]
@@ -369,4 +337,6 @@ def change_extension(self):
 def check_favorite(self):
     self.favorite = [ x for x in self.favorite if x in self.files]
     
-    
+
+                
+            

@@ -4,8 +4,8 @@ from .utils import *
 from .terminal import *
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
+    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# commande defini par l'utilisateur ( modifiable )
+    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
     self.tooltips = {
             "h": "pour afficher le menu help",
             "q": "pour quitter le lecteur",
@@ -35,9 +35,10 @@ def init_command( self ):
             "x": "pour télécharger une playlist youtube",
             "v": "pour modifier une commande",
             "w": "pour remetre les paramètre a 0",
-            "z": "pour supprimer/deplacer/renommer un fichier + ajouter au playlist + favoris",
+            "z": "pour supprimer/deplacer/renommer un fichier",
             "bb": "pour la musique en cours a 0",
-            "pl": "permet de gerer les playlist"
+            "pl": "permet de gerer les playlist",
+            "add":"permet d'ajouter la chanson a une playlist / au favoris"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb
@@ -48,6 +49,7 @@ def sort_command( self ):
     en fonction de leur taille puis alphabétiquement en gardant le h(help) en priorité dans l'alphabet
     """
     # all this THING sort commands by lenght then by alphabetical order and put the h on top of the alphabet
+        
     command = self.holders[ 1: ]
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
@@ -108,4 +110,4 @@ def help_menu( self ):
     cette fonction se sert du dico qui contient les info pour renvoier une
     liste de toute les info
     """
-    return [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause/actualiser" ]+[f"{ self.holders[ x ] } : { self.tooltips[ self.commands[ x ] ] }" for x in range( len( self.commands ) ) ] + [" "] 
+    return [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause/actualiser" ]+[f"{ self.holders[ x ] } : { self.tooltips[ self.commands[ x ] ] }" if self.holders[ x ] in self.tooltips.keys() else f"{self.holders[x]}: missing tooltip pls report" for x in range( len( self.commands ) )  ] + [" "] 

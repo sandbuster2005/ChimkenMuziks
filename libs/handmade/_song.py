@@ -34,7 +34,7 @@ def choose_song( self ):
         files = self.files
         
     if self.mode == 1:
-        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior:
+        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
             num = randint(1 , min(100 , 50 + len(self.favorite)*5) )
             
             if num > 50:

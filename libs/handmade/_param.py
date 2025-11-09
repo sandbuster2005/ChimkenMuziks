@@ -29,7 +29,9 @@ def init_param( self ):
                    [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True ],
                    [ "last_song", "derniere chanson joué", "", "str", False ],
                    [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool", True ],
-                   [ "playlist" , "nom de la playlist actuel", "", "str", False ]
+                   [ "playlist" , "nom de la playlist actuel", "", "str", False ],
+                   [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
+                   [ "playlist_type","type de playlist", "", "str" , False]
                    ]
     for x in self.params:
         if x[2]!= -1:
@@ -60,6 +62,8 @@ def get_param( self , param = ""):
             setattr(self,x,data[y][1])
     
     self.load_favorite_database()
+    if len( self.commands ) != len( self.holders ):
+        self.holders = [ x for x in self.commands ]
     
 def write_param( self , param = ""):
     """

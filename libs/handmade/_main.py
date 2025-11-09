@@ -69,7 +69,7 @@ def main( self ):
     
     else:
         if self.playlist:
-            self.load_playlist_database()
+            self.load_playlist()
         
         if self.last_song and self.auto_last_song:
             self.last_song[0] = int( self.last_song[0] )
@@ -83,7 +83,9 @@ def main( self ):
            self.stay = False
             
     self.player.stop()#end
-    self.write_param()#sauvegarde des parametres
+    
+    if self.save_param:
+        self.write_param()#sauvegarde des parametres
     
     
 def update( self ):
@@ -112,7 +114,9 @@ def update( self ):
         if not self.MainThread.is_alive():
             self.stay = False
             self.player.stop()#end
-            self.write_param()#sauvegarde des parametres
+            
+            if self.save_param:
+                self.write_param()#sauvegarde des parametres
             
         if self.timer != None:
             
@@ -255,6 +259,7 @@ def update( self ):
                 if self.show:
                     white()
                     self.display_img()
+                    
                 ldown(3)
                 
                 time_string = f"{ base_time[ 0 ] }:{base_time[ 1 ]}"
@@ -269,6 +274,10 @@ def update( self ):
                     timer_string = f"timer :{ self.timer[1] } mins"
             
                 string =  time_string + "   " + volume_string
+                
+                if self.playlist:
+                    string = self.playlist + "   " + string
+                    
                 if self.timer:
                     string += "  "+ timer_string
                 
@@ -516,39 +525,3 @@ def clear_cache(self):
         rm_file("appdata/cache/" + f)
         
     self.display()
-
-def playlist_manager(self):
-    word = self.ask_list( ["select playlist"," add playlist","remove playlist","return to file mode"])
-    if all_numbers( word, 4 ,1):
-        playlists = self.get_column()
-        
-        if word == "3":
-            self.playlist = ""
-        
-        elif word == "1":
-            white(4)
-            word = self.ask( "new playlist name:" )
-            
-            if word.lower() not in ( playlists + ["id_song","nom","played","favorite",""]   ):
-                self.add_column( word.lower() )
-                
-        else :
-            if playlists:
-                white()
-                new = self.ask_list( playlists )
-                
-                if all_numbers(new , len( playlists ) , 1):
-                    if word == "0":
-                        self.playlist = playlists[ int( new ) ]
-                        self.load_playlist_database()
-                
-                    elif self.playlist!= playlist [ int( new ) ]:
-                        self.drop_column( playlists[ int( new ) ] )
-                
-            else:
-                print("no playlist")
-                input("press any key to continue")
-            
-        
-    self.display()
-                

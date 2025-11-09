@@ -26,6 +26,8 @@ def create_song_database(self):
     nom TEXT UNIQUE NOT NULL ,
     played INTEGER NOT NULL,
     favorite INTEGER NOT NULL,
+    artist TEXT ,
+    album TEXT,
     PRIMARY KEY(id_song AUTOINCREMENT)
     )
     """
@@ -48,14 +50,16 @@ def add_song_database(self, song):
 def update_song_database(self):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
+    
     cursor = base.cursor()
     
     if self.exterior:
         for x in self.get_file( self.exterior, [] ):
-            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
+            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
     else:
         for x in self.get_file( self.path_to_file, [] ):
-            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite) VALUES (?,"0","0")',[x])
+            artist,album = self.get_song_info(x)
+            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
         
     base.commit()
     base.close()
@@ -129,7 +133,6 @@ def is_in_playlist(self,playlist):
     else:
         return 0
     
-
 def get_column(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
@@ -137,5 +140,41 @@ def get_column(self):
     result = cursor.fetchall()
     base.commit()
     base.close()
-    return [ x[0]for x in result ][4:]
-    
+    return [ x[0]for x in result ][6:]
+
+def get_albums(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT DISTINCT album FROM song WHERE album IS NOT NULL")
+    result =  cursor.fetchall()
+    base.commit()
+    base.close()
+    return [ x[0] for x in result]
+
+def load_album_database(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT id_song,nom FROM song WHERE album = ?",[self.playlist])
+    result =  cursor.fetchall()
+    base.commit()
+    base.close()
+    self.playlist_files = [  [ x[0],x[1] ] for x in result ]
+
+
+def get_artists(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT DISTINCT artist FROM song WHERE artist IS NOT NULL")
+    result = cursor.fetchall()
+    base.commit()
+    base.close()
+    return [ x[0] for x in result]
+
+def load_artist_database(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT id_song,nom FROM song WHERE artist = ?",[self.playlist])
+    result =  cursor.fetchall()
+    base.commit()
+    base.close()
+    self.playlist_files =  [  [ x[0],x[1] ] for x in result ]
