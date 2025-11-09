@@ -4,8 +4,8 @@ from .utils import *
 from .terminal import *
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
+    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl" ]# commande defini par l'utilisateur ( modifiable )
+    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
     self.tooltips = {
             "h": "pour afficher le menu help",
             "q": "pour quitter le lecteur",

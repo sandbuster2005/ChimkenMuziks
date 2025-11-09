@@ -26,9 +26,10 @@ def init_param( self ):
                    [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, b"ool", True ],
                    [ "invert", "inverse les couleurs des images", 0, "bool", True],
                    [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],
-                   [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True],
-                   [ "last_song", "derniere chanson joué", "", "str",False],
-                   [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool",True]
+                   [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True ],
+                   [ "last_song", "derniere chanson joué", "", "str", False ],
+                   [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool", True ],
+                   [ "playlist" , "nom de la playlist actuel", "", "str", False ]
                    ]
     for x in self.params:
         if x[2]!= -1:

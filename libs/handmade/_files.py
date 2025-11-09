@@ -215,8 +215,10 @@ def check_adress( self ):
     """
     if not isdir( self.path_to_file ) or self.path_to_file == "":
         while not isdir( self.path_to_file ):
+            
             try:
                 self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
+            
             except:
                 self.path_to_file = input( "chemin du dossier musique: " )
                 if self.path_to_file[-1] != self.separator:
@@ -247,10 +249,15 @@ def mani_file(self):
         
         else:
             fav = "add from favorite"
-            
-        word = self.ask_list( [ "delete ", "move", "rename", "convert",fav] )
         
-        if all_numbers( word, 4 ):
+        tooltip = [ "delete ", "move", "rename", "convert",fav]
+        
+        if self.get_column():
+            tooltip.append("add to playlist")
+        
+        word = self.ask_list( tooltip )
+        
+        if all_numbers( word, len( tooltip ), 1 ):
             
             if int( word ) == 0:
                 choice = self.ask( "are you sure (y/n)" )
@@ -259,21 +266,22 @@ def mani_file(self):
                     rm_file( self.song[ 1 ] )
                     self.files.remove( self.song )
                 
-            if int( word ) == 1:
+            elif int( word ) == 1:
                 choice = str( self.select_dir( retour = 1 ) )
+                
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
-            if int( word ) == 2:
+            elif int( word ) == 2:
                 choice = self.ask( "new_name :" )
                 mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
                 self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
-            if int( word ) == 3:
+            elif int( word ) == 3:
                 self.change_extension()
                 
-            if int( word ) == 4:
+            elif int( word ) == 4:
                 if not self.song in self.favorite:
                     self.favorite.append( self.song )
                     self.update_favorite_database(1)
@@ -281,7 +289,24 @@ def mani_file(self):
                 else:
                     self.favorite.remove( self.song )
                     self.update_favorite_database(0)
-             
+            
+            elif int( word ) == 5:
+                white()
+                playlists = self.get_column()
+                tooltip = []
+                value = []
+                
+                for x in playlists:
+                    value.append(1 - self.is_in_playlist(x) )
+                    tooltip.append( f": { 'not'* value[-1] } in {x}")
+                    
+                new = self.ask_list( tooltip )
+                if all_numbers(new, len( playlists ), 1):
+                    self.update_playlist_database(playlists[ int( new ) ], value[ int( new ) ] )
+                
+            
+            
+            
             if int(word) < 4 : 
                 self.song = None
                 self.played = self.played[:-1]

@@ -17,10 +17,14 @@ def choose_song( self ):
     choisir une chanson aléatoire : mode 0
     choisit la chanson qui suit dans la liste : mode 1 
     """
+    if self.playlist:
+        if self.playlist_files:
+            files = self.playlist_files
     
-    if self.play_favorite:
+    elif self.play_favorite:
         if self.favorite:
             files = self.favorite
+            
         else:
             self.play_favorite = 0
             files = self.files
@@ -28,9 +32,11 @@ def choose_song( self ):
         
     else:
         files = self.files
+        
     if self.mode == 1:
         if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior:
             num = randint(1 , min(100 , 50 + len(self.favorite)*5) )
+            
             if num > 50:
                 files = self.favorite
                 
@@ -55,6 +61,7 @@ def load_songs( self ):
     """
     if self.exterior:
         self.files = self.get_file( self.exterior, [] )
+    
     else:    
         self.files = self.get_file( self.path_to_file, [] )
         
@@ -189,5 +196,6 @@ def get_metadata(self):
                     write_file("appdata/cache/preview", file.read(), mode = "wb")
                     image = "appdata/cache/preview"
                     file.close()
+                    
     self.thumbnail = image
     

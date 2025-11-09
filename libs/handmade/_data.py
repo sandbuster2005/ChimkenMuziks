@@ -43,7 +43,6 @@ def add_song_database(self, song):
     base.commit()
     cursor.execute( " SELECT id_song,nom FROM song WHERE nom = ?", [s])
     result = cursor.fetchall()
-    print(result)
     return [result[ 0 ][0],result[ 0 ][1]]
 
 def update_song_database(self):
@@ -86,3 +85,57 @@ def get_index_data(self,nom):
         cursor.execute("SELECT id_song FROM song WHERE nom = ?" ,[x])
         result.append(cursor.fetchone()[0])
     return result
+
+def add_column(self,column):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute(f"ALTER TABLE song ADD COLUMN {column} INTEGER")
+    base.commit()
+    base.close()
+    
+def drop_column(self,column):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute(f"ALTER TABLE song DROP COLUMN {column} ")
+    base.commit()
+    base.close()
+
+def load_playlist_database(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute(f" SELECT id_song,nom FROM song WHERE {self.playlist} = '1' ")
+    result = cursor.fetchall()
+    base.commit()
+    base.close()
+    self.playlist_files =  [  [ x[0],x[1] ] for x in result ]
+
+def update_playlist_database(self, playlist, value):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute( f"UPDATE song SET {playlist} = ? where nom = ?",[ value, self.song[ 1 ] ] )
+    base.commit()
+    base.close()
+
+def is_in_playlist(self,playlist):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute(f" select {playlist} FROM song where nom = ? ",[ self.song[ 1 ] ] )
+    result =  cursor.fetchone()[0]
+    base.commit()
+    base.close()
+    if result == 1:
+        return 1
+    
+    else:
+        return 0
+    
+
+def get_column(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("select name from pragma_table_info('song') as tblInfo")
+    result = cursor.fetchall()
+    base.commit()
+    base.close()
+    return [ x[0]for x in result ][4:]
+    

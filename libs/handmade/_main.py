@@ -59,21 +59,22 @@ def main( self ):
         
     progress = threading.Thread( target = self.update )#create update thread
     progress.start()
+    
     if self.exterior:
         if self.exterior_song:
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
             self.song = [ self.get_index_data( [ self.exterior_song ] )[0], self.exterior_song ]
             self.play()
-        #self.files = 
-        #self.song = self.add_song_database(self.exterior)
-        #self.play()
-        pass
+    
+    else:
+        if self.playlist:
+            self.load_playlist_database()
         
-    elif self.last_song and self.auto_last_song:
-        self.last_song[0] = int( self.last_song[0] )
-        self.song = self.last_song
-        self.play()
+        if self.last_song and self.auto_last_song:
+            self.last_song[0] = int( self.last_song[0] )
+            self.song = self.last_song
+            self.play()
         
     while self.stay != False:
         self.get_input()#interface
@@ -82,7 +83,7 @@ def main( self ):
            self.stay = False
             
     self.player.stop()#end
-    self.write_param()#sauvegarde est parametre
+    self.write_param()#sauvegarde des parametres
     
     
 def update( self ):
@@ -111,7 +112,7 @@ def update( self ):
         if not self.MainThread.is_alive():
             self.stay = False
             self.player.stop()#end
-            self.write_param()#sauvegarde es parametre
+            self.write_param()#sauvegarde des parametres
             
         if self.timer != None:
             
@@ -174,7 +175,7 @@ def update( self ):
                 self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar , center = self.center)
                 load()
          
-        if self.bar != None and not self.search and self.song != None:#chason en cours et pas de pause/suspension     
+        if self.bar != None and not self.search and self.song != None:#chanson en cours et pas de pause/suspension     
             
             if self.term_size != ( _ := os.get_terminal_size()) :
                 self.term_size = _
@@ -203,7 +204,7 @@ def update( self ):
             if self.bar.index < 0:##en cas de reculer en desosus du debut
                 self.bar.index = 0
                 
-            if time < 0:#en cas de reculer en desosus du debut
+            if time < 0:#en cas de reculer en dessous du debut
                 time = 0
                 
             if last_update + 0.5 < monotonic() :
@@ -515,3 +516,39 @@ def clear_cache(self):
         rm_file("appdata/cache/" + f)
         
     self.display()
+
+def playlist_manager(self):
+    word = self.ask_list( ["select playlist"," add playlist","remove playlist","return to file mode"])
+    if all_numbers( word, 4 ,1):
+        playlists = self.get_column()
+        
+        if word == "3":
+            self.playlist = ""
+        
+        elif word == "1":
+            white(4)
+            word = self.ask( "new playlist name:" )
+            
+            if word.lower() not in ( playlists + ["id_song","nom","played","favorite",""]   ):
+                self.add_column( word.lower() )
+                
+        else :
+            if playlists:
+                white()
+                new = self.ask_list( playlists )
+                
+                if all_numbers(new , len( playlists ) , 1):
+                    if word == "0":
+                        self.playlist = playlists[ int( new ) ]
+                        self.load_playlist_database()
+                
+                    elif self.playlist!= playlist [ int( new ) ]:
+                        self.drop_column( playlists[ int( new ) ] )
+                
+            else:
+                print("no playlist")
+                input("press any key to continue")
+            
+        
+    self.display()
+                
