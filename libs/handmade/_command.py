@@ -35,8 +35,9 @@ def init_command( self ):
             "x": "pour télécharger une playlist youtube",
             "v": "pour modifier une commande",
             "w": "pour remetre les paramètre a 0",
-            "z": "pour supprimer/deplacer/renommer un fichier",
-            "bb": "pour la musique en cours a 0"
+            "z": "pour supprimer/deplacer/renommer un fichier + ajouter au playlist + favoris",
+            "bb": "pour la musique en cours a 0",
+            "pl": "permet de gerer les playlist"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb
