@@ -52,17 +52,28 @@ def update_song_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
     
     cursor = base.cursor()
-    
+    noms = self.get_song_database()
     if self.exterior:
         for x in self.get_file( self.exterior, [] ):
             cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
     else:
         for x in self.get_file( self.path_to_file, [] ):
-            artist,album = self.get_song_info(x)
-            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
+            if x not in noms:
+                artist,album = self.get_song_info(x)
+                cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
         
     base.commit()
     base.close()
+
+def get_song_database(self):
+    self.create_song_database()
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT nom FROM song")
+    result = cursor.fetchall()
+    base.commit()
+    base.close()
+    return [x[0] for x in result]
     
 def update_favorite_database(self,mode):
     base = sqlite3.connect("appdata/cache/data.db")
