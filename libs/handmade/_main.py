@@ -173,7 +173,8 @@ def update( self ):
                     wipe_line()
                     self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar ,center = self.center)
                     load()
-            else:
+          
+            elif self.player.get_length() > 0:
                 
                 if self.color:
                     color = random.randint( 0, 252 )

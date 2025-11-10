@@ -64,7 +64,11 @@ def playlist_manager(self):
                 
         elif word =="0":
             albums = self.get_albums()
+            albums = remove_list ( [ x.split("/") for x in albums] )
+            
             artists = self.get_artists()
+            artists = remove_list ( [ x.split("/") for x in artists ] )
+            
             self.tooltips = []
             
             if playlists or albums or artists:

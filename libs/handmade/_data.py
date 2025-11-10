@@ -169,7 +169,7 @@ def get_albums(self):
 def load_album_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT id_song,nom FROM song WHERE album = ?",[self.playlist])
+    cursor.execute("SELECT id_song,nom FROM song WHERE (album LIKE ? OR album LIKE ? )",["%"+self.playlist+"/", "%" + self.playlist])
     result =  cursor.fetchall()
     base.commit()
     base.close()
@@ -188,7 +188,7 @@ def get_artists(self):
 def load_artist_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT id_song,nom FROM song WHERE artist = ?",[self.playlist])
+    cursor.execute("SELECT id_song,nom FROM song WHERE (artist LIKE ? OR artist LIKE ? )",["%"+self.playlist+"/", "%" + self.playlist])
     result =  cursor.fetchall()
     base.commit()
     base.close()
