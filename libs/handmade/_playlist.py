@@ -75,27 +75,30 @@ def playlist_manager(self):
                     
                     if new == "0" and playlists:
                         res = self.ask_list( playlists )
-                        
+                        white()
                         if all_numbers(res , len(playlists) , 1):
                             self.playlist = playlists[ int( res ) ]
                             self.playlist_type = "playlist"
                             self.load_playlist()
+                            n_f()
                     
                     elif new == "1" and albums:
                         res = self.ask_list( albums )
-                        
+                        white()
                         if all_numbers(res , len( albums ) , 1):
                             self.playlist = albums[ int( res ) ]
                             self.playlist_type = "album"
                             self.load_playlist()
+                            n_f()
                         
                     elif new == "2" and artists:
                         res = self.ask_list( artists )
-                        
+                        white()
                         if all_numbers(res , len( artists ) , 1):
                             self.playlist = artists[ int( res ) ]
                             self.playlist_type = "artist"
                             self.load_playlist()
+                            n_f()
        
         elif word =="1":
             white()
