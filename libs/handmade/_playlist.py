@@ -65,9 +65,11 @@ def playlist_manager(self):
         elif word =="0":
             albums = self.get_albums()
             albums = remove_list ( [ x.split("/") for x in albums] )
-            
+            albums = [ x  for y,x in enumerate( albums )  if x not in albums[:y] ]
+
             artists = self.get_artists()
             artists = remove_list ( [ x.split("/") for x in artists ] )
+            artists = [ x  for y,x in enumerate( artists)  if x not in artists[:y] ]
             
             self.tooltips = []
             
