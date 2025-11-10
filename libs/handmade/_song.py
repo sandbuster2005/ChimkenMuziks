@@ -50,6 +50,8 @@ def choose_song( self ):
             self.song = files[ 0 ]# si pas de chanson joué avant prendre la premiére
             
         else:
+            if self.song not in files:
+                files = self.files
             self.song = files[ ( files.index( self.song ) + 1 ) % len( files ) ]#chanson suivante : index+1
         
 
