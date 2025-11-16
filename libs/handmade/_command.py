@@ -1,11 +1,11 @@
 #made by sand
 
 from .utils import *
-
+from .terminal import *
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
+    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# commande defini par l'utilisateur ( modifiable )
+    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
     self.tooltips = {
             "h": "pour afficher le menu help",
             "q": "pour quitter le lecteur",
@@ -16,10 +16,10 @@ def init_command( self ):
             "y": "pour changer le repertoire d'origine",
             "+": "pour avancer de 10 seconde",
             "-": "pour reculer de 10 seconde",
-            "p": "pour monter le son de 10%",
-            "m": "pour baisser le son de 10%",
+            "p": "pour monter le son de 5%",
+            "m": "pour baisser le son de 5%",
             "a": "pour recharger le catalogue de chanson et d'image",
-            "b": "pour charger la  chanson précédente",
+            "b": "pour charger la chanson précédente",
             "i": "pour afficher l'historique",
             "f": "pour mettre un timer ",
             "c": "pour activer/desactiver des dossiers",
@@ -36,10 +36,12 @@ def init_command( self ):
             "v": "pour modifier une commande",
             "w": "pour remetre les paramètre a 0",
             "z": "pour supprimer/deplacer/renommer un fichier",
-            "bb": "pour la musique en cours a 0"
+            "bb": "pour la musique en cours a 0",
+            "pl": "permet de gerer les playlist",
+            "add":"permet d'ajouter la chanson a une playlist / au favoris"
             }
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
-    #dl
+    #dl bb pl add
     
 def sort_command( self ):
     """
@@ -47,11 +49,14 @@ def sort_command( self ):
     en fonction de leur taille puis alphabétiquement en gardant le h(help) en priorité dans l'alphabet
     """
     # all this THING sort commands by lenght then by alphabetical order and put the h on top of the alphabet
+        
     command = self.holders[ 1: ]
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
     missing = ""
+    
     while x < len( command ) and missing == "":
+        
         if len( command[ x ] ) == 1:
             missing = command[ x ]
             
@@ -68,8 +73,8 @@ def sort_command( self ):
     elif len( command[ 0 ] ) > 1:
         command += [ "h" ]
         
-    command=[self.holders.index(command[x]) for x in range(len(command))]
-    self.command=command
+    command = [self.holders.index(command[x]) for x in range(len(command))]
+    self.command = command
 
 
 def edit_command( self ):
@@ -77,22 +82,29 @@ def edit_command( self ):
     cette fonction permet de de modifier les commande du programme a
     l'exception de h(help)
     """
-    cmd = self.ask_list( self.help_menu(), text = "enter current command call :", num = False )#show current command 
-    if cmd=="h":
-        self.out( "help cannot be modified" )
-        return
+    cmd = "0"
     
-    if cmd in self.holders:
-        key = self.ask( "new command call :" )
+    while cmd:
+        self.show_list(self.help_menu(), num = False)
+        cmd = self.ask("enter current command call :")#show current command 
         
-        if not all_numbers( key ):
-             if key not in self.holders:#if key don't already exist
-                 self.holders[ self.holders.index( cmd ) ] = key
-                 self.write_param()
-                 self.sort_command()
-             
-             else:
-                 self.out( "key already exist" )
+        if cmd=="h":
+            self.out( "help cannot be modified" )
+            return
+        
+        if cmd in self.holders:
+            key = self.ask( "new command call :" )
+            
+            if not all_numbers( key ):
+                 
+                 if key not in self.holders:#if key don't already exist
+                     
+                     print(f"{self.holders[ self.holders.index( cmd ) ]} changed to {key}")
+                     self.holders[ self.holders.index( cmd ) ] = key
+                     self.write_param()
+                     self.sort_command()
+                     
+            wipe()
 
 
 def help_menu( self ):
@@ -100,4 +112,4 @@ def help_menu( self ):
     cette fonction se sert du dico qui contient les info pour renvoier une
     liste de toute les info
     """
-    return [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause/actualiser" ]+[f"{ self.holders[ x ] } : { self.tooltips[ self.commands[ x ] ] }" for x in range( len( self.commands ) ) ] + [" "] 
+    return [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause/actualiser" ]+[f"{ self.holders[ x ] } : { self.tooltips[ self.commands[ x ] ] }" if self.holders[ x ] in self.tooltips.keys() else f"{self.holders[x]}: missing tooltip pls report" for x in range( len( self.commands ) )  ] + [" "] 

@@ -1,8 +1,8 @@
 #made by sand
 from libs.youtube_search import YoutubeSearch
 from .utils import *
-from os import listdir
-
+from os import listdir, makedirs
+from os.path import isdir
 def init_download( self ):
     pass
 
@@ -32,8 +32,13 @@ def yt_search( self ):
             title = clear_adjacent(title,["-","_"],2)
             title = replace(title ,["_"],"\ ")
             link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
-            print( link ) 
-            self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format { extension } -o { self.path_to_file }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
+            print( link )
+            
+            if not isdir( self.path_to_file + "download/"):
+                makedirs(self.path_to_file + "download/")
+                
+            path = replace(self.path_to_file," ","\ ")
+            self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format { extension } -o { path }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
 
 
 def dl_yt_playlist( self ):
@@ -42,14 +47,21 @@ def dl_yt_playlist( self ):
     elle verifie aussi si toute les chanson on été télécharger sans probléme
     """
     playlist = self.ask( "playlist/song url:" )
-    lenght = self.ask("lenght of playlist:")
-    new_lenght=0
+    lenght = self.ask( "lenght of playlist:" )
+    new_lenght = 0
+    
     if all_numbers( lenght ):
         lenght = int( lenght )
+        
+        if not isdir( self.path_to_file + "download/"):
+                makedirs(self.path_to_file + "download/")
+        
+        path = replace(self.path_to_file," ","\ ")
+        
         for f in listdir( f"{ self.path_to_file }/download" ):
             lenght += 1
-            
-        self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ self.path_to_file }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
+           
+        self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ path }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
         
         for f in listdir( f"{ self.path_to_file }/download" ):
             new_lenght += 1

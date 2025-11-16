@@ -1,14 +1,16 @@
 #made by sand
+from math import ceil
 def white(x:int=60):
     """
     cette fonction passe un nombre x de ligne
     """
     for z in range(x):
         print("")
-
+        
 def replace(word:str,chrs:list,new:str="") -> str:
-    return "".join([word[x]*(1-(word[x] in chrs))+ new*(word[x] in chrs) for x in range(len(word))])
-
+    
+    return [ word := f"{new}".join( word.split( x ) ) for x in chrs ][ -1 ]
+    
 def all_numbers(word,lim=0,mode=0):
     """
     cette fonction permet de :
@@ -22,7 +24,7 @@ def all_numbers(word,lim=0,mode=0):
     mode doit étre compris entre 0 et 1 inclut
     """
     
-    return all(test in "0123456789" for test in word)==(word!="")==True==(int("".join([str(max(0,int(ord(word[x])-48))) for x in range(len(word))]))*lim<lim*lim-mode+1)
+    return all(test in "0123456789" for test in word)==(word!="")==True==(int("".join([str(max(0,int(ord(str(word)[x])-48))) for x in range(len(str(word)))]))*lim<lim*lim-mode+1)
 
 def str_lowerup(word:str,chrs:[str],mode=0):
     """
@@ -38,10 +40,13 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
     pos = 0
     if lenght <= 1 :
         raise Exception("lenght should be above 1")
+    
     if not isinstance(word, str):
         raise Exception("word should be a string")
+    
     if isinstance(chrs, str):
         chrs = list(chrs)
+        
     if not isinstance(chrs, list):
         raise Exception("chrs should be a list/string")
     
@@ -49,6 +54,7 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
         if not isinstance(chrs[x], str):
             if isinstance(chrs[x], int):
                 chrs[x] = chr(chrs[x])
+                
             else :
                 raise Exception("inside chrs should be str")
         
@@ -61,6 +67,7 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
         while x < lenght and remove == True:
             if word[pos+x] not in chrs:
                 remove = False
+            
             x += 1
         
         if remove :
@@ -71,11 +78,13 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
                 replace = min(replace, chrs.index(word[pos + x]))
                 
             word = word[:pos] + chrs[replace] + word[pos + lenght:]
+            
             if pos !=0 :
                 pos -= 1
         
         else :
             pos += 1
+            
     return word
             
                 
@@ -108,3 +117,62 @@ def ask_list(liste, text = "" , num = True ):
     """
     self.show_list( liste, num )
     return self.ask( f"{ text }" )
+
+def dumb_closest(num:int ,liste:sorted) -> int:
+    """
+    cette fonction renvoie l'index du nombre le plus proche dans une liste rangé
+    """
+    while ( pos:= ( ( high := ( high := [ len(liste) if not "high" in ( var := locals() ) else high ][0] ) * ( _ := ( num > liste[ ( pos := [0 if "pos" not in var  else pos ][0] ) ] ) ) + pos * (1 - _) ) + (low := ( low := [ 0 if not "low" in var  else low ][0] ) * (1 - _ ) + pos * _  ) ) // 2) != low :
+        pass
+            
+    return pos
+        
+def closest(num:int , liste:sorted) -> int:
+    pos = 0
+    high = len(liste)
+    low = 0
+    
+    while (pos := (high + low)//2 ) != low:
+        
+        if liste[pos] > num:
+            high = pos
+        
+        else:
+            low = pos
+            
+    return pos
+
+def remove_list(liste:list) -> list:
+    """
+    cette fonction permet de retirer les etage de liste inutile (contenant 1 element)
+    """
+    if type(liste) is not list:
+        return liste
+    
+    if len(liste) == 1:
+        
+        if type(liste[0]) is not list:
+            return liste[0]
+        
+        else:
+            return remove_list(liste[0])
+        
+    else:
+        return [remove_list(x) for x in liste]
+    
+def rotate_tableau(liste, add = True, val = None):
+    """
+    cette fonction permet de tourner le tableau de 90°
+    """
+    lenght = max( [ len(x) for x in liste ] )
+    result = [ [] for x in range( len(liste) ) ]
+    
+    for index in range( lenght ):
+        for elem in liste:
+            if len( elem ) > index:
+                result[ index ].append( elem[ index ] )
+                
+            elif add:
+                 result[ index ].append( val )
+                 
+    return result

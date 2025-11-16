@@ -1,48 +1,88 @@
 #made by sand
 from .ffiles import *
 
-
 def init_param( self ):
     self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
+    #              [ param name, tooltip ,defaut value ,type ,param center ?]
+    self.params =  [
+                   [ "path_to_file", "chemin vers le dossier source musique", "" ,"str", False ],
+                   [ "path_to_img", "chemin vers le dossier source image", "appdata/image/", "str" , False ],
+                   [ "mode", "jouer en random", 0 , "bool" , True ],
+                   [ "sound_manager", "gestionnaire de son", "base", "str", False ],
+                   [ "img", "image actuel" ,"" , "str", False ],
+                   [ "repeat", "jouer en boucle ", 0 , "bool", True ],
+                   [ "dirs" ,"liste des dossiers / sous dossiers", [], "list", False ],
+                   [ "play_favorite", "joue les favoris", 0 , "bool", True],
+                   ["fchoose", "augmente la frequence des favoris", 0 , "bool" , True],
+                   [ "holders", "commandes", -1 , "list", False ],
+                   [ "graphic_manager", "mode d'affichage", "base" , "str", False ],
+                   [ "confirmation", "message de choix", "Your choice", "str", False ],
+                   [ "show", "afficher l'image ", 1 , "bool", True ],
+                   [ "word", "afficher les fichier paroles", 1 , "bool", True ],
+                   [ "base_soundmap", "codec midi par default" , "appdata/midi_codec/default.sf2" , "str", False ],
+                   [ "addaptive_bar", "taille de la bar proportionnel", 1, bool, True ],
+                   [ "color", "la bar change de couleur", 0 , "bool", True ],
+                   [ "true_color", "passe les image en true color", 1 ,"bool", True ],
+                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, b"ool", True ],
+                   [ "invert", "inverse les couleurs des images", 0, "bool", True],
+                   [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],
+                   [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True ],
+                   [ "last_song", "derniere chanson joué", "", "str", False ],
+                   [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool", True ],
+                   [ "playlist" , "nom de la playlist actuel", "", "str", False ],
+                   [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
+                   [ "playlist_type","type de playlist", "", "str" , False]
+                   ]
     
-def get_param( self ):
+    for x in self.params:
+        if x[ 2 ] != -1:
+            setattr(self,x[ 0 ], x[ 2 ] )
+
+def get_param( self , param = ""):
     """
-    cette fonction permet de lire le fichier ou sont stocké les parametre
-    et de les charger ,et dans le cas ou le fichier n'existe pas le creer
+    cette fonction permet de recuperer les variables cité dans le fichier  param si presence de celle si
     """
-    data = get_data( self.param, [ "|" , "," , "#" ] )# pour extraire les donné
-    if data == [] or len( data ) != 13:# si les donné sont corrompu ou n'existe pas
-        self.write_param()
-        self.show_list(self.help_menu(), num=False )
+    data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
+    data = remove_list( data )
+    co = [ data[ x ][ 0 ] for x in range( len( data ) ) ]
+    param = [ x[ 0 ] for x in self.params ]
+    print( "param :", co )
+    for y,x in enumerate( co ):
         
-    else:# attribution des parametre
-        self.path_to_file = data[ 0 ][ 0 ][ 0 ]
-        self.path_to_img = data[ 1 ][ 0 ][ 0 ]
-        self.mode = int( data[ 2 ][ 0 ][ 0 ][ 0 ] )
-        self.sound_manager = data[ 3 ][ 0 ][ 0 ]
-        self.img = data[ 4 ][ 0 ][ 0 ]
-        self.repeat = int( data[ 5 ][ 0 ][ 0 ] )
-        self.dirs = data[ 6 ]
-        self.holders  = [ data[ 7 ][ x ][ 0 ] for x in range( len( data[ 7 ] ) ) ]
-        self.graphic_manager = data[ 8 ][ 0 ][ 0 ]
-        self.confirmation = data[ 9 ][ 0 ][ 0 ]
-        self.show = int( data[ 10 ][ 0 ][ 0 ] )
-        self.word = int( data[ 11 ][ 0 ][ 0 ] )
-        self.base_soundmap = data[ 12 ][ 0 ][ 0 ] 
-        self.sort_command()
-        self.show_list(self.help_menu(), num=False )
+        if data[ y ][ 1 ] =="":
+            continue
+        
+        #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
+        if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
+            setattr( self, x, [ data[ y ][ 1 ] ])
+        
+        elif data[ y ][ 1 ] == "0" or data[ y ][ 1 ] == "1":
+            setattr( self, x, int( data[ y ][ 1 ] ) )
+           
+        else:
+            setattr( self, x, data[ y ][ 1 ] )
     
+    self.load_favorite_database()
+    if len( self.commands ) != len( self.holders ):
+        self.holders = [ x for x in self.commands ]
     
-def write_param( self ):
+def write_param( self , param = ""):
     """
-    cette fonction permet d'ecrire les parametre actuel en memoire
-    dans le fichier param
+    cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
-    data = [ str( self.path_to_file ), str( self.path_to_img ), str( self.mode ), self.sound_manager, str( self.img ), str( self.repeat ), self.dirs, self.holders, self.graphic_manager, self.confirmation, str(self.show), str(self.word) , self.base_soundmap ]# tout les parametre a stocker
-    data = join_list( data,[ "|", ",", "#" ] )# formatage pour l'ecriture
+    if not self.stay:
+        if type( self.song ) == list:
+            self.last_song = self.song
+            
+        else:
+            self.last_song = ""
+    
+    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int  else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] ]
+    
+    data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
     self.sort_command()
-    
+
 def reset( self ):
     """
     cette fonction permet de remmetre a 0 les parrametre actuel et
@@ -50,3 +90,6 @@ def reset( self ):
     """
     self.__init__()#remise a 0
     self.write_param()
+
+
+

@@ -1,31 +1,41 @@
 #!/bin/python
 #made by sand
+import argparse
+import sys
 class App:
-    def __init__( self ):
-        self.init_main()
+    def __init__( self, directory = "" , song = ""):
+        self.init_param()
+        self.init_main( directory , song)
         self.init_sound()
         self.init_battery()
         self.init_command()
-        self.init_param()
         self.init_file()
         self.init_image()
         self.init_download()
         self.init_song()
         self.init_display()
-        #self.init_letter()
-    from libs.handmade._external import external_call,external_return
-    from libs.handmade._display import init_display,out,ask,ask_list,show_list,change_confirmation
-    from libs.handmade._sound import init_sound,start_sound,change_sound_manager,get_volume,set_volume,deafen
-    from libs.handmade._batterie import init_battery,battery_check,get_battery,get_battery_life
-    from libs.handmade._command import init_command,sort_command,edit_command,help_menu      
-    from libs.handmade._param import init_param,get_param,write_param,reset 
-    from libs.handmade._files import init_file,get_file,select_dir,switch_dir,find_file,check_adress,change_main_path,mani_file,get_words,change_extension
-    from libs.handmade._image import init_image,get_img,display_img,select_img,load_script,screen_mode
-    from libs.handmade._download import init_download,yt_search,dl_yt_playlist  
-    from libs.handmade._song import init_song,choose_song,load_songs,play_song,play_last,historic,select,play,play_midi,convert_midi,default_midi,get_metadata
-    from libs.handmade._main import init_main,main,update,get_input,load_all,wind,check_time,display,set_timer,param_center,clear_cache
-    #from libs.handmade._letter import init_letter,suspend,a_f,b_f,c_f,d_f,e_f,f_f,g_f,h_f,i_f,j_f,k_f,l_f,m_f,n_f,o_f,p_f,q_f,r_f,s_f,t_f,u_f,v_f,w_f,x_f,y_f,z_f,plus_f,minus_f,dl_f,bb_f
-    def suspend( self, fonction ):
+        self.init_printer()
+        self.init_data()
+        self.init_playlist()
+        
+    from libs.handmade._external import external_call, external_return
+    from libs.handmade._display import init_display, out, ask, ask_list, show_list, change_confirmation
+    from libs.handmade._sound import init_sound, start_sound, change_sound_manager, get_volume, set_volume, deafen
+    from libs.handmade._batterie import init_battery, battery_check, get_battery, get_battery_life
+    from libs.handmade._command import init_command, sort_command, edit_command, help_menu      
+    from libs.handmade._param import init_param, get_param, write_param, reset
+    from libs.handmade._files import init_file, get_file, select_dir, switch_dir, find_file, check_adress, change_main_path, mani_file, get_words, change_extension, edit_dirs, check_favorite
+    from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode
+    from libs.handmade._download import init_download, yt_search, dl_yt_playlist  
+    from libs.handmade._song import init_song, choose_song, load_songs, play_song, play_last, historic, select, play, play_midi, convert_midi, default_midi, get_metadata
+    from libs.handmade._main import init_main, main, update, get_input, load_all, wind, display, set_timer, param_center, clear_cache, u_bar, n_input
+    from libs.handmade._printimage import print_image_to_screen, init_printer
+    from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database
+    from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist
+    import libs.colorama.__init__ as colorama
+    colorama.init()
+
+    def suspend( self, fonction):
         """
         cette fonction met en pause l'affichage le temps que la fonction
         fonction s'execute
@@ -57,7 +67,7 @@ class App:
 
 
     def n_f( self ):
-        self.play_song()
+        self.suspend("play_song")
 
     def e_f( self ):
         self.change_confirmation()
@@ -85,7 +95,7 @@ class App:
         self.wind( 5 )
       
     def bb_f( self ):
-        self.wind( 11 )
+        self.wind( 15 )
         
     def t_f( self ):
         self.suspend("screen_mode")
@@ -104,12 +114,12 @@ class App:
 
 
     def c_f( self ):
-        self.suspend( "select_dir" )
+        self.suspend( "edit_dirs")
         self.load_songs()
 
 
     def b_f( self ):
-        self.play_last()
+        self.suspend("play_last")
 
 
     def dl_f( self ):
@@ -129,7 +139,11 @@ class App:
 
 
     def w_f( self ):
-        self.reset()
+        self.search = True
+        a = input(" are you sure you want to reset your setting ? (o/n)")
+        if a == "o" or a=="1" or a=="y":
+            self.reset()
+        self.search = False
 
 
     def x_f( self ):
@@ -152,9 +166,25 @@ class App:
         self.search = True
         self.show_list( self.help_menu(), num=False )
         self.get_input()
+    
+    def pl_f( self ):
+        self.suspend("playlist_manager")
+    
+    def add_f( self ):
+        self.suspend("add_to_playlist")
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-s', "--song")
+parser.add_argument("--dir", required="--song" in sys.argv)
 
 
 
-app = App()
+args = parser.parse_args()
+if args.dir:
+    app = App(args.dir,args.song)
+    
+else:
+    app = App()
+    
 app.main()
 
