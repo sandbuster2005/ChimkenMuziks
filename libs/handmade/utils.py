@@ -1,21 +1,23 @@
 #made by sand
-from math import ceil
-def white(x:int=60):
+from math import log,floor
+def white( x : int = 60 ) -> None:
     """
     cette fonction passe un nombre x de ligne
     """
     for z in range(x):
         print("")
         
-def replace(word:str,chrs:list,new:str="") -> str:
+def replace( word : str, chrs : list[str], new : str = "" ) -> str:
+    """
+    cette fonction permet de remplacer dans word les string contenu dans chr par new
+    """
+    return [ word := f"{ new }".join( word.split( x ) ) for x in chrs ][ -1 ]
     
-    return [ word := f"{new}".join( word.split( x ) ) for x in chrs ][ -1 ]
-    
-def all_numbers(word,lim=0,mode=0):
+def all_numbers(word : str ,lim :int = 0,mode : int = 0) -> bool:
     """
     cette fonction permet de :
     verifier si une chaine de charactère est un nombre : mode 0
-    verifier si une chaine de charactère est un nombre strictement inferieur a un seuil lim : mode 1
+    verifier si une chaine de charactère est un nombre strictement inférieur a un seuil lim : mode 1
     verifier si une chaine de charactére est un nombre  inferieur ou égal a un seuil lim : mode 2
     
     limite:
@@ -26,34 +28,38 @@ def all_numbers(word,lim=0,mode=0):
     
     return all(test in "0123456789" for test in word)==(word!="")==True==(int("".join([str(max(0,int(ord(str(word)[x])-48))) for x in range(len(str(word)))]))*lim<lim*lim-mode+1)
 
-def str_lowerup(word:str,chrs:[str],mode=0):
+def str_lowerup( word : str, chrs : list[ str ], mode : int = 0 ) -> str:
     """
-    cette fonction permet de mettre en majuscule ou minuscule une liste de chr dans uene chaine de caractére
+    cette fonction permet de mettre en majuscule ou minuscule une liste de chr dans une chaine de caractére
     word est une chaine de charactere
     chrs est une liste de charactere
     mode 1 pour majuscule
-    mode 0 pour mminuscule
+    mode 0 pour minuscule
     """
-    return "".join([word[x]*(1-(word[x].lower() in chrs))+(word[x].lower())*(word[x].lower() in chrs )*(1-mode)+(word[x].upper())*(word[x] in chrs )*(mode) for x in range(len(word))])
+    return "".join( [word[x]*(1-(word[x].lower() in chrs))+(word[x].lower())*(word[x].lower() in chrs )*(1-mode)+(word[x].upper())*(word[x] in chrs ) * mode for x in range(len(word))])
 
-def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
+def clear_adjacent( word : str, chrs : list[ str ], lenght : int ) -> str:
+    """
+    cette fonction permet de supprimer les charactère adjacent de lenght individu
+    contenu dans chrs de word
+    """
     pos = 0
     if lenght <= 1 :
-        raise Exception("lenght should be above 1")
+        raise Exception( "lenght should be above 1" )
     
-    if not isinstance(word, str):
-        raise Exception("word should be a string")
+    if not isinstance( word, str ):
+        raise Exception( "word should be a string" )
     
-    if isinstance(chrs, str):
-        chrs = list(chrs)
+    if isinstance( chrs, str ):
+        chrs = list( chrs )
         
-    if not isinstance(chrs, list):
-        raise Exception("chrs should be a list/string")
+    if not isinstance( chrs, list ):
+        raise Exception( "chrs should be a list/string" )
     
-    for x in range(len(chrs)):
-        if not isinstance(chrs[x], str):
-            if isinstance(chrs[x], int):
-                chrs[x] = chr(chrs[x])
+    for x in range( len( chrs ) ):
+        if not isinstance( chrs[ x ], str ):
+            if isinstance( chrs[ x ], int ):
+                chrs[ x ] = ord( chrs[ x ] )
                 
             else :
                 raise Exception("inside chrs should be str")
@@ -71,13 +77,12 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
             x += 1
         
         if remove :
-            replace = len(chrs) - 1
-            x = 0
+            change = len( chrs ) - 1
             
-            for x in range(lenght):
-                replace = min(replace, chrs.index(word[pos + x]))
+            for x in range( lenght ):
+                change = min( change, chrs.index( word[ pos + x ] ) )
                 
-            word = word[:pos] + chrs[replace] + word[pos + lenght:]
+            word = word[:pos] + chrs[ change ] + word[ pos + lenght: ]
             
             if pos !=0 :
                 pos -= 1
@@ -86,39 +91,9 @@ def clear_adjacent(word:str,chrs:[str],lenght:int) -> str:
             pos += 1
             
     return word
-            
-                
-        
 
-def ask( self, text ):
-    """
-    cette fonction permet de demander une valeur a l'utilisateur
-    en lui demandant text
-    """
-    return input( f"{ text }" )
-
-def show_list( liste, num = True ):
-    """
-    cette fonction permet d afficher les elements d'une liste un
-    par un ,numeroté ou non
-    """
-    if num == True:
-        for x in range( len( liste ) ):
-             print( x, liste[x] )
-        
-    else:
-        for x in liste:
-                print( x )
-                
-def ask_list(liste, text = "" , num = True ):
-    """
-    cette fonction affiche a l'utilisateur une liste et lui demande
-    une valeur a l'aide d un prompt text
-    """
-    self.show_list( liste, num )
-    return self.ask( f"{ text }" )
-
-def dumb_closest(num:int ,liste:sorted) -> int:
+#please don't use that
+def dumb_closest(num : int ,liste : list ) -> int:
     """
     cette fonction renvoie l'index du nombre le plus proche dans une liste rangé
     """
@@ -127,14 +102,18 @@ def dumb_closest(num:int ,liste:sorted) -> int:
             
     return pos
         
-def closest(num:int , liste:sorted) -> int:
-    pos = 0
+def closest(num : int , liste :  list ) ->  int:
+    """
+    cette fonction renvoie l'index de la valeur la plus proche de num
+    liste doit étre rangé par ordre croissant / decroissant
+    """
+
     high = len(liste)
     low = 0
     
-    while (pos := (high + low)//2 ) != low:
+    while (pos := ( high + low ) // 2 ) != low:
         
-        if liste[pos] > num:
+        if liste[ pos ] > num:
             high = pos
         
         else:
@@ -142,9 +121,9 @@ def closest(num:int , liste:sorted) -> int:
             
     return pos
 
-def remove_list(liste:list) -> list:
+def remove_list( liste : list ) -> list:
     """
-    cette fonction permet de retirer les etage de liste inutile (contenant 1 element)
+    cette fonction permet de retirer les étages de liste inutile (contenant 1 element)
     """
     if type(liste) is not list:
         return liste
@@ -160,12 +139,12 @@ def remove_list(liste:list) -> list:
     else:
         return [remove_list(x) for x in liste]
     
-def rotate_tableau(liste, add = True, val = None):
+def rotate_tableau(liste : list , add : bool = True, val = None) -> list :
     """
     cette fonction permet de tourner le tableau de 90°
     """
-    lenght = max( [ len(x) for x in liste ] )
-    result = [ [] for x in range( len(liste) ) ]
+    lenght = max( [ len( x ) for x in liste ] )
+    result = [ [] for _ in range( len( liste ) ) ]
     
     for index in range( lenght ):
         for elem in liste:
@@ -175,4 +154,52 @@ def rotate_tableau(liste, add = True, val = None):
             elif add:
                  result[ index ].append( val )
                  
+    return result
+
+def convertion( number : int ,precision : int = 4,extension : str = "b", base : int = 1000 , names : list = [" ","K","M","G","T","P","E","Z","Y","R","Q"] ) -> str:
+    power = floor( log( number ,base) )
+    num = number / base ** power
+
+    a = f"{ round( number / base ** power , precision -  ( floor( log(num , 10) ) + 1  ) ) }"
+    spaces = max (0, 5 - len( a ) ) * " "
+    if power <= len( names ):
+        return f"{ a } {spaces}{ names[ power ] }{ extension }"
+
+    else:
+        raise "value too big for provided notation"
+
+def get_perm( num : int|str ) -> list :
+    """
+    cette fonction renvoie les permission (rwx) d un fichier a partir du nombre
+    """
+    result = ""
+    for x in str( num ):
+        y = int( x )
+
+        if y >= 4:
+            result += "r"
+        else:
+            result += "-"
+
+        if y in [2,3,6,7]:
+            result += "w"
+        else:
+            result += "-"
+
+        if y % 2 == 1:
+            result += "x"
+        else:
+            result += "-"
+
+    return result
+
+def scroll_text( text : str , pos : int, size : int, direction : int) -> str:
+    """
+    cette fonction permet de faire defiller un string pour pouvoir l afficher sur l'ecran
+    direction = 1 : gauche
+    direction = -1 : droite
+    """
+    #direction 1 : left | -1 : right
+    result = text[ max( 0, direction + pos ) : size + direction + pos ]
+    print( result )
     return result

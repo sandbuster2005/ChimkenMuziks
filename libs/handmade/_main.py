@@ -36,6 +36,7 @@ def init_main( self, directory, song ):
     self.MainThread = threading.currentThread()
     self.timer = None
     self.words = None
+    self.input = ReadChar()
  
    
 def main( self ):
@@ -59,7 +60,7 @@ def main( self ):
         self.display()
         
     progress = threading.Thread( target = self.update )#create update thread
-    progress.start()
+    #progress.start()
     
     if self.exterior:
         if self.exterior_song:
@@ -77,11 +78,11 @@ def main( self ):
             self.song = self.last_song
             self.play()
         
-    while self.stay != False:
+    while self.stay:
         self.get_input()#interface
         
-        if not progress.is_alive():#if update thread crashed quit main thread
-           self.stay = False
+        #if not progress.is_alive():#if update thread crashed quit main thread
+           #self.stay = False
             
     self.player.stop()#end
     
@@ -339,6 +340,7 @@ def update( self ):
                 
                 self.play_song( ( 1 - self.repeat ) )
 
+
 def u_bar(self):
     """
     cette fonction permet de mettre la bar a jour sans casser l'ecran
@@ -381,9 +383,10 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    got = self.ask( ":" ).lower()#ignorer les majuscules
-    self.n_input()
-    
+    #got = self.ask( ":" ).lower()#ignorer les majuscules
+    #self.n_input()
+    got = ninput( self.update_logic, self.update_display, bare = True , before = ":",condition = self.is_finished )
+
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.song = self.files[ int( got ) ]
             self.search = True
@@ -392,7 +395,6 @@ def get_input( self ):
     if self.search:#recherche terminé
         self.suspend("display")
         self.search = False
-        
         
     if got == "" and self.song != None:#pause 
         self.wind( 6 )

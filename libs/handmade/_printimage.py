@@ -1,12 +1,12 @@
 import os
 import sys
-from .terminal import out , Tbackground
+from .terminal import out , tbackground
 sys.path.append(os.path.abspath("libs"))
 import imageio as iio
 try:
     import numpy
 except:
-    raise importerror("numpy not installed ")
+    raise "numpy not installed "
 else:
     pass
 def init_printer(self):
@@ -93,10 +93,10 @@ def print_image_to_screen(self, path, top_offset=0):
         out(centerspace)
         
         for j in range(widthprint): # width
-            left = (width) * j
-            up = (height) * i
-            right = left + (width)
-            down = up + (height)
+            left = width * j
+            up = height * i
+            right = left + width
+            down = up + height
             
             pixel = image[int(up):int(down)+1, int(left):int(right)+1]
             #cv2.imshow('test', pixel)
@@ -122,7 +122,7 @@ def print_image_to_screen(self, path, top_offset=0):
                 print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
             
             else:
-                Tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
+                tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
         
         print('\033[0m')
     self.search = False

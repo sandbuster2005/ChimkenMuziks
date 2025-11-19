@@ -109,3 +109,5 @@ class PixelBar(IncrementalBar):
 
 class ShadyBar(IncrementalBar):
     phases = (' ', '░', '▒', '▓', '█')
+
+a = Bar("tesr")

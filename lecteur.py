@@ -17,6 +17,7 @@ class App:
         self.init_printer()
         self.init_data()
         self.init_playlist()
+        self.init_update()
         
     from libs.handmade._external import external_call, external_return
     from libs.handmade._display import init_display, out, ask, ask_list, show_list, change_confirmation
@@ -32,6 +33,7 @@ class App:
     from libs.handmade._printimage import print_image_to_screen, init_printer
     from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database
     from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist
+    from libs.handmade._update import init_update , is_finished , update_logic , update_display
     import libs.colorama.__init__ as colorama
     colorama.init()
 
