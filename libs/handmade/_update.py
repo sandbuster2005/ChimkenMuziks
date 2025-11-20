@@ -10,13 +10,8 @@ def current_time():
 
 def init_update(self):
     self.term_size = os.get_terminal_size()
-    self.volume_changed = False
-    self.display_changed = False
-    self.word_changed = False
-    self.time_changed = False
-    self.timer_changed = False
+    self.changed = []
     self.song_saved = False
-    self.bar_changed = False
     self.current_time = current_time()
     self.time = False
     self.time_check = [False, 0, 0, 0]
@@ -35,25 +30,25 @@ def update_logic(self):
             elif self.timer_mode == 2:
                 self.wind(6)
 
-    if not self.time_changed:
+    if not "time" in self.changed:
         if self.current_time != current_time():
             self.current_time = current_time()
-            self.time_changed = True
+            self.changed.append("time")
 
     if self.timer:
 
-        if not self.timer_changed:
+        if not "timer" in self.changed:
             if monotonic() > self.timer[2] + ( self.timer[0] * 60 ):
                 self.timer[0] += 1
                 self.timer[1] -= 1
-                self.timer_changed = True
+                self.changed.append("timer")
 
 
     if self.sound_manager == "alsa":
 
         if self.volume != self.get_volume():
             self.volume = self.get_volume()
-            self.volume_changed = True
+            self.changed.append("volume")
 
 
 
@@ -78,13 +73,15 @@ def update_logic(self):
 
             if self.bar.index + 0.5 < floor( self.time / 1000 ) or self.bar.index > floor( self.time / 1000 ) - 1 :
                 self.bar.index = floor( self.time / 1000 )
-                self.bar_changed = True
+                if not "bar" in self.changed:
+                    self.changed.append("bar")
 
             if self.word:
                 if self.words:
                     if ( close := closest( int( self.time / 1000 ), [x[0] for x in self.words])) != self.last_word and self.words[close][0] - self.time / 1000 < 1:
                             self.last_word = close
-                            self.word_changed = True
+                            if not "word" in self.changed:
+                                self.changed.append("word")
                     
             if self.time < 0:  # en cas de reculer en dessous du debut
                 self.time = 0
@@ -95,7 +92,8 @@ def update_logic(self):
 
             if self.term_size != ( _ := os.get_terminal_size() ) :
                 self.term_size = _
-                self.display_changed = True
+                if not "display" in self.changed:
+                    self.changed.append("display")
 
 
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
@@ -128,14 +126,14 @@ def update_logic(self):
 
 
 def update_display(self):
-    if self.bar_changed and not self.search and self.bar:
+    if "bar" in self.changed and not self.search and self.bar:
         save()
         up()
         self.bar.update()
         load()
-        self.bar_changed = False
+        self.changed.remove("bar")
 
-    if self.word_changed:
+    if "word" in self.changed:
         lyrics = self.words[self.last_word][1]
         space = floor(self.term_size.columns / 2 - len(lyrics) / 2)
         save()
@@ -145,13 +143,11 @@ def update_display(self):
         load()
         self.word_changed = False
 
-    if self.time_changed or self.timer_changed or self.volume_changed or self.display_changed:
-        print(self.time_changed,self.timer_changed,self.volume_changed,self.display_changed)
-        if self.show:
+    if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
+        if self.show and "display" in self.changed:
             white()
             self.display_img()
-
-        ldown(3)
+            ldown(3)
 
         time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
 
@@ -160,7 +156,6 @@ def update_display(self):
 
         if self.volume < 10:
             volume_string = "0" + volume_string
-
         string = time_string + "   " + volume_string
 
         if self.playlist:
@@ -188,20 +183,27 @@ def update_display(self):
 
         save()
         lup(3)
-
+        wipe_line()
         out(f"{' ' * space * self.center}{string}")
 
         ldown()
-
+        wipe_line()
         out(f"{' ' * space_name * self.center}{name}")
 
         load()
+        wipe_line()
         out(":")
+        if "time" in self.changed:
+            self.changed.remove("time")
 
-        self.time_changed = False
-        self.timer_changed = False
-        self.volume_changed = False
-        self.display_changed = False
+        if "timer" in self.changed:
+            self.changed.remove("timer")
+
+        if "volume" in self.changed:
+            self.changed.remove("volume")
+
+        if "display" in self.changed:
+            self.changed.remove("display")
 
 def is_finished(self):
     if not self.stay:

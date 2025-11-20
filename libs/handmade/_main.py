@@ -366,9 +366,11 @@ def display( self ):
     lup()
     
     if self.song:
-        self.display_changed = True
+        if not "display" in self.changed:
+            self.changed.append("display")
         if self.word and self.words != [] and self.last_word != -1:
-            self.word_changed = True
+            if not "word" in self.changed:
+                self.changed.append("word")
                  
     ldown(3)
 
@@ -456,15 +458,17 @@ def wind( self, mode, pause = False  ):
     if mode == 3:
         self.volume = min( 100, self.volume + 5 )
         self.set_volume()
-        
-        self.volume_changed = True
+        if not "volume" in self.changed:
+            self.changed.append("volume")
+        sleep(0.001)
         
         
     if mode == 4:
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
-        self.volume_changed = True
-        
+        if not "volume" in self.changed:
+            self.changed.append("volume")
+        sleep(0.001)
         
         
     if mode == 5:
