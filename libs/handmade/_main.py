@@ -33,7 +33,7 @@ def init_main( self, directory, song ):
     self.search = False   # True pour cacher l'affichage
     self.player = vlc.MediaPlayer()  # lecteur
     self.played = []  # historique
-    self.MainThread = threading.currentThread()
+    #self.MainThread = threading.currentThread()
     self.timer = None
     self.words = None
     self.input = ReadChar()
@@ -59,7 +59,7 @@ def main( self ):
         self.start_sound()
         self.display()
         
-    progress = threading.Thread( target = self.update )#create update thread
+    #progress = threading.Thread( target = self.update )#create update thread
     #progress.start()
     
     if self.exterior:
@@ -83,11 +83,7 @@ def main( self ):
         
         #if not progress.is_alive():#if update thread crashed quit main thread
            #self.stay = False
-            
-    self.player.stop()#end
-    
-    if self.save_param:
-        self.write_param()#sauvegarde des parametres
+    self.end()
     
     
 def update( self ):
@@ -120,7 +116,7 @@ def update( self ):
             if self.save_param:
                 self.write_param()#sauvegarde des parametres
             
-        if self.timer != None:
+        if self.timer:
             
             if self.timer[ 1 ] < 1:
                 if self.timer_mode == 0:
@@ -141,7 +137,7 @@ def update( self ):
                 base_time = strftime( '%H %M' ).split( " " )
                 time_changed = True
             
-        if self.timer != None:
+        if self.timer:
             
             if not timer_changed:
                 if monotonic() > self.timer[ 2 ] + ( self.timer[ 0 ] * 60 ):
@@ -155,9 +151,9 @@ def update( self ):
                 self.volume = self.get_volume()
                 self.volume_changed = True
        
-        if self.song != None and not self.search:#chanson demarré
+        if self.song  and not self.search:#chanson demarré
             
-            if self.bar != None:
+            if self.bar:
                 
                 if self.bar.max != floor( self.player.get_length() / 1000 ):
                     
@@ -358,6 +354,7 @@ def n_input(self):
     lup()
     wipe_line()
 
+
 def display( self ):
     """
     cette fonction affiche l'image ,recupére la durée de la chanson ainsi que le nom de la chanson en cours,
@@ -368,8 +365,7 @@ def display( self ):
     """
     lup()
     
-    if self.song != None:
-        sleep( 0.1 )  
+    if self.song:
         self.display_changed = True
         if self.word and self.words != [] and self.last_word != -1:
             self.word_changed = True
@@ -385,7 +381,8 @@ def get_input( self ):
     """
     #got = self.ask( ":" ).lower()#ignorer les majuscules
     #self.n_input()
-    got = ninput( self.update_logic, self.update_display, bare = True , before = ":",condition = self.is_finished )
+    got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished )
+    lup()
 
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.song = self.files[ int( got ) ]
@@ -393,16 +390,16 @@ def get_input( self ):
             self.play_song( 0 )
             
     if self.search:#recherche terminé
-        self.suspend("display")
+        self.display()
         self.search = False
         
-    if got == "" and self.song != None:#pause 
+    if not got and self.song:#pause
         self.wind( 6 )
         
     x = 0
     stop = False
     
-    while x < len( self.holders ) and not stop:#executer la premier commande contenu dans la chaine donné par l utilisateur
+    while x < len( self.holders ) and not stop:#executer la première commande contenu dans la chaine donné par l utilisateur
         if self.holders[ self.command[ x ] ] in got:#prenant en compte les modification de l'utilisateur 
             if self.commands[ self.command[ x ] ] == "+":
                 command = "plus_f"
@@ -448,19 +445,14 @@ def wind( self, mode, pause = False  ):
     limite:
     le volume du son est compris entre 0 et 100%
     """
-    self.search = True
     if mode == 1:
-        if self.bar	!= None: 
+        if  self.bar:
             self.player.set_time( min( self.player.get_length() - 1000, self.player.get_time() + 10000 ) )
-            self.bar.index = min( self.bar.max - 1, self.bar.index + 10 )
-            self.u_bar()
             
     if mode == 2:
-        if self.bar != None:
+        if self.bar:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
-            self.bar.index = max( 0, self.bar.index - 10 )
-        
-    
+
     if mode == 3:
         self.volume = min( 100, self.volume + 5 )
         self.set_volume()
@@ -485,11 +477,10 @@ def wind( self, mode, pause = False  ):
     if mode == 15:
         self.player.set_time( 0 )
         self.bar.index = 0
-    
-    self.search = False
+
     
     if pause:
-        self.suspend( "display" )
+        self.display()
         
 def set_timer( self ):
     """
@@ -525,7 +516,7 @@ def param_center( self ):
     while all_numbers( word ):
         tooltip=[ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
         
-        up( len( tooltip ) + 1 )
+        up( len( tooltip ) + 2  )
         word = self.ask_list( tooltip )
         lup()
         out( " " * ( len( tooltip ) + 3 ) )

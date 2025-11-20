@@ -45,7 +45,7 @@ def choose_song( self ):
         
     if self.mode == 0:
         
-        if self.song == None:
+        if not self.song:
             self.song = files[ 0 ]# si pas de chanson joué avant prendre la premiére
             
         else:
@@ -97,7 +97,7 @@ def play( self ):
     limite:
     une musique doit étre selectionné au préalable 
     """
-    if self.played == []:
+    if not self.played:
         self.played.append(  self.song  )# ajoute a l'historique
         
     elif self.played[ -1 ] != self.song :# ajoute a l'historique si la chanson a changé
@@ -109,9 +109,10 @@ def play( self ):
      
     else:
         self.player.set_mrl( self.song[1] )# charge la chanson
-        
+    
+    self.bar = None
     self.player.play()
-    self.suspend( "display" )# affiche
+    self.display()# affiche
     
     
 def play_last( self ):
@@ -138,10 +139,12 @@ def select( self ):
     cette fonction demande une chaine de charactére a rechercher dans les données de l'utilisateur
     """
     self.search = True
-    white( 1 )
     INPUT = self.ask( "rechercher dans la liste de chanson :" )
     result = self.find_file( str( INPUT ) )#recherche dans les fichiers
-    self.show_list( [ f"{ result[ x ][ 1 ] } :{ result[ x ][ 0 ] }" for x in range( len( result ) ) ], num = False )
+    if result:
+        self.show_list( [ f"{ result[ x ][ 1 ] } :{ result[ x ][ 0 ] }" for x in range( len( result ) ) ], num = False )
+    else:
+        self.out("no song corresponding")
 
 def play_midi(self):
     """
@@ -185,12 +188,12 @@ def get_metadata(self):
     artist = tag.artist
     image = tag.images.any
     
-    if image != None :
+    if image :
         image = image.data
         write_file("appdata/cache/preview", image , mode = "wb")
         image = "appdata/cache/preview"
         
-    elif tag.album != None:
+    elif tag.album :
         for j in [splitext(self.song[1] )[0], dirname(self.song[1])+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
                 if isfile(i):

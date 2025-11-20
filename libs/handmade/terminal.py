@@ -188,7 +188,6 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
     chrs = [  chr( x ) for x in range( 32, 127 ) ]
     text =  "input: "
     error = "value not recognized / not acceptable"
-    bare = False
     before = ""
     condition = None
 
@@ -200,8 +199,6 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             text = x
         if k == "error":
             error = x
-        if k == "bare":
-            bare = x
         if k == "before":
             before = x
         if k == "condition":
@@ -212,8 +209,9 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
     le = len(before)
     pos = 0
 
-    if not bare:
+    if text:
         print(text)
+    if error:
         print("")
 
     out(before)
@@ -241,6 +239,7 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
                 value = ""
                 line_start()
                 wipe_line()
+                out(before)
 
             elif a == Key.BACKSPACE:
                 line_start()
@@ -261,7 +260,8 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
 
             elif a in chrs:
                 lup()
-                wipe_line()
+                if error:
+                    wipe_line()
                 ldown()
 
                 value = value[ : pos  ] + a + value [ pos   : ]
@@ -276,7 +276,7 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
                 pass
 
             else:
-                if not bare:
+                if error:
                     lup()
                     print(error)
                 if pos:
@@ -288,8 +288,8 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             if condition:
                 if condition():
                     return ""
-        print("")
-        return value
+    print("")
+    return value
 
 #pretty sure your not dumb if you see this so it can go without comment for now
 

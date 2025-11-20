@@ -297,7 +297,7 @@ def get_words(self):
     self.last_word = -1
     self.words = []
     
-    if self.song != None :
+    if self.song:
         file = self.song[1].rsplit( ".", 1 )[ 0 ] + ".lrc"
         
         if isfile( file ):

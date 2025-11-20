@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from .utils import *
 
 def init_data(self):
@@ -173,7 +174,7 @@ def load_album_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files = [  [ x[0],x[1] ] for x in result ]
+    self.playlist_files = [  [ x[0],x[1] ] for x in result if os.path.isfile(x[1])]
 
 
 def get_artists(self):
@@ -192,6 +193,6 @@ def load_artist_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files =  [  [ x[0],x[1] ] for x in result ]
+    self.playlist_files =  [  [ x[0],x[1] ] for x in result if os.path.isfile(x[1]) ]
     
     

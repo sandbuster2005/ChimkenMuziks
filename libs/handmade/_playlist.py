@@ -42,7 +42,7 @@ def add_to_playlist(self):
             
             if all_numbers(new, len( playlists ), 1):
                 self.update_playlist_database(playlists[ int( new ) ], value[ int( new ) ] )
-                
+
     self.display()
             
             
@@ -114,7 +114,7 @@ def playlist_manager(self):
             new = self.ask_list( playlists )
             
             if all_numbers(new , len( playlists ) , 1):
-                 if self.playlist!= playlist [ int( new ) ]:
+                 if self.playlist!= playlists [ int( new ) ]:
                     self.drop_column( playlists[ int( new ) ] )
                 
             else:

@@ -1,6 +1,6 @@
 import os
 from math import ceil
-from terminal import ninput
+from .terminal import ninput
 from collections.abc import Callable
 
 def white( n = 40 ):

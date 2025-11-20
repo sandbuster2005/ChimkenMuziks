@@ -1,6 +1,6 @@
 import os
 import random
-from time import strftime, monotonic
+from time import strftime, monotonic, sleep
 from libs.progress.bar import Bar
 from math import floor,ceil
 from .terminal import *
@@ -60,7 +60,7 @@ def update_logic(self):
     if self.song:
         if not self.bar:
             if self.player.get_length() > 0:
-
+                sleep(0.01)
                 if self.color:
                     color = random.randint(0, 252)
                     color += 3 - (color % 3)
@@ -73,8 +73,19 @@ def update_logic(self):
 
 
         else:
+                    
             self.time = self.player.get_time()
 
+            if self.bar.index + 0.5 < floor( self.time / 1000 ) or self.bar.index > floor( self.time / 1000 ) - 1 :
+                self.bar.index = floor( self.time / 1000 )
+                self.bar_changed = True
+
+            if self.word:
+                if self.words:
+                    if ( close := closest( int( self.time / 1000 ), [x[0] for x in self.words])) != self.last_word and self.words[close][0] - self.time / 1000 < 1:
+                            self.last_word = close
+                            self.word_changed = True
+                    
             if self.time < 0:  # en cas de reculer en dessous du debut
                 self.time = 0
 
@@ -111,23 +122,13 @@ def update_logic(self):
                     else:
                         self.time_check = [False, 0, 0, 60]
 
+            if self.bar:
+                if floor( self.time / 1000 ) >= self.bar.max:  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                    self.play_song((1 - self.repeat))
 
-            if ceil( self.time / 1000 ) >= self.bar.max:  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
-                self.play_song((1 - self.repeat))
-
-
-            if self.bar.index + 0.5 < floor( self.time / 1000 ) or self.bar.index > floor( self.time / 1000 ) - 1 :
-                self.bar.index = floor( self.time / 1000 )
-                self.bar_changed = True
-
-            if self.word:
-                if self.words:
-                    if ( close := closest( int( self.time / 1000 ), [x[0] for x in self.words])) != self.last_word and self.words[close][0] - self.time / 1000 < 1:
-                            self.last_word = close
-                            self.word_changed = True
 
 def update_display(self):
-    if self.bar_changed:
+    if self.bar_changed and not self.search and self.bar:
         save()
         up()
         self.bar.update()
@@ -182,7 +183,8 @@ def update_display(self):
 
         space_name = floor((self.term_size.columns - len(name)) / 2)
 
-        self.bar.center = self.center
+        if self.bar:
+            self.bar.center = self.center
 
         save()
         lup(3)

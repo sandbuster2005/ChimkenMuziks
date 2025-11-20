@@ -1,16 +1,17 @@
 from ..readchar import readchar
 from math import ceil,floor
 from .utils import white
+from .display import *
 
 def init_display( self ):
-    pass
+    self.asker = Display()
     
 def out( self, text ):
     """
     cette fonction permet d'afficher un message text a l'utilisateur
     """
     if self.graphic_manager == "base":
-        print( text )
+        print( text , )
 
 
 def ask( self, text ):
@@ -18,8 +19,8 @@ def ask( self, text ):
     cette fonction permet de demander une valeur a l'utilisateur
     en lui demandant text
     """
-    if self.graphic_manager == "base":
-        return input( f"{ text }" )
+    return self.asker.ask( text, self.update_logic ,error = False , before = ":",condition = self.is_finished )
+
 
 
 def show_list( self, liste, num = True , start = 0):
@@ -67,12 +68,7 @@ def ask_list( self, liste, text = "" , num = True ):
         
         else:
             self.show_list( liste, num )
-            
-            if len( liste ) < 11:
-                return readchar()    
-            
-            else:
-                return self.ask( f"{ text }" )
+            return self.ask( f"{ text }" )
     
 
 
