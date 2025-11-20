@@ -1,6 +1,7 @@
 appdata/param.txt
 __pycache__/
 **/cache/**
+**/.idea/
 !/appdata/cache/static
 update
 appdata/image/wallpapers/
