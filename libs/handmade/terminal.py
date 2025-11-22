@@ -190,6 +190,7 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
     error = "value not recognized / not acceptable"
     before = ""
     condition = None
+    quick = 0
 
     for k,x in kwarg.items():
 
@@ -203,6 +204,8 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             before = x
         if k == "condition":
             condition = x
+        if k == "quick":
+            quick = x
 
     stop = False
     value = ""
@@ -278,7 +281,8 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             else:
                 if error:
                     lup()
-                    print(error)
+                    print(error
+                          )
                 if pos:
                     right(pos)
 
@@ -288,6 +292,10 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             if condition:
                 if condition():
                     return ""
+            
+            if quick:
+                if len(value) == quick:
+                    stop = True
     print("")
     return value
 

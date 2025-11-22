@@ -31,7 +31,8 @@ def init_param( self ):
                    [ "auto_last_song", "joue la dernier chanson au retour", 1,"bool", True ],
                    [ "playlist" , "nom de la playlist actuel", "", "str", False ],
                    [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
-                   [ "playlist_type","type de playlist", "", "str" , False]
+                   [ "playlist_type","type de playlist", "", "str" , False],
+                   [ "quickselect" , "remove need for confirmation when possible", 0, "bool", True ]
                    ]
     
     for x in self.params:

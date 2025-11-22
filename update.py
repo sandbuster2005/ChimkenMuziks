@@ -8,7 +8,6 @@ depth = 1
 #a:add o:overwrite
 
 
-
 def external_call( arg, shell = False ):
     """
     cette fonction permet d'executer des commandes dans le cmd avec ou sans
@@ -75,7 +74,7 @@ files,dirs = get_file(source)
 nfiles = []
 efiles,dirs2 = get_file(destination,files = []) #existing file in destination
 edirs = []
-#print(dirs)
+
 print(f"{len(files)} files")
 
 

@@ -121,7 +121,7 @@ def update_logic(self):
                         self.time_check = [False, 0, 0, 60]
 
             if self.bar:
-                if floor( self.time / 1000 ) >= self.bar.max:  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                if floor(self.time / 1000)  >= floor( self.player.get_length() / 1000):  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
                     self.play_song((1 - self.repeat))
 
 
@@ -141,7 +141,7 @@ def update_display(self):
         wipe_line()
         out(f"{' ' * space * self.center}{lyrics}")
         load()
-        self.word_changed = False
+        self.changed.remove("word")
 
     if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
         if self.show and "display" in self.changed:
@@ -156,6 +156,7 @@ def update_display(self):
 
         if self.volume < 10:
             volume_string = "0" + volume_string
+        
         string = time_string + "   " + volume_string
 
         if self.playlist:

@@ -14,12 +14,12 @@ def out( self, text ):
         print( text , )
 
 
-def ask( self, text ):
+def ask( self, text , quick = 0 ):
     """
     cette fonction permet de demander une valeur a l'utilisateur
     en lui demandant text
     """
-    return self.asker.ask( text, self.update_logic ,error = False , before = ":",condition = self.is_finished )
+    return self.asker.ask( text, self.update_logic ,error = False , before = ":",condition = self.is_finished , quick = quick )
 
 
 
@@ -31,14 +31,19 @@ def show_list( self, liste, num = True , start = 0):
     if self.graphic_manager == "base":
         if num == True:
             for x in range( len( liste ) ):
-                print( x + start, liste[x] )
+                if self.quickselect:
+                    
+                    print( "0" * ( len( str ( len( liste ) ) ) - len( str(x) ) ) + str(x + start), liste[x] )
+                
+                else:
+                    print( x + start, liste[x] )
         
         else:
             for x in liste:
                 print( x )
   
   
-def ask_list( self, liste, text = "" , num = True ):
+def ask_list( self, liste, text = "" , num = True):
     """
     cette fonction affiche a l'utilisateur une liste et lui demande
     une valeur a l'aide d un prompt text
@@ -65,6 +70,10 @@ def ask_list( self, liste, text = "" , num = True ):
                     n = max(n-1,0)
                     
             return word
+        
+        elif self.quickselect:
+            self.show_list( liste, num )
+            return self.ask( f"{ text }" ,quick = len( str ( len ( liste ) ) ) )
         
         else:
             self.show_list( liste, num )

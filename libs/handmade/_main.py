@@ -31,6 +31,7 @@ def init_main( self, directory, song ):
     self.pause = 0  # pour mettre en pause le lecteur+la barre
     self.bar = None   # la barre de progression du temps de la chanson 
     self.search = False   # True pour cacher l'affichage
+    os.environ["VLC_VERBOSE"] = str("-1")
     self.player = vlc.MediaPlayer()  # lecteur
     self.played = []  # historique
     #self.MainThread = threading.currentThread()
@@ -67,7 +68,7 @@ def main( self ):
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
             self.song = [ self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ]
-            self.play()
+            self.play_song(0)
     
     else:
         if self.playlist:
@@ -76,7 +77,7 @@ def main( self ):
         if self.last_song and self.auto_last_song:
             self.last_song[ 0 ] = int( self.last_song[ 0 ] )
             self.song = self.last_song
-            self.play()
+            self.play_song(0)
         
     while self.stay:
         self.get_input()#interface
