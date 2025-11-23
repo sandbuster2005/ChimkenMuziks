@@ -23,7 +23,7 @@ def init_param( self ):
                    [ "addaptive_bar", "taille de la bar proportionnel", 1, bool, True ],
                    [ "color", "la bar change de couleur", 0 , "bool", True ],
                    [ "true_color", "passe les image en true color", 1 ,"bool", True ],
-                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, b"ool", True ],
+                   [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ],
                    [ "invert", "inverse les couleurs des images", 0, "bool", True],
                    [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],
                    [ "autoaddapt", "adapte l affichage a la taille du terminal ", 1, "bool", True ],
@@ -49,10 +49,15 @@ def get_param( self , param = ""):
     param = [ x[ 0 ] for x in self.params ]
     print( "param :", co )
     for y,x in enumerate( co ):
-        
+
         if data[ y ][ 1 ] =="":
             continue
-        
+
+        if x == "holders":
+            for z in range( len ( data[y][1] ) ):
+                self.commands[z][0] = data[y][1][z]
+                continue
+
         #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
         if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
             setattr( self, x, [ data[ y ][ 1 ] ])
@@ -64,9 +69,8 @@ def get_param( self , param = ""):
             setattr( self, x, data[ y ][ 1 ] )
     
     self.load_favorite_database()
-    if len( self.commands ) != len( self.holders ):
-        self.holders = [ x for x in self.commands ]
-    
+    self.sort_command()
+
 def write_param( self , param = ""):
     """
     cette fonction permet d'enregistrer les variable cité dans le fichier param
@@ -78,11 +82,10 @@ def write_param( self , param = ""):
         else:
             self.last_song = ""
     
-    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int  else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] ]
-    
+    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] if x != "holders" ]
+    data += [ ["holders" ,[x[0] for x in self.commands] ] ]
     data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
-    self.sort_command()
 
 def reset( self ):
     """

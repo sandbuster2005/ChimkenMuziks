@@ -4,42 +4,40 @@ from .utils import *
 from .terminal import *
 
 def init_command( self ):
-    self.holders = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# commande defini par l'utilisateur ( modifiable )
-    self.commands = [ "h", "q", "r", "g", "i", "j", "o", "n", "k", "+", "-", "p", "m", "d", "s", "a", "c", "b", "y", "l", "t", "u", "v", "w", "x", "dl", "z", "e", "f", "bb", "pl","add" ]# valeurs qui permet d appeler les fonction correspondante ( PAS TOUCHER )
-    self.tooltips = {
-            "h": "pour afficher le menu help",
-            "q": "pour quitter le lecteur",
-            "n": "pour aller a la chanson suivante",
-            "r": "pour rechercher un son dans le catalogue",
-            "l": "pour actualiser l'affichage",
-            "s": "centre parametre",
-            "y": "pour changer le repertoire d'origine",
-            "+": "pour avancer de 10 seconde",
-            "-": "pour reculer de 10 seconde",
-            "p": "pour monter le son de 5%",
-            "m": "pour baisser le son de 5%",
-            "a": "pour recharger le catalogue de chanson et d'image",
-            "b": "pour charger la chanson précédente",
-            "i": "pour afficher l'historique",
-            "f": "pour mettre un timer ",
-            "c": "pour activer/desactiver des dossiers",
-            "d": "pour mute/unmute le son",
-            "k": "pour vider la cache",
-            "o": "pour selectionner l'instrumental par defaut des .midi",
-            "e": "pour changer le message de choix",
-            "g": "changer de gestionnaire de volume",
-            "j": "pour selectionner une image dans la galerie",
-            "t": "pour selectionner le mode d'affichage",
-            "u": "pour sauvegarder les parametre actuel",
-            "dl": "pour rechercher sur youtube",
-            "x": "pour télécharger une playlist youtube",
-            "v": "pour modifier une commande",
-            "w": "pour remetre les paramètre a 0",
-            "z": "pour supprimer/deplacer/renommer un fichier",
-            "bb": "pour la musique en cours a 0",
-            "pl": "permet de gerer les playlist",
-            "add":"permet d'ajouter la chanson a une playlist / au favoris"
-            }
+    self.commands = [
+         ["h", self.help_menu, {} , "pour afficher le menu help"],
+         ["q", self.wind, { 7 : "mode" }, "pour quitter le lecteur"],
+         ["r", self.select, {}, "pour rechercher un son dans le catalogue"],
+         ["g", self.change_sound_manager, {}, "changer de gestionnaire de volume"],
+         ["i", self.historic, {}, "pour afficher l'historique"],
+         ["j", self.select_img, {}, "pour selectionner une image dans la galerie"],
+         ["o", self.default_midi, {}, "pour selectionner l'instrumental par defaut des .midi"],
+         ["n", self.play_song, {}, "pour aller a la chanson suivante"],
+         ["k", self.clear_cache, {}, "pour vider la cache"],
+         ["+", self.wind, {1: "mode"}, "pour avancer de 10 seconde"],
+         ["-", self.wind, {2: "mode"}, "pour reculer de 10 seconde"],
+         ["p", self.wind, {3: "mode"}, "pour monter le son de 5%"],
+         ["m", self.wind, {4: "mode"}, "pour baisser le son de 5%"],
+         ["d", self.wind, {5: "mode"}, "pour mute/unmute le son"],
+         ["s", self.param_center, {}, "centre parametre"],
+         ["a", self.load_all, {}, "pour recharger le catalogue de chanson et d'image"],
+         ["c", self.edit_dirs, {}, "pour activer/desactiver des dossiers"],
+         ["b", self.play_last, {}, "pour charger la chanson précédente"],
+         ["y", self.change_main_path, {}, "pour changer le repertoire d'origine"],
+         ["l", self.display, {}, "pour actualiser l'affichage"],
+         ["t", self.screen_mode, {}, "pour selectionner le mode d'affichage"],
+         ["u", self.write_param, {}, "pour sauvegarder les parametre actuel"],
+         ["v", self.edit_command, {}, "pour modifier une commande"],
+         ["w", self.reset_settings, {}, "pour remetre les paramètre a 0"],
+         ["x", self.dl_yt_playlist, {}, "pour télécharger une playlist youtube"],
+         ["dl", self.yt_search, {}, "pour rechercher sur youtube"],
+         ["z", self.mani_file, {}, "pour supprimer/deplacer/renommer un fichier"],
+         ["e", self.change_confirmation, {}, "pour changer le message de choix"],
+         ["f",  self.set_timer , {}, "pour mettre un timer "],
+         ["bb", self.wind, { 15 : "mode" }, "pour la musique en cours a 0"],
+         ["pl", self.playlist_manager, {}, "permet de gerer les playlist"],
+         ["add", self.add_to_playlist, {}, "permet d'ajouter la chanson a une playlist / au favoris"]
+         ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add
     
@@ -49,8 +47,8 @@ def sort_command( self ):
     en fonction de leur taille puis alphabétiquement en gardant le h(help) en priorité dans l'alphabet
     """
     # all this THING sort commands by lenght then by alphabetical order and put the h on top of the alphabet
-        
-    command = self.holders[ 1: ]
+    base = [x[0] for x in self.commands ]
+    command = base[1:]
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
     missing = ""
@@ -73,9 +71,9 @@ def sort_command( self ):
     elif len( command[ 0 ] ) > 1:
         command += [ "h" ]
         
-    command = [self.holders.index(command[x]) for x in range(len(command))]
-    self.command = command
+    command = [ base.index(command[x]) for x in range(len(command) ) ]
 
+    self.command_pos = command
 
 def edit_command( self ):
     """
@@ -83,24 +81,24 @@ def edit_command( self ):
     l'exception de h(help)
     """
     cmd = "0"
-    
+    a = ""
     while cmd:
-        self.show_list(self.help_menu(), num = False)
-        cmd = self.ask("enter current command call :")#show current command 
+        commands = [ x[0] for x in self.commands ]
+        self.help_menu()
+        print(a)
+        cmd = self.ask("enter current command call :")#show current command
         
-        if cmd=="h":
+        if cmd == "h":
             self.out( "help cannot be modified" )
             return
         
-        if cmd in self.holders:
+        if cmd in commands:
             key = self.ask( "new command call :" )
             
-            if not all_numbers( key ):
-                 
-                 if key not in self.holders:#if key don't already exist
-                     
-                     print(f"{self.holders[ self.holders.index( cmd ) ]} changed to {key}")
-                     self.holders[ self.holders.index( cmd ) ] = key
+            if not all_numbers( key ) and key != "":
+                 if key not in commands:#if key don't already exist
+                     a = f"{  self.commands[ commands.index( cmd ) ][0] } changed to {key}"
+                     self.commands[ commands.index( cmd ) ][0] = key
                      self.write_param()
                      self.sort_command()
                      
@@ -112,4 +110,7 @@ def help_menu( self ):
     cette fonction se sert du dico qui contient les info pour renvoier une
     liste de toute les info
     """
-    return [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause/actualiser" ]+[f"{ self.holders[ x ] } : { self.tooltips[ self.commands[ x ] ] }" if self.holders[ x ] in self.tooltips.keys() else f"{self.holders[x]}: missing tooltip pls report" for x in range( len( self.commands ) )  ] + [" "] 
+
+    menu =  [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "]
+    self.show_list(menu , num = False)
+    self.display()

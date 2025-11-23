@@ -59,9 +59,6 @@ def main( self ):
     if self.sound_manager != "base":#base sound manager need a media playing to get voulme
         self.start_sound()
         self.display()
-        
-    #progress = threading.Thread( target = self.update )#create update thread
-    #progress.start()
     
     if self.exterior:
         if self.exterior_song:
@@ -81,262 +78,8 @@ def main( self ):
         
     while self.stay:
         self.get_input()#interface
-        
-        #if not progress.is_alive():#if update thread crashed quit main thread
-           #self.stay = False
-    self.end()
-    
-    
-def update( self ):
-    """
-    cette fonction afiche la bar de progression et la mettre a jour ainsi que
-    passer a la chason suivant a la fin de l'actuel 
-    """
-    time_check = [ False, 0, 0, 0 ]
-    time_changed = False
-    save_cooldown = 0
-    self.term_size = os.get_terminal_size()
-    self.volume_changed = False
-    self.display_changed = False
-    self.word_changed = False
-    timer_changed = False
-    timer = None
-    last_update = monotonic()
-    tick = 0
-    base_time = strftime( '%H %M' ).split( " " )
-    stop = 0
-    
-    while self.stay:
-        tick += 1
-        time = self.player.get_time()#temps actuel
-        
-        if not self.MainThread.is_alive():
-            self.stay = False
-            self.player.stop()#end
-            
-            if self.save_param:
-                self.write_param()#sauvegarde des parametres
-            
-        if self.timer:
-            
-            if self.timer[ 1 ] < 1:
-                if self.timer_mode == 0:
-                    self.stay = False
-                    self.player.stop()#end
-                    
-                    if self.save_param:
-                        self.write_param()
-                
-                if self.timer_mode == 1:
-                    self.wind( 5 )
-                    
-                if self.timer_mode == 2:
-                    self.wind( 6 )
-         
-        if not time_changed :
-            if base_time != strftime( '%H %M' ).split( " " ):
-                base_time = strftime( '%H %M' ).split( " " )
-                time_changed = True
-            
-        if self.timer:
-            
-            if not timer_changed:
-                if monotonic() > self.timer[ 2 ] + ( self.timer[ 0 ] * 60 ):
-                    self.timer[ 0 ] += 1
-                    self.timer[ 1 ] -= 1
-                    timer_changed = True
-                
-        if self.sound_manager == "alsa":
-            
-            if self.volume != self.get_volume():
-                self.volume = self.get_volume()
-                self.volume_changed = True
-       
-        if self.song  and not self.search:#chanson demarré
-            
-            if self.bar:
-                
-                if self.bar.max != floor( self.player.get_length() / 1000 ):
-                    
-                    if self.color :
-                        color = random.randint( 0, 252 )
-                        color += 3 - ( color % 3 )
-                    
-                    else:
-                        color = "white"
-                        
-                    Max = self.player.get_length()
-                    down()
-                    save()
-                    wipe_line()
-                    self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar ,center = self.center)
-                    load()
-          
-            elif self.player.get_length() > 0:
-                
-                if self.color:
-                    color = random.randint( 0, 252 )
-                    color += 3 - ( color % 3 )
-                
-                else:
-                    color = "white"
-                    
-                Max = self.player.get_length()
-                down()
-                save()
-                wipe_line()
-                self.bar = Bar( f"", max=floor( Max/1000 ), color = color, addaptative_bar = self.addaptive_bar , center = self.center)
-                load()
-         
-        if self.bar != None and not self.search and self.song != None:#chanson en cours et pas de pause/suspension     
-            
-            if self.term_size != ( _ := os.get_terminal_size() ) :
-                self.term_size = _
-                self.display()
-            
-            if not save_cooldown and self.bar.index == int( self.bar.max/2 ):
-                save_cooldown = monotonic() + 5
-                self.write_song_database( self.song[ 1 ] )
-                
-            if save_cooldown:
-                if save_cooldown - monotonic() <0:
-                    save_cooldown = 0
-            
-            if time_check[ 3 ]:
-                time_check[ 3 ] -= 1
-            
-            if time == self.player.get_time() and not time_check[ 3 ]:
-                time_check[ 0 ] = True
-                time_check[ 1 ] = self.player.get_time()
-                time_check[ 2 ] = monotonic()
-                
-                
-            if time / 1000 > self.bar.max:#idk really
-                continue
-            
-            if self.bar.index < 0:##en cas de reculer en desosus du debut
-                self.bar.index = 0
-                
-            if time < 0:#en cas de reculer en dessous du debut
-                time = 0
-                
-            if last_update + 0.5 < monotonic() :
-                last_update += 0.5
-                self.bar.index = floor( time / 1000 )
-                save()
-                up()
-                self.bar.update()
-                load()
-                
-                
-                
-            if time_check and not self.pause:
-                
-                if time_check[ 2 ] + 5 < monotonic():
-                    
-                    if self.player.get_time() == time_check[ 1 ]:
-                        
-                        self.play_song( ( 1 - self.repeat ) )
-                        out( ":" )
-                        continue
-                    
-                    else:
-                        time_check=[ False, 0, 0, 60 ]
-           
-            if self.word:
-                if self.words:
-                    
-                    if self.words != []:
-                        
-                        if  ( close := closest( time / 1000, [ x[ 0 ] for x in self.words ] ) ) != self.last_word and self.words[close][0] - time / 1000 < 1:
-                            self.last_word = close
-                            self.word_changed = True
-            
-            
-            if self.word_changed:
-                lyrics = self.words[ self.last_word ][ 1 ]
-                space = floor( self.term_size.columns / 2 - len( lyrics ) / 2 )
-                save()
-                lup( 4 )
-                wipe_line()
-                out( f"{' '*space * self.center}{ lyrics }" )
-                load()
-                self.word_changed = False
-                
-            if time_changed or timer_changed or self.volume_changed or self.display_changed:
-        
-                if self.show:
-                    white()
-                    self.display_img()
-                    
-                ldown( 3 )
-                
-                time_string = f"{ base_time[ 0 ] }:{base_time[ 1 ]}"
-                
-                self.volume = self.get_volume()
-                volume_string = f"{ self.volume }%"
-               
-                if self.volume < 10:
-                     volume_string = "0" + volume_string
-                
-                if self.timer :
-                    timer_string = f"timer :{ self.timer[1] } mins"
-            
-                string = time_string + "   " + volume_string
-                
-                if self.playlist:
-                    string = self.playlist + "   " + string
-                    
-                if self.timer:
-                    string += "   " + timer_string
-                
-                space = floor( ( self.term_size.columns - len( string ) ) / 2 ) 
-                
-                if os.name == 'nt':
-                    a = '\\'
-                else:
-                    a = '/'
-                
-                name = self.song[ 1 ].rsplit( a, 1 )[ 1 ]
-                if self.song in self.favorite:
-                    name = "*" + name + "*"
-                space_name = floor( ( self.term_size.columns - len( name ) ) / 2 )
-                
-                self.bar.center = self.center
-                
-                save()
-                lup( 3 )
-                
-                out(f"{' ' * space * self.center}{string}")
-                
-                ldown()
-                
-                out( f"{' ' * space_name * self.center}{name}" )
-                
-                load()
-                out( ":" )
-    
-                time_changed = False
-                timer_changed = False
-                self.volume_changed = False
-                self.display_changed = False
-            
-            if stop != 0:
-                stop -= 1
-                
-            if self.img_script != None and stop == 0 and self.img_mode == "script" and not self.search:
-                
-                if int( monotonic() ) % self.Screen.framerate == 0:
-                    save()
-                    home()
-                    self.Screen.update()
-                    load()
-                    stop = 10
-                    
-            if ceil( time / 1000 ) >= self.bar.max : #la chanson est fini# la chason est bien fini et ne vien pas de commencer
-                
-                self.play_song( ( 1 - self.repeat ) )
 
+    self.end()
 
 def u_bar(self):
     """
@@ -364,16 +107,14 @@ def display( self ):
     limite:
     il est nécessaire qu'une chanson soit selectionné
     """
-    lup()
-    
+
     if self.song:
         if not "display" in self.changed:
             self.changed.append("display")
         if self.word and self.words != [] and self.last_word != -1:
             if not "word" in self.changed:
                 self.changed.append("word")
-                 
-    ldown(3)
+
 
     
     
@@ -401,19 +142,9 @@ def get_input( self ):
         
     x = 0
     stop = False
-    
-    while x < len( self.holders ) and not stop:#executer la première commande contenu dans la chaine donné par l utilisateur
-        if self.holders[ self.command[ x ] ] in got:#prenant en compte les modification de l'utilisateur 
-            if self.commands[ self.command[ x ] ] == "+":
-                command = "plus_f"
-                
-            elif self.commands[ self.command[ x ] ] == "-":
-                command = "minus_f"
-                
-            else:
-                command = self.commands[ self.command[ x ] ] + "_f"
-                
-            getattr( self, command )()#lancer la function souhaité
+    while x < len( self.commands) and not stop:#executer la première commande contenu dans la chaine donné par l utilisateur
+        if   self.commands[ ( index := self.command_pos[ x ] ) ][0] in got:#prenant en compte les modification de l'utilisateur
+            self.commands[ index ][1]( *self.commands[ index ][2] )#lancer la function souhaité
             
             stop = True
             
@@ -461,6 +192,7 @@ def wind( self, mode, pause = False  ):
         self.set_volume()
         if not "volume" in self.changed:
             self.changed.append("volume")
+
         sleep(0.001)
         
         
@@ -478,6 +210,9 @@ def wind( self, mode, pause = False  ):
     if mode == 6:
         self.pause = 1 - self.pause
         self.player.pause()
+
+    if mode == 7:
+        self.stay = False
 
     if mode == 15:
         self.player.set_time( 0 )
@@ -530,9 +265,16 @@ def param_center( self ):
         
         if all_numbers( word , len( tooltip ), 1 ):
                 setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] )
+
+    self.display()
                 
 def manager_manager(self):
     pass
+
+def reset_settings(self):
+    a = self.ask(" are you sure you want to reset your setting ? (o/n)")
+    if a == "o" or a == "1" or a == "y":
+        self.reset()
 
 def clear_cache(self):
     """

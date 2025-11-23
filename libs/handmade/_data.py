@@ -3,6 +3,7 @@ import os
 from .utils import *
 
 def init_data(self):
+    self.trash = 5
     pass
 
 def write_song_database(self,song):

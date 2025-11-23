@@ -1,37 +1,54 @@
 # ChimkenMuziks
-A handmade MP3 player
+A humanmade AI free MP3 player
 
-this is a cli player which plan to be easily usable , highly configurable
-and good looking with plenty functions
+this is a cli player which plan to be easily~ish usable , highly configurable
+and good looking
 
-function currenctly include :
-- playing mp3,waw,m4a
-- search song in loaded by name
+dependancy:
+- vlc
+- python 
+
+currently its allow you to :
+- select a  main folder (and to change it)
+- load specific sub-folder
+- edit command to your liking
+- rename / move / remove songs
+- play mp3,waw,m4a,flac,,ogg,midi*
+- play in loop,order,random
+- forwarding , backwarding
+- go to previous / next song
+- load last played song when starting the player
+- ay song via command
+- search for song
+- favorites
 - create and edit playlists
 - show historic of current session
-- show image chosen or random and allow to add images
-- change main music directory
-- play in loop,order,random
-- enabel/disable music sub folders individually
-- edit commands
-- search on youtube and download
-- enter youtube link and download
-- edit file
+- show file image or image of your chosing (random or not) if not  
+- search on youtube and download*
+- enter youtube link and download*
+- see your mosts played song
+- set a configurable timer
+- additionnal parameters 
 
-required dependancy:
-- vlc
+
+*additionnal dependancy required
+
+to download from youtube:
 - yt-dlp
-- fluidsynth
-- xplr
-- To use alsaaudio :
-- FOR ARCH    : alsa-lib
-- FOR UNBUNTU : libasound2-dev
 
-for python:
-linux : alsaaudio if you want to use it
+for .midi:
+- fluidsynth
+
+for easier folder selection:
+- xplr
+
+for alsaaudio (use global volume instead of vlc instance):
+- alsaaudio
+- on ARCH alsa-lib
+- on UNBUNTU libasound2-dev
 
 windows version is in the making but cli is not really adapted to windows
 	
 there are still bug every now and then but hey it work 
 
-![exemple display during a song](/exemple.png)
+![exemple display during a song](/example.png)

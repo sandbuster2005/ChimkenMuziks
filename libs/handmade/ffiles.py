@@ -26,7 +26,7 @@ def get_file(file:str ,encoding="utf-8")-> str:
         
     return result
 
-def get_info(data:str,chrs:[str])-> list:
+def get_info(data:str,chrs:list[str])-> list:
     """
     cette fonction permet de transforer une chaine de charactére avec des separateur en liste de profondeur maximal egal
     au nombre de caractére dans chrs 
@@ -48,7 +48,7 @@ def get_info(data:str,chrs:[str])-> list:
     else:
         return data
 
-def get_data(file:str,chrs:[str])-> list:
+def get_data(file:str,chrs:list[str])-> list:
     """
     cette fonction permet de recupérer les valeur d'un fichier a separateur et de le transformer en liste
     """
@@ -61,7 +61,7 @@ def get_data(file:str,chrs:[str])-> list:
         write_file(file)
         return []
     
-def edit_data(file,chrs,edit:str,position:[int])-> None:
+def edit_data(file,chrs,edit:str,position:list[int])-> None:
     """
     cette fonction permet avec la position dans la liste créer grace a get_data de modifier une valeur et de l'enregistrer
     """
@@ -83,7 +83,7 @@ def edit_data(file,chrs,edit:str,position:[int])-> None:
         data=join_list(data,chrs)
         write_file(file,data)
         
-def join_list(data:str,chrs:[str],depth:int=0,lenght:int=0)-> str:
+def join_list(data:str,chrs:list[str],depth:int=0,length:int=0)-> str:
     """
     cette fonction permet a partir d'une liste de former une chaine de caractére avec des separateurs 
     """
@@ -97,7 +97,7 @@ def join_list(data:str,chrs:[str],depth:int=0,lenght:int=0)-> str:
         else:
             new_data+=str(data[x])+(chrs[0+depth]*(x!=len(data)-1))
             
-    return new_data+(chrs[depth-1]*(lenght!=0))
+    return new_data+(chrs[depth-1]*(length!=0))
 
 def rm_file(file):
     """

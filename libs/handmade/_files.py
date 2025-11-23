@@ -52,6 +52,7 @@ def edit_dirs(self):
     en suivant l'architecture de dossier en partant de la racine
     """
     self.select_dir( self.switch_dir )
+    self.load_songs()
 
 def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
@@ -226,7 +227,7 @@ def check_adress( self ):
                 if self.path_to_file[-1] != self.separator:
                     self.path_to_file += self.separator
     
-    self.write_param()
+        self.write_param()
     
     
 def change_main_path( self ):

@@ -10,50 +10,6 @@ def init_song( self ):
     #SONG variables
     self.song = None# son actuelle
     self.last_word = -1 
-     
-def choose_song( self ):
-    """
-    cette fonction permet de:
-    choisir une chanson aléatoire : mode 0
-    choisit la chanson qui suit dans la liste : mode 1 
-    """
-    if self.playlist:
-        if self.playlist_files:
-            files = self.playlist_files
-    
-    elif self.play_favorite:
-        if self.favorite:
-            files = self.favorite
-            
-        else:
-            self.play_favorite = 0
-            files = self.files
-        
-    else:
-        files = self.files
-        
-    if self.mode == 1:
-        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
-            num = randint(1 , min(100 , 50 + len(self.favorite)*5) )
-            
-            if num > 50:
-                files = self.favorite
-                
-        self.song = files[ randint( 0, len( files ) - 1 ) ]#chanson aleatoire
-        
-                
-        
-    if self.mode == 0:
-        
-        if not self.song:
-            self.song = files[ 0 ]# si pas de chanson joué avant prendre la premiére
-            
-        else:
-            if self.song not in files:
-                files = self.files
-            self.song = files[ ( files.index( self.song ) + 1 ) % len( files ) ]#chanson suivante : index+1
-        
-
 
 def load_songs( self ):
     """
@@ -79,18 +35,58 @@ def play_song( self ,choose = 1):
     if len( self.files ) != 0:
         #self.bar = None
         if choose:
-            self.choose_song()
+            self._choose_song()
             
         self.get_words()
         
         if self.song[-4:] ==".mid":
-            self.suspend("play_midi")
+            self.play_midi()
         
-        self.play()
+        self._play()
         self.pause = 0
+
+
+def _choose_song(self):
+    """
+    cette fonction permet de:
+    choisir une chanson aléatoire : mode 0
+    choisit la chanson qui suit dans la liste : mode 1
+    """
+    if self.playlist:
+        if self.playlist_files:
+            files = self.playlist_files
+
+    elif self.play_favorite:
+        if self.favorite:
+            files = self.favorite
+
+        else:
+            self.play_favorite = 0
+            files = self.files
+
+    else:
+        files = self.files
+
+    if self.mode == 1:
+        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
+            num = randint(1, min(100, 50 + len(self.favorite) * 5))
+
+            if num > 50:
+                files = self.favorite
+
+        self.song = files[randint(0, len(files) - 1)]  # chanson aleatoire
+
+    if self.mode == 0:
+
+        if not self.song:
+            self.song = files[0]  # si pas de chanson joué avant prendre la premiére
+
+        else:
+            if self.song not in files:
+                files = self.files
+            self.song = files[(files.index(self.song) + 1) % len(files)]  # chanson suivante : index+1
     
-    
-def play( self ):
+def _play( self ):
     """
     cette fonction lance la musique actuel ,l'ajoute a l'historique et affiche l intérface
     
@@ -129,7 +125,8 @@ def historic( self ):
     """
     cette fonction affiche l'historique d'écoute de la session 
     """
-    self.show_list( [ f"{ self.played[ x ][ 0 ] }: {  self.played [ x ][ 1 ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom  
+    self.search = True
+    self.show_list( [ f"{ self.played[ x ][ 0 ] }: {  self.played [ x ][ 1 ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom
 
 def select( self ):
     """
