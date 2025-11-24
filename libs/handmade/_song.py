@@ -8,14 +8,15 @@ from os.path import isfile, splitext, dirname
 from libs.tinytag import TinyTag
 def init_song( self ):
     #SONG variables
-    self.song = None# son actuelle
-    self.last_word = -1 
+    self.song = None# currently playing song
+    self.last_word = -1 # pos in current lyrics if there are
 
 def load_songs( self ):
     """
     cette fonction permet de charge en memoire les chanson de la playlist selectionné/toute
     et de remmetre a 0 le lecteur
     """
+    #use arg from exterior
     if self.exterior:
         self.files = self.get_file( self.exterior, [] )
     
@@ -23,7 +24,7 @@ def load_songs( self ):
         self.files = self.get_file( self.path_to_file, [] )
         
     self.indexs = self.get_index_data( self.files )
-    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]
+    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]# [index in database , song file]
     self.song = None
 
 
@@ -32,17 +33,25 @@ def play_song( self ,choose = 1):
     cette fonction lance le choix de chanson et la joue
     """
     
-    if len( self.files ) != 0:
-        #self.bar = None
+    if len( self.files ) != 0: # if there are song
+
         if choose:
             self._choose_song()
             
-        self.get_words()
+        self.get_words()# check if there are a lyric file
         
-        if self.song[-4:] ==".mid":
+        if self.song[-4:] ==".mid": # if its a midi comvert it with a midi codec to a playable version
             self.play_midi()
-        
-        self._play()
+
+        if not self.played:#if list is empty
+            self.played.append(self.song)# add to historic
+
+        elif self.played[-1] != self.song:  # add to historic if song as changed
+            self.played.append(self.song)# add to historic
+            self.song_saved = False # tell backend is can save a play in the database
+
+        self._play() #send song to the player
+
         self.pause = 0
 
 
@@ -52,22 +61,22 @@ def _choose_song(self):
     choisir une chanson aléatoire : mode 0
     choisit la chanson qui suit dans la liste : mode 1
     """
-    if self.playlist:
+    if self.playlist:# choose in playlist if there one
         if self.playlist_files:
             files = self.playlist_files
 
-    elif self.play_favorite:
+    elif self.play_favorite: #choose in favorite if the option is on
         if self.favorite:
             files = self.favorite
 
-        else:
+        else:# check if theres file in favorite
             self.play_favorite = 0
             files = self.files
 
-    else:
+    else: #normal files
         files = self.files
 
-    if self.mode == 1:
+    if self.mode == 1: # random
         if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
             num = randint(1, min(100, 50 + len(self.favorite) * 5))
 
@@ -76,14 +85,15 @@ def _choose_song(self):
 
         self.song = files[randint(0, len(files) - 1)]  # chanson aleatoire
 
-    if self.mode == 0:
+    if self.mode == 0: # in order
 
-        if not self.song:
-            self.song = files[0]  # si pas de chanson joué avant prendre la premiére
+        if not self.song:# if its first song playing
+            self.song = files[0]
 
         else:
-            if self.song not in files:
+            if self.song not in files: # if >there's a problem fall back to global
                 files = self.files
+
             self.song = files[(files.index(self.song) + 1) % len(files)]  # chanson suivante : index+1
     
 def _play( self ):
@@ -93,22 +103,16 @@ def _play( self ):
     limite:
     une musique doit étre selectionné au préalable 
     """
-    if not self.played:
-        self.played.append(  self.song  )# ajoute a l'historique
-        
-    elif self.played[ -1 ] != self.song :# ajoute a l'historique si la chanson a changé
-        self.played.append(  self.song  )
-        self.song_saved = False
 
-    if ".mid" in self.song[1] :
-        self.player.set_mrl( "appdata/cache/" + self.song[1].rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav" )
-     
+    if ".mid" in self.song[1]:# if its a midi played converted version
+        self.player.set_mrl("appdata/cache/" + self.song[1].rsplit(".", 1)[0].rsplit("/", 1)[1] + ".wav")
+
     else:
-        self.player.set_mrl( self.song[1] )# charge la chanson
+        self.player.set_mrl( self.song[1] )# load song
     
-    self.bar = None
+    self.bar = None # reset bar
     self.player.play()
-    self.display()# affiche
+    self.display()
     
     
 def play_last( self ):

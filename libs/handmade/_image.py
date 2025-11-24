@@ -58,7 +58,7 @@ def get_img( self, path, files = [], start = 0 ):
        
         else:
             
-            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
+            if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# format d'image supporté par la librairie
                 self.imgs.append( path + f )
     
     

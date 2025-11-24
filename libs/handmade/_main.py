@@ -15,9 +15,11 @@ import platform
 import os
 
 def init_main( self, directory, song ):
+    #process arg passed with the start command
     self.exterior = directory
     self.exterior_song = song
     
+    #check problem with windows
     self.sysname = sysname
     
     if sysname == 'nt':
@@ -30,14 +32,13 @@ def init_main( self, directory, song ):
     self.stay = True  # False pour quiter le lecteur
     self.pause = 0  # pour mettre en pause le lecteur+la barre
     self.bar = None   # la barre de progression du temps de la chanson 
-    self.search = False   # True pour cacher l'affichage
-    os.environ["VLC_VERBOSE"] = str("-1")
+    self.search = False   # pour mettre en pause l afichhage le temps de finir une recherche
+    os.environ["VLC_VERBOSE"] = str("-1") # retire les message de warning vlc cassant l affichage
     self.player = vlc.MediaPlayer()  # lecteur
     self.played = []  # historique
-    #self.MainThread = threading.currentThread()
     self.timer = None
-    self.words = None
-    self.input = ReadChar()
+    self.words = None # parole si existante
+    self.input = ReadChar() # systeme d'input 
  
    
 def main( self ):
@@ -56,11 +57,11 @@ def main( self ):
         self.change_main_path()
         self.load_songs()
 
-    if self.sound_manager != "base":#base sound manager need a media playing to get voulme
+    if self.sound_manager != "base":#base sound manager need a media playing to get volume
         self.start_sound()
         self.display()
     
-    if self.exterior:
+    if self.exterior: # if an argument was pasted from command line
         if self.exterior_song:
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
@@ -68,10 +69,10 @@ def main( self ):
             self.play_song(0)
     
     else:
-        if self.playlist:
+        if self.playlist: #load playlist if there one
             self.load_playlist()
         
-        if self.last_song and self.auto_last_song:
+        if self.last_song and self.auto_last_song: #launch last played sont if configured to 
             self.last_song[ 0 ] = int( self.last_song[ 0 ] )
             self.song = self.last_song
             self.play_song(0)
@@ -80,16 +81,6 @@ def main( self ):
         self.get_input()#interface
 
     self.end()
-
-def u_bar(self):
-    """
-    cette fonction permet de mettre la bar a jour sans casser l'ecran
-    """
-    if self.bar:
-        save()
-        up()
-        self.bar.update()
-        load()
         
 def n_input(self):
     """
@@ -110,10 +101,10 @@ def display( self ):
 
     if self.song:
         if not "display" in self.changed:
-            self.changed.append("display")
+            self.changed.append("display")# previens l'affichage d'un changement
         if self.word and self.words != [] and self.last_word != -1:
             if not "word" in self.changed:
-                self.changed.append("word")
+                self.changed.append("word") #previens l"affichage d'un changement
 
 
     
@@ -123,10 +114,8 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    #got = self.ask( ":" ).lower()#ignorer les majuscules
-    #self.n_input()
     got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished )
-    lup()
+    lup()# permet d'eviter de recharger l ecran a chaque impur en conservant la ligne
 
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.song = self.files[ int( got ) ]
@@ -143,7 +132,7 @@ def get_input( self ):
     x = 0
     stop = False
     while x < len( self.commands) and not stop:#executer la première commande contenu dans la chaine donné par l utilisateur
-        if   self.commands[ ( index := self.command_pos[ x ] ) ][0] in got:#prenant en compte les modification de l'utilisateur
+        if   self.commands[ ( index := self.command_pos[ x ] ) ][0] in got:#prenant en compte les modification de l'utilisateur et eviter que les plus petite command shadow les plus grande
             self.commands[ index ][1]( *self.commands[ index ][2] )#lancer la function souhaité
             
             stop = True
@@ -158,7 +147,8 @@ def load_all( self ):
     """
     self.player.stop()
     self.load_songs()
-    self.get_img( self.path_to_img, start = 1 )
+    self.load_favorite_database()
+    self.get_img( self.path_to_img, start = 1 ) #charge toute les image en memoire
     self.check_favorite()
     self.write_param()
     
@@ -179,54 +169,51 @@ def wind( self, mode, pause = False  ):
     limite:
     le volume du son est compris entre 0 et 100%
     """
-    if mode == 1:
+    if mode == 1: # avance de 10 seconde
         if  self.bar:
             self.player.set_time( min( self.player.get_length() - 1000, self.player.get_time() + 10000 ) )
             
-    if mode == 2:
+    if mode == 2:# recule de 10 seconde
         if self.bar:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
 
-    if mode == 3:
+    if mode == 3: # augmente le volume de 5
         self.volume = min( 100, self.volume + 5 )
         self.set_volume()
-        if not "volume" in self.changed:
-            self.changed.append("volume")
+        if not "volume" in self.changed: #si l'affichage n'a pas deja ete prevenu
+            self.changed.append("volume")#previens l'affichage que le volume a changer
 
         sleep(0.001)
         
         
-    if mode == 4:
+    if mode == 4:# baisse le volume de 5
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
-        if not "volume" in self.changed:
-            self.changed.append("volume")
+        if not "volume" in self.changed:#si l'affichage n'a pas deja ete prevenu
+            self.changed.append("volume")#previens l'affichage que le volume a changer
+            
         sleep(0.001)
         
         
-    if mode == 5:
+    if mode == 5:# mute the music
         self.deafen()
         
-    if mode == 6:
+    if mode == 6:# pause the music
         self.pause = 1 - self.pause
         self.player.pause()
 
-    if mode == 7:
+    if mode == 7:# quit the player
         self.stay = False
 
-    if mode == 15:
+    if mode == 15:# go back to music start
         self.player.set_time( 0 )
         self.bar.index = 0
-
-    
-    if pause:
-        self.display()
         
 def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
     """
-    word = self.ask_list( [ "quit", "mute", "pause" ] )
+    word = self.ask_list( [ "quit", "mute", "pause" ] )# timer modes
     if all_numbers( word, 3, 1 ):
         self.timer_mode = int( word ) 
         
@@ -234,7 +221,7 @@ def set_timer( self ):
         choice = self.ask( "shutdown in  x minutes :" )
     
         if all_numbers( choice ):
-            self.timer = [ 1, int( choice ), monotonic() ]
+            self.timer = [ 1, int( choice ), monotonic() ]# [elapsed time (m), time remaining (m) , starting time]
         
         else:
             self.timer = None
@@ -254,9 +241,9 @@ def param_center( self ):
     param = [ [x[ 1 ],x[ 0 ],x[ 3 ] ]  for x in self.params if x[ 4 ] ]
     
     while all_numbers( word ):
-        tooltip=[ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
+        tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
         
-        up( len( tooltip ) + 2  )
+        up( len( tooltip ) + 2  )# for each loop rewrite on the same space
         word = self.ask_list( tooltip )
         lup()
         out( " " * ( len( tooltip ) + 3 ) )
@@ -264,7 +251,7 @@ def param_center( self ):
         
         
         if all_numbers( word , len( tooltip ), 1 ):
-                setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] )
+                setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] ) # if choice is a param , edit it
 
     self.display()
                 
@@ -272,6 +259,9 @@ def manager_manager(self):
     pass
 
 def reset_settings(self):
+    """
+    cette fonction permet a l'utilisateur de supprimer ses paramétre apres une CONFIRMATION
+    """
     a = self.ask(" are you sure you want to reset your setting ? (o/n)")
     if a == "o" or a == "1" or a == "y":
         self.reset()
