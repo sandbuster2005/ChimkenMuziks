@@ -144,7 +144,7 @@ def update_display(self):
         self.changed.remove("word")
 
     if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
-        if self.show and "display" in self.changed:
+        if self.show and "display" in self.changed and self.song:
             white()
             self.display_img()
             ldown(3)

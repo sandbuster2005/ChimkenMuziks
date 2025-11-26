@@ -7,6 +7,7 @@ and good looking
 dependancy:
 - vlc
 - python 
+- PIL
 
 currently its allow you to :
 - select a  main folder (and to change it)
