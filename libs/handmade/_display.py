@@ -31,7 +31,7 @@ def show_list( self, liste, num = True , start = 0):
     if self.graphic_manager == "base":
         if num == True:
             for x in range( len( liste ) ):
-                if self.quickselect:
+                if self.quickselect:# show a string like 04 , 015 ,0045 to match max number respectively 10-99 , 100-999 ,1000-9999
                     
                     print( "0" * ( len( str ( len( liste ) ) ) - len( str(x) ) ) + str(x + start), liste[x] )
                 
@@ -51,29 +51,29 @@ def ask_list( self, liste, text = "" , num = True):
     if text == "":
         text = self.confirmation
         
-    if self.graphic_manager == "base":
+    if self.graphic_manager == "base":#terminal interface
         if len( liste ) > self.term_size.lines:
-            n = 0
+            n = 0 # current page
             word = "n"
             size = self.term_size.lines
             
             while word == "n" or word == "p":
-                self.show_list( liste[ n * (size-2) : ( n + 1 ) * (size - 2)] , start = n*(size - 2 ) )
+                self.show_list( liste[ n * (size-2) : ( n + 1 ) * (size - 2)] , start = n*(size - 2 ) ) # initial list split in n page to each fit on the screen
                 self.show_list(["p : previous page","n : next page"], num = False)
                 word = self.ask( f"{ text }" )
                 white()
                 
                 if word == "n":
-                    n = min(n+1, ceil( len(liste) / (size-2) ) - 1 )
+                    n = min(n+1, ceil( len(liste) / (size-2) ) - 1 ) # next page if exist
                     
                 if word == "p":
-                    n = max(n-1,0)
+                    n = max(n-1,0) # previous page if exist
                     
             return word
         
         elif self.quickselect:
             self.show_list( liste, num )
-            return self.ask( f"{ text }" ,quick = len( str ( len ( liste ) ) ) )
+            return self.ask( f"{ text }" ,quick = len( str ( len ( liste ) ) ) )# auto return when enough number where entered
         
         else:
             self.show_list( liste, num )

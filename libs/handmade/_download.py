@@ -20,18 +20,18 @@ def yt_search( self ):
     self.search = True
     word = self.ask("votre recherche : ")
     results = YoutubeSearch( word, max_results = 10 ).to_dict()#10 premier resultat de la recherche youtube     
-    word = self.ask_list( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])
+    word = self.ask_list( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])# see titles of vid
     
     if all_numbers( word, 10, 1 ):
-        option = ["mp3", "m4a"]
+        option = ["mp3", "m4a"]# dowload format
         words = self.ask_list( option )
         
         if all_numbers( words, len( option ), 1 ):
-            extension = option[ int( words ) ]
+            extension = option[ int( words ) ] # user choice
             title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
             title = clear_adjacent(title,["-","_"],2)
-            title = replace(title ,["_"],"\ ")
-            link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" )
+            title = replace(title ,["_"],"\ ")# replace _ by spaces
+            link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" ) # video url
             print( link )
             
             if not isdir( self.path_to_file + "download/"):
@@ -58,12 +58,12 @@ def dl_yt_playlist( self ):
         
         path = replace(self.path_to_file," ","\ ")
         
-        for f in listdir( f"{ self.path_to_file }/download" ):
+        for f in listdir( f"{ self.path_to_file }/download" ):#count file before
             lenght += 1
            
         self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ path }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
         
-        for f in listdir( f"{ self.path_to_file }/download" ):
+        for f in listdir( f"{ self.path_to_file }/download" ):#count file after
             new_lenght += 1
         
         if new_lenght!=lenght:

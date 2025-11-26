@@ -4,6 +4,7 @@ from .utils import *
 from .terminal import *
 
 def init_command( self ):
+        #command , linked fonction , fonction arg , tooltip in help
     self.commands = [
          ["h", self.help_menu, {} , "pour afficher le menu help"],
          ["q", self.wind, { 7 : "mode" }, "pour quitter le lecteur"],
@@ -84,12 +85,12 @@ def edit_command( self ):
     a = ""
     while cmd:
         commands = [ x[0] for x in self.commands ]
-        self.help_menu()
-        print(a)
-        cmd = self.ask("enter current command call :")#show current command
+        self.help_menu()#show current commands
+        print(a)#show last message
+        cmd = self.ask("enter current command call :")
         
         if cmd == "h":
-            self.out( "help cannot be modified" )
+            self.out( "help cannot be modified" ) # in case the user forget the change
             return
         
         if cmd in commands:
@@ -98,7 +99,7 @@ def edit_command( self ):
             if not all_numbers( key ) and key != "":
                  if key not in commands:#if key don't already exist
                      a = f"{  self.commands[ commands.index( cmd ) ][0] } changed to {key}"
-                     self.commands[ commands.index( cmd ) ][0] = key
+                     self.commands[ commands.index( cmd ) ][0] = key # set key
                      self.write_param()
                      self.sort_command()
                      

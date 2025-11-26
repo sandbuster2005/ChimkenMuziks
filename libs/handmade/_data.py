@@ -3,7 +3,6 @@ import os
 from .utils import *
 
 def init_data(self):
-    self.trash = 5
     pass
 
 def write_song_database(self,song):
@@ -55,8 +54,10 @@ def update_song_database(self):
     
     cursor = base.cursor()
     noms = self.get_song_database()
-    if self.exterior:
+
+    if self.exterior:# if song was sent through command
         for x in self.get_file( self.exterior, [] ):
+            artist, album = self.get_song_info(x)
             cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
     
     else:
@@ -76,7 +77,7 @@ def get_song_database(self):
     result = cursor.fetchall()
     base.commit()
     base.close()
-    return [x[0] for x in result]
+    return [ x[0] for x in result ]
     
 def update_favorite_database(self,mode):
     base = sqlite3.connect("appdata/cache/data.db")
@@ -157,7 +158,7 @@ def get_column(self):
     result = cursor.fetchall()
     base.commit()
     base.close()
-    return [ x[0]for x in result ][6:]
+    return [ x[0]for x in result ][6:] # the first 6 are other data and not playlist
 
 def get_albums(self):
     base = sqlite3.connect("appdata/cache/data.db")

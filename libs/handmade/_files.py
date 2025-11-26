@@ -40,10 +40,10 @@ def get_file( self, path, files = [] ):
                 files += self.get_file( path + f + self.separator, [] )
                 self.dirs.append( [ path + f, '1' ] )
                 
-        if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid" or f[ -4: ] == ".ogg":#le fichier est un audio
+        if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid" or f[ -4: ] == ".ogg":#le fichier est un audio supporté
             files.append( path + self.separator + f )
             
-    return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )
+    return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )#sorted by music name
 
 
 def edit_dirs(self):
@@ -95,14 +95,9 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
             
         print("(b) to go back")
         print("(s) switch mode")
-        
-        if len( temp )< 11:
-            out("select folder")
-            word = readchar()
-        
-        else:
-            word = input( "select folder " )
-        
+
+        word = self.ask("select folder", quick = self.quickselect)
+
         if all_numbers( word, len( temp ), 1 ):
             if mode == "switch":
                 if temp[ int( word ) ][ 1 ] == "1":
@@ -131,8 +126,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                 print("")
                 print("1: select folder")
                 print("2: enter folder ")
-                out("select option")
-                nword = readchar()
+                nword = self.ask("select option", quick = self.quickselect)
                 
                 if "1" in nword :
                     
@@ -201,7 +195,10 @@ def find_file( self, word ):
     toute les charactère sont considérée comme minuscule
     """
     files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
-    
+    #basic search
+
+
+    #allow searching with a 1 character error if few result
     if len(files) < 10 and len(word) > 3:
         for y in range( len( word ) ):
             for i,x in enumerate( self.files ):
@@ -209,7 +206,7 @@ def find_file( self, word ):
                     if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x[ 1 ].lower() ):
                         files.append( [ x [1] .rsplit( self.separator )[ -1 ], i ] )
     
-    return sorted(files,key = lambda x: x[1] )
+    return sorted(files,key = lambda x: x[1] )#sort by index
 
 def check_adress( self ):
     """
@@ -222,7 +219,7 @@ def check_adress( self ):
                 self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
             
             except:
-                self.path_to_file = input( "chemin du dossier musique: " )
+                self.path_to_file = self.ask( "chemin du dossier musique: " )
                 
                 if self.path_to_file[-1] != self.separator:
                     self.path_to_file += self.separator
@@ -235,7 +232,7 @@ def change_main_path( self ):
     cette fonction permet de changer l'adresse des chansons
     """
     self.path_to_file = ""
-    self.check_adress()
+    self.check_adress()#obviously "" is not good
     self.load_songs()
      
      
@@ -244,14 +241,11 @@ def mani_file(self):
     cette fonction permet de supprimer , deplacer(dans les dossiers connu)
     et renommer le fichier actuel
     """
-    if self.song != None:
+    if self.song :
         index = self.files.index( self.song )
         
-        tooltip = [ "delete ", "move", "rename", "convert"]
-        
-        if self.get_column():
-            tooltip.append("add to playlist")
-        
+        tooltip = [ "delete ", "move", "rename", "convert"]#option
+
         word = self.ask_list( tooltip )
         
         if all_numbers( word, len( tooltip ), 1 ):
@@ -259,26 +253,26 @@ def mani_file(self):
             if int( word ) == 0:
                 choice = self.ask( "are you sure (y/n)" )
                 
-                if choice == "y":
+                if choice == "y":#delete
                     rm_file( self.song[ 1 ] )
                     self.files.remove( self.song )
                 
-            elif int( word ) == 1:
+            elif int( word ) == 1:#move
                 choice = str( self.select_dir( retour = 1 ) )
                 
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
-            elif int( word ) == 2:
+            elif int( word ) == 2:#rename
                 choice = self.ask( "new_name :" )
                 mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
                 self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
-            elif int( word ) == 3:
+            elif int( word ) == 3:#convert
                 self.change_extension()
                  
-            if int(word) < 4 : 
+            if int(word) < 4 : #obviously whathever happended changed file and its not playable anymore like before
                 self.song = None
                 self.played = self.played[:-1]
                 self.player.stop()
