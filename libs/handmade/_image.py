@@ -117,7 +117,7 @@ def select_img( self ):
         if word <= len( self.imgs ):
             if  word == len( self.imgs ):
                 self.img = ""# aleatoire
-                word = ""
+                word = len(self.imgs)
             
             else:
                 
@@ -129,7 +129,7 @@ def select_img( self ):
                 
                 if confirm.lower() == "y":
                     self.img = self.imgs[  word ] # selection
-                    word = ""
+                    len(self.imgs)
             
         self.display()
 
