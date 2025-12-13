@@ -100,7 +100,7 @@ def update_logic(self):
                 self.song_saved = True
                 self.write_song_database( self.song[ 1 ] )
 
-
+            """
             if self.time_check[3]:
                 self.time_check[3] -= 1
 
@@ -116,16 +116,23 @@ def update_logic(self):
                     if self.player.get_time() == self.time_check[1]:
 
                         self.play_song( (1 - self.repeat ) )
+                        self.display()
 
                     else:
                         self.time_check = [False, 0, 0, 60]
+            """
 
             if self.bar:
                 if floor(self.time / 1000)  >= floor( self.player.get_length() / 1000):  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
                     self.play_song((1 - self.repeat))
+                    self.display()
 
 
 def update_display(self):
+    if "space" in self.changed and not self.search:
+        wipe()
+        self.changed.remove("space")
+
     if "bar" in self.changed and not self.search and self.bar:
         save()
         up()
@@ -143,68 +150,69 @@ def update_display(self):
         load()
         self.changed.remove("word")
 
-    if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
-        if self.show and "display" in self.changed and self.song:
-            white()
-            self.display_img()
-            ldown(3)
+    if self.song:
+        if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
+            if self.show and "display" in self.changed:
+                white()
+                self.display_img()
+                ldown(3)
 
-        time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
+            time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
 
-        self.volume = self.get_volume()
-        volume_string = f"{self.volume}%"
+            self.volume = self.get_volume()
+            volume_string = f"{self.volume}%"
 
-        if self.volume < 10:
-            volume_string = "0" + volume_string
-        
-        string = time_string + "   " + volume_string
+            if self.volume < 10:
+                volume_string = "0" + volume_string
 
-        if self.playlist:
-            string = self.playlist + "   " + string
+            string = time_string + "   " + volume_string
 
-        if self.timer:
-            string += "   " + f"timer :{self.timer[1]} mins"
+            if self.playlist:
+                string = self.playlist + "   " + string
 
-        space = floor((self.term_size.columns - len(string)) / 2)
+            if self.timer:
+                string += "   " + f"timer :{self.timer[1]} mins"
 
-        if os.name == 'nt':
-            a = '\\'
-        else:
-            a = '/'
+            space = floor((self.term_size.columns - len(string)) / 2)
 
-        name = self.song[1].rsplit(a, 1)[1]
+            if os.name == 'nt':
+                a = '\\'
+            else:
+                a = '/'
 
-        if self.song in self.favorite:
-            name = "*" + name + "*"
+            name = self.song[1].rsplit(a, 1)[1]
 
-        space_name = floor((self.term_size.columns - len(name)) / 2)
+            if self.song in self.favorite:
+                name = "*" + name + "*"
 
-        if self.bar:
-            self.bar.center = self.center
+            space_name = floor((self.term_size.columns - len(name)) / 2)
 
-        save()
-        lup(3)
-        wipe_line()
-        out(f"{' ' * space * self.center}{string}")
+            if self.bar:
+                self.bar.center = self.center
 
-        ldown()
-        wipe_line()
-        out(f"{' ' * space_name * self.center}{name}")
+            save()
+            lup(3)
+            wipe_line()
+            out(f"{' ' * space * self.center}{string}")
 
-        load()
-        wipe_line()
-        out(":")
-        if "time" in self.changed:
-            self.changed.remove("time")
+            ldown()
+            wipe_line()
+            out(f"{' ' * space_name * self.center}{name}")
 
-        if "timer" in self.changed:
-            self.changed.remove("timer")
+            load()
+            wipe_line()
+            out(":")
+            if "time" in self.changed:
+                self.changed.remove("time")
 
-        if "volume" in self.changed:
-            self.changed.remove("volume")
+            if "timer" in self.changed:
+                self.changed.remove("timer")
 
-        if "display" in self.changed:
-            self.changed.remove("display")
+            if "volume" in self.changed:
+                self.changed.remove("volume")
+
+            if "display" in self.changed:
+                self.changed.remove("display")
 
 def is_finished(self):
     if not self.stay:

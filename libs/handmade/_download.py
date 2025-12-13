@@ -20,18 +20,18 @@ def yt_search( self ):
     self.search = True
     word = self.ask("votre recherche : ")
     results = YoutubeSearch( word, max_results = 10 ).to_dict()#10 premier resultat de la recherche youtube     
-    word = self.ask_list( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])# see titles of vid
+    word = self.asker.menu_deroulant( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])# see titles of vid
     
-    if all_numbers( word, 10, 1 ):
+    if  word < 10 :
         option = ["mp3", "m4a"]# dowload format
-        words = self.ask_list( option )
+        words = self.asker.menu_deroulant( option )
         
-        if all_numbers( words, len( option ), 1 ):
-            extension = option[ int( words ) ] # user choice
-            title = replace( results[ int( word ) ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
+        if words < len( option ):
+            extension = option[ words ] # user choice
+            title = replace( results[  word  ].get( "title" ), [ "(", "'", '"', ")", " ", ":", "|", "&","/"] , "_")#formatage pour eviter les crash
             title = clear_adjacent(title,["-","_"],2)
             title = replace(title ,["_"],"\ ")# replace _ by spaces
-            link = "https://www.youtube.com" + results[ int( word ) ].get( "url_suffix" ) # video url
+            link = "https://www.youtube.com" + results[ word ].get( "url_suffix" ) # video url
             print( link )
             
             if not isdir( self.path_to_file + "download/"):

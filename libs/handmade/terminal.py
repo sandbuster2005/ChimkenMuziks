@@ -183,14 +183,17 @@ class ReadChar:
         return c1 + c2 + c3 + c4 + c5
 
 
-def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> str:
+def ninput(*arg : Callable , **kwarg) -> str:
 
-    chrs = [  chr( x ) for x in range( 32, 127 ) ]
-    text =  "input: "
-    error = "value not recognized / not acceptable"
-    before = ""
-    condition = None
-    quick = 0
+    chrs : list[str] = [  chr( x ) for x in range( 32, 127 ) ]
+    escape : any = ""
+    text : str =  "input: "
+    error : str  = "value not recognized / not acceptable"
+    before : str = ""
+    condition : Callable | None = None
+    quick : int = 0
+    value : str = ""
+    pos = len(value)
 
     for k,x in kwarg.items():
 
@@ -206,18 +209,22 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
             condition = x
         if k == "quick":
             quick = x
+        if k== "value":
+            value = x
+        if k == "escape":
+            escape = x
 
     stop = False
-    value = ""
     le = len(before)
-    pos = 0
 
     if text:
         print(text)
+
     if error:
         print("")
 
     out(before)
+
     with ReadChar() as Ninput:
         while not stop:
             a = Ninput.key()
@@ -259,12 +266,14 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
                     right(pos + le)
 
             elif a == Key.ESC:
-                return ""
+                return escape
 
             elif a in chrs:
                 lup()
+
                 if error:
                     wipe_line()
+
                 ldown()
 
                 value = value[ : pos  ] + a + value [ pos   : ]
@@ -294,7 +303,7 @@ def ninput(*arg : Callable , **kwarg : str | list[ str ] | bool | Callable) -> s
                     return ""
             
             if quick:
-                if len(value) == quick:
+                if len(value) >= quick:
                     stop = True
     print("")
     return value
@@ -344,14 +353,20 @@ def line_start():
 #true color (24bit)
 def tforeground(r,g,b,text):
     out(f"\x1b[38;2;{r};{g};{b}m{text}")
+    out("\033[0m")
+
 def tbackground(r,g,b,text):
     out(f"\x1b[48;2;{r};{g};{b}m{text}")
-    
+    out("\033[0m")
+
 #0-255
 def foreground(idd,text):
     out(f"\x1b[38;5;{idd}m{text}")
+    out("\033[0m")
+
 def background(idd,text):
     out(f"\x1b[48;5;{idd}m{text}")
+    out("\033[0m")
 
 #The table starts with the original 16 colors (0-15).
 #The proceeding 216 colors (16-231) or formed by a 3bpc RGB value offset by 16, packed into a single value.

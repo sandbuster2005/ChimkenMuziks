@@ -29,7 +29,7 @@ def show_list( self, liste, num = True , start = 0):
     par un ,numeroté ou non
     """
     if self.graphic_manager == "base":
-        if num == True:
+        if num:
             for x in range( len( liste ) ):
                 if self.quickselect:# show a string like 04 , 015 ,0045 to match max number respectively 10-99 , 100-999 ,1000-9999
                     

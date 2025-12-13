@@ -31,12 +31,12 @@ def change_sound_manager( self ):
     """
     cette fonction permet de changer le gestionnaire
     """
-    choice = self.ask_list( [ "base inclued in vlc", "alsaaudio , use global volume ONLY on linux" ] )
+    choice = self.asker.menu_deroulant( [ "base inclued in vlc", "alsaaudio , use global volume ONLY on linux" ] )
     
-    if choice == "0":
+    if choice == 0:
         self.sound_manager = "base"
         
-    if choice == "1": 
+    if choice == 1:
         if self.audio_linux:
             self.mixer = alsaaudio.Mixer()
             self.volume = self.get_volume()

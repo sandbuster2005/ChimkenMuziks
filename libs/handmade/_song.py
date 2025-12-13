@@ -152,10 +152,10 @@ def play_midi(self):
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné
     """
     outs = listdir("appdata/midi_codec")
-    word = self.ask_list(outs)
+    word = self.asker.menu_deroulant(outs)
     
-    if all_numbers( word, len( outs ), 1 ):
-        print("appdata/midi_codec/" + outs[int(word)])
+    if  word > len( outs ):
+        print("appdata/midi_codec/" + outs[ word ])
         self.convert_midi(  )
         
 def convert_midi(self,soundmap = ""  , destination = "appdata/cache/" ):
@@ -176,9 +176,9 @@ def default_midi(self):
     cette fonction permet a l'utillisteur de selectionner un codec par defaut pour les fichier midi pour eviter les interuptions futur
     """
     choice = listdir( "appdata/midi_codec" )
-    word = self.ask_list(choice)
+    word = self.asker.menu_deroulant( choice )
     
-    if all_numbers( word, len(choice) , 1):
+    if  word < len(choice):
         self.base_soundmap = f"appdata/midi_codec/{ choice[ int( word ) ] }"
         
 def get_metadata(self):

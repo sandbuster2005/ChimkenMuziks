@@ -83,60 +83,58 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         
     folder = self.path_to_file + ""
     pos = 0
-    word = "0"
+    word = 0
     temp = choose[ 0 ]
-    while word and count != lim :
+    print(folder)
+    while word >= 0  and count != lim :
         white()
-        print(f"mode : { str( mode ) }")
-        print("   " + folder.split( self.path_to_file )[ 1 ] )
-        
+
+        display = []
         for x in range( len( temp ) ):
-            print( str(x) + ":", temp[x][0].split(folder,1)[1] ,int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" )
-            
-        print("(b) to go back")
-        print("(s) switch mode")
+            display.append( f" {temp[x][0].split(folder,1)[1]} : {int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" } " )
 
-        word = self.ask("select folder", quick = self.quickselect)
+        display.append("switch mode")
+        display.append("go back")
 
-        if all_numbers( word, len( temp ), 1 ):
+        word = self.asker.menu_deroulant( display, f"mode : { str( mode ) }" +  "\n   " + folder.split( self.path_to_file )[ 1 ] , word )
+        #word = self.ask("select folder", quick = self.quickselect) len( temp )
+
+        if word < len( temp ):
             if mode == "switch":
-                if temp[ int( word ) ][ 1 ] == "1":
+                if temp[  word ][ 1 ] == "1":
                         
                         if retour:
-                            return self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] )
+                            return self.dirs.index( [ temp[  word ][ 0 ], "1" ] )
                         
                         else:
                             temp[ int( word ) ][ 1 ] = "0"
-                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] ) )
+                            func( self.dirs.index( [ temp[ word ][ 0 ], "1" ] ) )
                             count += 1
                         
                 else:
                         
                         if retour:
-                            return self.dirs.index([ temp[ int( word ) ][ 0 ], "0" ])
+                            return self.dirs.index([ temp[  word ][ 0 ], "0" ])
                         
                         else:
                             temp[ int( word ) ][ 1 ] = "1"
-                            func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "0" ] ) )
+                            func( self.dirs.index( [ temp[ word ][ 0 ], "0" ] ) )
                             count += 1    
             
             if mode == "standard":
                 wipe()
-                print( int( word ), temp[ int( word ) ][ 0 ].split( folder, 1 )[ 1 ] )
-                print("")
-                print("1: select folder")
-                print("2: enter folder ")
-                nword = self.ask("select option", quick = self.quickselect)
+                nword = self.asker.menu_deroulant(["select folder","enter folder"],temp[ int( word ) ][ 0 ].split( folder, 1 )[ 1 ])
+                #nword = self.ask("select option", quick = self.quickselect)
                 
-                if "1" in nword :
+                if 0 == nword :
                     
-                    if temp[ int( word ) ][ 1 ] == "1":
+                    if temp[ word ][ 1 ] == "1":
                         
                         if retour:
                             return self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ])
                         
                         else:
-                            temp[int(word)][1] = "0"
+                            temp[ word ][1] = "0"
                             func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "1" ] ) )
                             count += 1
                         
@@ -146,25 +144,26 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                             return self.dirs.index( [temp[ int( word ) ][ 0 ], "0" ] )
                         
                         else:
-                            temp[ int( word) ][ 1 ] = "1"
+                            temp[ word ][ 1 ] = "1"
                             func( self.dirs.index( [ temp[ int( word ) ][ 0 ], "0" ]) )
                             count += 1
                 
-                elif "2" in nword:
+                elif 1 == nword:
                     if pos != bottom:
                         pos += 1
                         folder = temp[ int( word ) ][ 0 ] + self.separator
                         temp = [ x for x in choose[ pos ] if folder in x[ 0 ] ]
+                        word = 0
                 
             
-        elif "s" in word:
+        elif word == len(temp):
             if mode != "switch":
                 mode = "switch"
             
             else:
                 mode = "standard"
         
-        elif "b" in word :
+        elif word == len(temp) + 1 :
             
             if pos!=0:
                 folder = folder.rsplit( self.separator, 2 )[ 0 ] + self.separator
@@ -172,12 +171,13 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
                 temp = [ x for x in choose [pos ] if folder in x[ 0 ] ]
             
             else:
-                word = ""
+                word = -1
                 print("")
         
         else:
-            word = ""
+            word = -1
             print("")
+        self.display(space = True)
 
 def switch_dir( self, word ):
     """
@@ -246,33 +246,34 @@ def mani_file(self):
         
         tooltip = [ "delete ", "move", "rename", "convert"]#option
 
-        word = self.ask_list( tooltip )
+        word = self.asker.menu_deroulant( tooltip )
         
-        if all_numbers( word, len( tooltip ), 1 ):
+        if  word < len( tooltip ):
             
-            if int( word ) == 0:
+            if word == 0:
                 choice = self.ask( "are you sure (y/n)" )
                 
                 if choice == "y":#delete
                     rm_file( self.song[ 1 ] )
                     self.files.remove( self.song )
                 
-            elif int( word ) == 1:#move
+            elif  word == 1:#move
                 choice = str( self.select_dir( retour = 1 ) )
                 
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
+
                     mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
-            elif int( word ) == 2:#rename
+            elif  word  == 2:#rename
                 choice = self.ask( "new_name :" )
                 mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
                 self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
-            elif int( word ) == 3:#convert
+            elif word  == 3:#convert
                 self.change_extension()
                  
-            if int(word) < 4 : #obviously whathever happended changed file and its not playable anymore like before
+            if word < 4 : #obviously whathever happended changed file and its not playable anymore like before
                 self.song = None
                 self.played = self.played[:-1]
                 self.player.stop()
@@ -326,11 +327,11 @@ def change_extension(self):
     """
     white()
     option = [".mp3", ".m4a", ".wav" , ".flac" ]
-    word = self.ask_list( option )
+    word = self.asker.menu_deroulant( option )
     
-    if all_numbers( word, len( option ), 1 ):
+    if  word < len( option ):
         confirm = self.ask( "delete original (y/n)?" )
-        new = self.song.rsplit( ".",1 )[ 0 ] + option[ int( word ) ]
+        new = self.song.rsplit( ".",1 )[ 0 ] + option[  word  ]
         self.external_call(f"ffmpeg -i '{self.song}' '{new}' " , shell = True)
         
         if confirm == "y":

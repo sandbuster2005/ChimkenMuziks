@@ -90,7 +90,7 @@ def n_input(self):
     wipe_line()
 
 
-def display( self ):
+def display( self , space = False ):
     """
     cette fonction affiche l'image ,recupére la durée de la chanson ainsi que le nom de la chanson en cours,
     le volume de la musique ainsi que creer la bar de progression si besoin
@@ -98,6 +98,8 @@ def display( self ):
     limite:
     il est nécessaire qu'une chanson soit selectionné
     """
+    if space:
+        self.changed.append("space")
 
     if self.song:
         if not "display" in self.changed:
@@ -213,9 +215,9 @@ def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
     """
-    word = self.ask_list( [ "quit", "mute", "pause" ] )# timer modes
-    if all_numbers( word, 3, 1 ):
-        self.timer_mode = int( word ) 
+    word = self.asker.menu_deroulant( [ "quit", "mute", "pause" ] )# timer modes
+    if  word < 3:
+        self.timer_mode = word
         
         self.out( "enter nothing to delete current timer" )
         choice = self.ask( "shutdown in  x minutes :" )
@@ -235,23 +237,23 @@ def param_center( self ):
     """
     cette fonction permet de gérer les différents paramétre boolean
     """
-    word = "0"
+    word = 0
     white()
     #tooltip , name , type
     param = [ [x[ 1 ],x[ 0 ],x[ 3 ] ]  for x in self.params if x[ 4 ] ]
     
-    while all_numbers( word ):
+    while word >= 0 :
         tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
         
-        up( len( tooltip ) + 2  )# for each loop rewrite on the same space
-        word = self.ask_list( tooltip )
+        up( len( tooltip ) + 1  )# for each loop rewrite on the same space
+        word = self.asker.menu_deroulant( [ f"{x[0]} : {bool(x[1])}" for x in tooltip ] , cursor = word)
         lup()
         out( " " * ( len( tooltip ) + 3 ) )
         ldown()
         
         
-        if all_numbers( word , len( tooltip ), 1 ):
-                setattr(self,param[ int ( word ) ][ 1 ], 1 - tooltip[ int ( word ) ][ 1 ] ) # if choice is a param , edit it
+        if word < len( tooltip ):
+                setattr(self,param[  word  ][ 1 ], 1 - tooltip[  word  ][ 1 ] ) # if choice is a param , edit it
 
     self.display()
                 

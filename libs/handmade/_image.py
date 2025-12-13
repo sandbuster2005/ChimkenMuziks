@@ -112,23 +112,23 @@ def select_img( self ):
     while all_numbers( word , len( self.imgs ) ):
         
         wipe()
-        word = self.ask_list(self.imgs+["random"],"select img:" )
+        word = self.asker.menu_deroulant(self.imgs+["random"],"select img:" )
         
-        if all_numbers( word, len( self.imgs ) ):
-            if int( word ) == len( self.imgs ):
+        if word <= len( self.imgs ):
+            if  word == len( self.imgs ):
                 self.img = ""# aleatoire
                 word = ""
             
             else:
                 
                 #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
-                self.print_image_to_screen(self.imgs[ int( word ) ], 5)
+                self.print_image_to_screen(self.imgs[ word  ], 5)
                 self.search = True
                 out("y/n ?")
                 confirm = readchar(  )
                 
                 if confirm.lower() == "y":
-                    self.img = self.imgs[ int( word ) ] # selection
+                    self.img = self.imgs[  word ] # selection
                     word = ""
             
         self.display()
@@ -147,12 +147,12 @@ def screen_mode(self):
     """
     
     choice = [ "image mode " , "script mode" ]
-    word = self.ask_list( choice )
+    word = self.asker.menu_deroulant( choice )
     
-    if word == "0":
+    if word == 0:
         self.img_mode = "img"
         
-    if word == "1":
+    if word == 1:
         self.img_mode = "script"
         
     self.display()

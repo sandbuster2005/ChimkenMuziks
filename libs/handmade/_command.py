@@ -25,7 +25,7 @@ def init_command( self ):
          ["c", self.edit_dirs, {}, "pour activer/desactiver des dossiers"],
          ["b", self.play_last, {}, "pour charger la chanson précédente"],
          ["y", self.change_main_path, {}, "pour changer le repertoire d'origine"],
-         ["l", self.display, {}, "pour actualiser l'affichage"],
+         ["l", self.display, { 1 : "space" }, "pour actualiser l'affichage"],
          ["t", self.screen_mode, {}, "pour selectionner le mode d'affichage"],
          ["u", self.write_param, {}, "pour sauvegarder les parametre actuel"],
          ["v", self.edit_command, {}, "pour modifier une commande"],
@@ -114,4 +114,5 @@ def help_menu( self ):
 
     menu =  [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "]
     self.show_list(menu , num = False)
-    self.display()
+    self.search = True
+
