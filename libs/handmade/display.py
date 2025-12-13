@@ -111,7 +111,7 @@ class Display:
                 else:
                     before = cursor - size
                     after = cursor + size
-                    for x in range( max(0,before) + min(after * -1 , len(menu) - 1), min(after , len(menu) - 1 ) + max(0, before * -1 ) ):
+                    for x in range( max(0,before + min(after * -1 , len(menu) )) + min( after + max(0, before * -1 -1 ), len(menu) ) ):
                         if x == cursor:
                             out(">")
                             tforeground(0, 0, 255, "".join(menu[x]))
