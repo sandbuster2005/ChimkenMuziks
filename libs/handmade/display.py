@@ -1,5 +1,5 @@
 import os
-from math import ceil,log
+from math import ceil, log, floor
 from .terminal import *
 from collections.abc import Callable
 
@@ -92,19 +92,33 @@ class Display:
 
     def menu_deroulant(self , menu ,text ="" ,cursor = 0 ):
         if self.graphic_manager == "base":
+            size = floor(os.get_terminal_size().lines/2)
+            print(size)
             word = "start"
             text += "\n"
             while word != "":
 
                 out( text )
-                for x in range( len (menu ) ) :
-                    if x == cursor:
-                        out(">")
-                        tforeground(0,0,255,"".join(menu[x]))
-                        out( "\n" )
+                if len(menu) < size:
+                    for x in range( len (menu ) ) :
+                        if x == cursor:
+                            out(">")
+                            tforeground(0,0,255,"".join(menu[x]))
+                            out( "\n" )
 
-                    else:
-                        print( " " + "".join(menu[x]) )
+                        else:
+                            print( " " + "".join(menu[x]) )
+                else:
+                    before = cursor - size
+                    after = cursor + size
+                    for x in range( max(0,before) + min(after * -1 , len(menu) - 1), min(after , len(menu) - 1 ) + max(0, before * -1 ) ):
+                        if x == cursor:
+                            out(">")
+                            tforeground(0, 0, 255, "".join(menu[x]))
+                            out("\n")
+
+                        else:
+                            print(" " + "".join(menu[x]))
 
                 word = ninput(text = "", error = None , chrs = [ Key.UP, Key.DOWN] , quick = 1 ,escape = None )
                 if  word == None :
