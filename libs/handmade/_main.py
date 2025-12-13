@@ -116,8 +116,12 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished )
+    got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished , escape = None )
     lup()# permet d'eviter de recharger l ecran a chaque impur en conservant la ligne
+
+    if got == None:
+        self.stay = False
+        return
 
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.song = self.files[ int( got ) ]
