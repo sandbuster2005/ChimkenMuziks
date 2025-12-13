@@ -290,8 +290,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
             else:
                 if error:
                     lup()
-                    print(error
-                          )
+                    print(error )
                 if pos:
                     right(pos)
 

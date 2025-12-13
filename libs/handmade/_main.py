@@ -104,6 +104,8 @@ def display( self , space = False ):
     if self.song:
         if not "display" in self.changed:
             self.changed.append("display")# previens l'affichage d'un changement
+        if not "bar" in self.changed:
+            self.changed.append("bar")
         if self.word and self.words != [] and self.last_word != -1:
             if not "word" in self.changed:
                 self.changed.append("word") #previens l"affichage d'un changement

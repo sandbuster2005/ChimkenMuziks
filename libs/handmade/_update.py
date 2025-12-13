@@ -71,7 +71,7 @@ def update_logic(self):
                     
             self.time = self.player.get_time()
 
-            if self.bar.index + 0.5 < floor( self.time / 1000 ) or self.bar.index > floor( self.time / 1000 ) - 1 :
+            if self.bar.index  < floor( self.time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
                 self.bar.index = floor( self.time / 1000 )
                 if not "bar" in self.changed:
                     self.changed.append("bar")
@@ -123,7 +123,7 @@ def update_logic(self):
             """
 
             if self.bar:
-                if floor(self.time / 1000)  >= floor( self.player.get_length() / 1000):  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                if not self.player.is_playing():  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
                     self.play_song((1 - self.repeat))
                     self.display()
 
@@ -139,6 +139,7 @@ def update_display(self):
         self.bar.update()
         load()
         self.changed.remove("bar")
+
 
     if "word" in self.changed:
         lyrics = self.words[self.last_word][1]
