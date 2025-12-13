@@ -107,7 +107,7 @@ def select_img( self ):
     
     """
     
-    word = "0"
+    word = 0
     
     while  word < len( self.imgs ):
         
