@@ -100,11 +100,11 @@ class Display:
                 for x in range( len (menu ) ) :
                     if x == cursor:
                         out(">")
-                        tforeground(0,0,255,menu[x])
+                        tforeground(0,0,255,"".join(menu[x]))
                         out( "\n" )
 
                     else:
-                        print( " " + menu[x] )
+                        print( " " + "".join(menu[x]) )
 
                 word = ninput(text = "", error = None , chrs = [ Key.UP, Key.DOWN] , quick = 1 ,escape = None )
                 if  word == None :
