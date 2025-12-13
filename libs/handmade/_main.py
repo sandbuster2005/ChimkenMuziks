@@ -242,7 +242,7 @@ def param_center( self ):
     #tooltip , name , type
     param = [ [x[ 1 ],x[ 0 ],x[ 3 ] ]  for x in self.params if x[ 4 ] ]
     
-    while word >= 0 :
+    while word < len( param ) :
         tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
         
         up( len( tooltip ) + 1  )# for each loop rewrite on the same space

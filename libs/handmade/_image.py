@@ -109,7 +109,7 @@ def select_img( self ):
     
     word = "0"
     
-    while all_numbers( word , len( self.imgs ) ):
+    while  word < len( self.imgs ):
         
         wipe()
         word = self.asker.menu_deroulant(self.imgs+["random"],"select img:" )
