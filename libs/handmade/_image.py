@@ -124,12 +124,11 @@ def select_img( self ):
                 #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 self.print_image_to_screen(self.imgs[ word  ], 5)
                 self.search = True
-                out("y/n ?")
-                confirm = readchar(  )
+                confirm = self.asker.ask("y/n ?")
                 
-                if confirm.lower() == "y":
+                if "y" in confirm:
                     self.img = self.imgs[  word ] # selection
-                    len(self.imgs)
+                    word = len(self.imgs)
             
         self.display()
 
