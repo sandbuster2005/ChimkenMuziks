@@ -87,7 +87,7 @@ def playlist_manager(self):
                             self.playlist_type = "playlist"
                             self.load_playlist()
                             self.song = None
-                            self.n_f()
+                            self.play_song()
                     
                     elif new == 1 and albums:
                         res = self.asker.menu_deroulant( albums )
@@ -97,7 +97,7 @@ def playlist_manager(self):
                             self.playlist_type = "album"
                             self.load_playlist()
                             self.song = None
-                            self.n_f()
+                            self.play_song()
                         
                     elif new == 2 and artists:
                         res = self.asker.menu_deroulant( artists )
@@ -107,7 +107,7 @@ def playlist_manager(self):
                             self.playlist_type = "artist"
                             self.load_playlist()
                             self.song = None
-                            self.n_f()
+                            self.play_song()
        
         elif word =="1":
             white()
