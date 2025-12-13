@@ -91,12 +91,12 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
 
         display = []
         for x in range( len( temp ) ):
-            display.append( f" {temp[x][0].split(folder,1)[1]} : {int(temp[x][1]) * "  on" + (1 - int(temp[x][1])) * "off" } " )
+            display.append( f" {temp[x][0].split(folder,1)[1]} : {int(temp[x][1]) * 'on' + (1 - int(temp[x][1])) * 'off' } " )
 
         display.append("switch mode")
         display.append("go back")
 
-        word = self.asker.menu_deroulant( display, f"mode : { str( mode ) }" +  "\n   " + folder.split( self.path_to_file )[ 1 ] , word )
+        word = self.asker.menu_deroulant( display, f"mode : { str( mode ) }" +  "\n " + folder.split( self.path_to_file )[ 1 ] , word )
         #word = self.ask("select folder", quick = self.quickselect) len( temp )
 
         if word < len( temp ):
