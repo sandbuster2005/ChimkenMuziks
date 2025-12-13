@@ -123,7 +123,7 @@ def update_logic(self):
             """
 
             if self.bar:
-                if not self.player.is_playing():  # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                if not self.player.is_playing() and not self.pause:   # la chanson est fini# la chason est bien fini et ne vien pas de commencer
                     self.play_song((1 - self.repeat))
                     self.display()
 
