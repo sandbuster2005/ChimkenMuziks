@@ -16,7 +16,7 @@ def add_to_playlist(self):
     if self.get_column():
         tooltip.append("add to playlist")
         
-    word = self.asker.menu_deroulant( tooltip )
+    word = self.asker.menu_deroulant( tooltip,self.update_logic )
         
     if word < len( tooltip ):
         if word == 0:
@@ -38,7 +38,7 @@ def add_to_playlist(self):
                 value.append(1 - self.is_in_playlist(x) )
                 tooltip.append( f": { 'not'* value[-1] } in {x}")
                     
-            new = self.asker.menu_deroulant( tooltip )
+            new = self.asker.menu_deroulant( tooltip,self.update_logic , search = True )
             
             if new < len( playlists ):
                 self.update_playlist_database(playlists[  new ], value[ new  ] )
@@ -47,7 +47,7 @@ def add_to_playlist(self):
             
             
 def playlist_manager(self):
-    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode"])
+    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode"], self.update_logic)
     
     if  word < 4:
         playlists = self.get_column()
@@ -75,12 +75,12 @@ def playlist_manager(self):
             
             if playlists or albums or artists:
                 white()
-                new = self.asker.menu_deroulant(["playlist","album","artist"])
+                new = self.asker.menu_deroulant(["playlist","album","artist"],self.update_logic)
                 
                 if new < 3:
                     
                     if new == 0 and playlists:
-                        res = self.asker.menu_deroulant( playlists )
+                        res = self.asker.menu_deroulant( playlists,self.update_logic,search = True )
                         white()
                         if res < len(playlists):
                             self.playlist = playlists[  res ]
@@ -90,7 +90,7 @@ def playlist_manager(self):
                             self.play_song()
                     
                     elif new == 1 and albums:
-                        res = self.asker.menu_deroulant( albums )
+                        res = self.asker.menu_deroulant( albums ,self.update_logic , search = True)
                         white()
                         if res < len( albums ):
                             self.playlist = albums[  res ]
@@ -100,7 +100,7 @@ def playlist_manager(self):
                             self.play_song()
                         
                     elif new == 2 and artists:
-                        res = self.asker.menu_deroulant( artists )
+                        res = self.asker.menu_deroulant( artists,self.update_logic,search = True )
                         white()
                         if res < len( artists ):
                             self.playlist = artists[  res  ]
@@ -109,9 +109,9 @@ def playlist_manager(self):
                             self.song = None
                             self.play_song()
        
-        elif word =="1":
+        elif word == 2:
             white()
-            new = self.asker.menu_deroulant( playlists )
+            new = self.asker.menu_deroulant( playlists,self.update_logic , search = True )
             
             if new < len( playlists ):
                  if self.playlist!= playlists [ new ]:

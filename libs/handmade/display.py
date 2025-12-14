@@ -90,7 +90,7 @@ class Display:
         else:
             return None
 
-    def menu_deroulant(self , menu ,text ="" ,cursor = 0 ,search = True,*args):
+    def menu_deroulant(self , menu , *args ,text ="" ,cursor = 0 ,search = False):
         if self.graphic_manager == "base":
             size = floor(os.get_terminal_size().lines/2)
             word = "start"
@@ -125,10 +125,10 @@ class Display:
                         choice = ninput(text = "rechercher:" )
 
                         if choice:
-                            new_menu = [ "".join(x) for x in menu if choice in "".join(x)]
+                            new_menu = [ "".join(x) for x in menu if choice.lower() in "".join(x).lower()]
 
                             if new_menu:
-                                new_word = self.menu_deroulant( new_menu , search = False , *args)
+                                new_word = self.menu_deroulant( new_menu , *args)
                                 if new_word < len(new_menu):
                                     return menu.index( new_menu[new_word])
 

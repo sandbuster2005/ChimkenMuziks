@@ -96,7 +96,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
         display.append("switch mode")
         display.append("go back")
 
-        word = self.asker.menu_deroulant( display, f"mode : { str( mode ) }" +  "\n " + folder.split( self.path_to_file )[ 1 ] , word )
+        word = self.asker.menu_deroulant( display, self.update_logic, text = f"mode : { str( mode ) }" +  "\n " + folder.split( self.path_to_file )[ 1 ] , cursor =  word  ,search = True)
         #word = self.ask("select folder", quick = self.quickselect) len( temp )
 
         if word < len( temp ):
@@ -123,7 +123,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
             
             if mode == "standard":
                 wipe()
-                nword = self.asker.menu_deroulant(["select folder","enter folder"],temp[ int( word ) ][ 0 ].split( folder, 1 )[ 1 ])
+                nword = self.asker.menu_deroulant(["select folder","enter folder"],self.update_logic, text = temp[ int( word ) ][ 0 ].split( folder, 1 )[ 1 ])
                 #nword = self.ask("select option", quick = self.quickselect)
                 
                 if 0 == nword :
@@ -246,7 +246,7 @@ def mani_file(self):
         
         tooltip = [ "delete ", "move", "rename", "convert"]#option
 
-        word = self.asker.menu_deroulant( tooltip )
+        word = self.asker.menu_deroulant( tooltip, self.update_logic )
         
         if  word < len( tooltip ):
             
@@ -327,7 +327,7 @@ def change_extension(self):
     """
     white()
     option = [".mp3", ".m4a", ".wav" , ".flac" ]
-    word = self.asker.menu_deroulant( option )
+    word = self.asker.menu_deroulant( option, self.update_logic )
     
     if  word < len( option ):
         confirm = self.ask( "delete original (y/n)?" )

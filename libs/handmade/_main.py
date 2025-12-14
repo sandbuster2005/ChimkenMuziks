@@ -221,7 +221,7 @@ def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
     """
-    word = self.asker.menu_deroulant( [ "quit", "mute", "pause" ] )# timer modes
+    word = self.asker.menu_deroulant( [ "quit", "mute", "pause" ] ,self.update_logic)# timer modes
     if  word < 3:
         self.timer_mode = word
         
@@ -252,7 +252,7 @@ def param_center( self ):
         tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
         
         up( len( tooltip ) + 1  )# for each loop rewrite on the same space
-        word = self.asker.menu_deroulant( [ f"{x[0]} : {bool(x[1])}" for x in tooltip ] , cursor = word)
+        word = self.asker.menu_deroulant( [ f"{x[0]} : {bool(x[1])}" for x in tooltip ] ,self.update_logic, cursor = word, search = True)
         lup()
         out( " " * ( len( tooltip ) + 3 ) )
         ldown()

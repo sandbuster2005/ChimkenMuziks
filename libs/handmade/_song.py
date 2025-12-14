@@ -152,7 +152,7 @@ def play_midi(self):
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné
     """
     outs = listdir("appdata/midi_codec")
-    word = self.asker.menu_deroulant(outs)
+    word = self.asker.menu_deroulant(outs,self.update_logic)
     
     if  word > len( outs ):
         print("appdata/midi_codec/" + outs[ word ])

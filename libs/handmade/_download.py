@@ -20,11 +20,11 @@ def yt_search( self ):
     self.search = True
     word = self.ask("votre recherche : ")
     results = YoutubeSearch( word, max_results = 10 ).to_dict()#10 premier resultat de la recherche youtube     
-    word = self.asker.menu_deroulant( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ])# see titles of vid
+    word = self.asker.menu_deroulant( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ], self.update_logic)# see titles of vid
     
     if  word < 10 :
         option = ["mp3", "m4a"]# dowload format
-        words = self.asker.menu_deroulant( option )
+        words = self.asker.menu_deroulant( option,self.update_logic )
         
         if words < len( option ):
             extension = option[ words ] # user choice

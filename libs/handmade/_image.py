@@ -112,7 +112,7 @@ def select_img( self ):
     while  word < len( self.imgs ):
         
         wipe()
-        word = self.asker.menu_deroulant(self.imgs+["random"],"select img:" )
+        word = self.asker.menu_deroulant(self.imgs+["random"],self.update_logic, text = "select img:" )
         
         if word <= len( self.imgs ):
             if  word == len( self.imgs ):
@@ -146,7 +146,7 @@ def screen_mode(self):
     """
     
     choice = [ "image mode " , "script mode" ]
-    word = self.asker.menu_deroulant( choice )
+    word = self.asker.menu_deroulant( choice, self.update_logic )
     
     if word == 0:
         self.img_mode = "img"
