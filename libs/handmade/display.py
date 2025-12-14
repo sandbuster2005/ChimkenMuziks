@@ -119,7 +119,8 @@ class Display:
                         else:
                             print(" " + "".join(menu[x]))
                 if search:
-                    word = ninput(text = "", error = None , chrs = [ Key.UP, Key.DOWN,"r"] , quick = 1 ,escape = None ,before = "press r to research",*args)
+                    word = ninput(text = "", error = None , chrs = Key.UPS +  Key.DOWNS + ["r"]
+                                  , quick = 1 ,escape = None ,before = "press r to research",*args)
                     if word == 'r':
                         white()
                         choice = ninput(text = "rechercher:" )
@@ -133,22 +134,35 @@ class Display:
                                     return menu.index( new_menu[new_word])
 
                 else:
-                    word = ninput(text="", error=None, chrs=[Key.UP, Key.DOWN], quick=1, escape=None,*args)
+                    word = ninput(text="", error=None, chrs= Key.UPS + Key.DOWNS
+                                  , quick=1, escape=None,*args)
 
                 if  word == None :
                     return len(menu) + 1
 
                 elif word == Key.DOWN:
                     cursor = min( len(menu) - 1 , cursor + 1 )
-                    lup(2)
+                    #lup(2)
+
+                elif word == Key.CTRL_DOWN:
+                    cursor = len(menu) -1
+
+                elif word == Key.SHIFT_DOWN:
+                    cursor = min( len(menu) - 1 , cursor + (size - 1) )
 
                 elif word == Key.UP:
                     cursor = max(0 , cursor - 1 )
 
-                lup( len (menu) + text.count("\n") )
+                elif word == Key.CTRL_UP:
+                    cursor = 0
+
+                elif word == Key.SHIFT_UP:
+                    cursor = max(0, cursor - (size - 1) )
+
+                lup(len(menu) + text.count("\n"))
                 wipe()
 
-            ldown( len(menu) )
+            #ldown( len(menu) )
             return cursor
 
         return None

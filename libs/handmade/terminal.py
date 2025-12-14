@@ -52,7 +52,23 @@ class Key:
     DOWN = "\x1b\x5b\x42"
     LEFT = "\x1b\x5b\x44"
     RIGHT = "\x1b\x5b\x43"
+    CTRL_UP = "\x1b\x5b\x31\x3B\x35\x41"
+    CTRL_DOWN = "\x1b\x5b\x31\x3B\x35\x42"
+    CTRL_LEFT = "\x1b\x5b\x31\x3B\x35\x44"
+    CTRL_RIGHT =  "\x1b\x5B\x31\x3B\x35\x43"
+    SHIFT_UP = "\x1b\x5b\x31\x3B\x32\x41"
+    SHIFT_DOWN = "\x1b\x5b\x31\x3B\x32\x42"
+    SHIFT_LEFT = "\x1b\x5b\x31\x3B\x32\x44"
+    SHIFT_RIGHT = "\x1b\x5B\x31\x3B\x32\x43"
+    ALT_UP = "\x1b\x5b\x31\x3B\x33\x41"
+    ALT_DOWN = "\x1b\x5b\x31\x3B\x33\x42"
+    ALT_LEFT = "\x1b\x5b\x31\x3B\x33\x44"
+    ALT_RIGHT =  "\x1b\x5B\x31\x3B\x33\x43"
 
+    UPS = [UP , CTRL_UP , SHIFT_UP]
+    DOWNS = [DOWN, CTRL_DOWN , SHIFT_DOWN]
+    LEFTS = [LEFT , CTRL_LEFT , SHIFT_LEFT]
+    RIGHTS = [RIGHT, CTRL_RIGHT , SHIFT_RIGHT ]
     # navigation keys
     INSERT = "\x1b\x5b\x32\x7e"
     SUPR = "\x1b\x5b\x33\x7e"
@@ -176,11 +192,16 @@ class ReadChar:
             return c1 + c2 + c3
 
         c4 = self.char()
-        if c4 not in "\x30\x31\x33\x34\x35\x37\x38\x39":
+        if c4 not in "\x30\x31\x33\x34\x35\x37\x38\x39\x3B":
             return c1 + c2 + c3 + c4
 
         c5 = self.char()
-        return c1 + c2 + c3 + c4 + c5
+
+        if c5 not in "\x30\x31\x32\x33\x34\x35\x37\x38\x39":
+            return c1 + c2 + c3 + c4 + c5
+
+        c6 = self.char()
+        return c1 + c2 + c3 + c4 + c5 + c6
 
 
 def ninput(*arg : Callable , **kwarg) -> str:

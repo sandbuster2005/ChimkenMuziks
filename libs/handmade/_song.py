@@ -131,13 +131,12 @@ def historic( self ):
     """
     self.search = True
     self.show_list( [ f"{ self.played[ x ][ 0 ] }: {  self.played [ x ][ 1 ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom
-
-def select( self ):
+def old_select( self ):
     """
-    cette fonction permet de chercher une chanson dans la liste chargé de chanson et l'affiche
+    #cette fonction permet de chercher une chanson dans la liste chargé de chanson et l'affiche
     
-    limite:
-    cette fonction demande une chaine de charactére a rechercher dans les données de l'utilisateur
+    #limite:
+    #cette fonction demande une chaine de charactére a rechercher dans les données de l'utilisateur
     """
     self.search = True
     INPUT = self.ask( "rechercher dans la liste de chanson :" )
@@ -147,6 +146,12 @@ def select( self ):
     else:
         self.out("no song corresponding")
 
+def select( self ):
+    print(self.files)
+    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit("/",1)[1]}" for x in self.files ] , self.update_logic , search = True)
+    if song < len(self.files):
+        self.song = self.files[song]
+        self.play_song(choose = 0)
 def play_midi(self):
     """
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné

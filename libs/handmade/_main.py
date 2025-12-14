@@ -250,8 +250,7 @@ def param_center( self ):
     
     while word < len( param ) :
         tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
-        
-        up( len( tooltip ) + 1  )# for each loop rewrite on the same space
+
         word = self.asker.menu_deroulant( [ f"{x[0]} : {bool(x[1])}" for x in tooltip ] ,self.update_logic, cursor = word, search = True)
         lup()
         out( " " * ( len( tooltip ) + 3 ) )
