@@ -193,6 +193,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
     condition : Callable | None = None
     quick : int = 0
     value : str = ""
+    simple : bool = False
     pos = len(value)
 
     for k,x in kwarg.items():
@@ -213,6 +214,8 @@ def ninput(*arg : Callable , **kwarg) -> str:
             value = x
         if k == "escape":
             escape = x
+        if k == "simple":
+            simple = x
 
     stop = False
     le = len(before)

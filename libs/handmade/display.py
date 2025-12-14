@@ -81,7 +81,7 @@ class Display:
 
             elif quick:
                 self.show_list( liste , quick = True)
-                return self.ask(f"{ text }", quick = ceil( log(  len( liste ), 10 ) ) )  # auto return when enough number where entered
+                return self.ask(f"{ text }", quick = ceil( log(  len( liste ), 10 ) ), *arg , **kwargs )  # auto return when enough number where entered
 
             else:
                 self.show_list( liste)
@@ -90,10 +90,9 @@ class Display:
         else:
             return None
 
-    def menu_deroulant(self , menu ,text ="" ,cursor = 0 ):
+    def menu_deroulant(self , menu ,text ="" ,cursor = 0 ,search = True,*args):
         if self.graphic_manager == "base":
             size = floor(os.get_terminal_size().lines/2)
-            print(size)
             word = "start"
             text += "\n"
             while word != "":
@@ -119,8 +118,23 @@ class Display:
 
                         else:
                             print(" " + "".join(menu[x]))
+                if search:
+                    word = ninput(text = "", error = None , chrs = [ Key.UP, Key.DOWN,"r"] , quick = 1 ,escape = None ,before = "press r to research",*args)
+                    if word == 'r':
+                        white()
+                        choice = ninput(text = "rechercher:" )
 
-                word = ninput(text = "", error = None , chrs = [ Key.UP, Key.DOWN] , quick = 1 ,escape = None )
+                        if choice:
+                            new_menu = [ "".join(x) for x in menu if choice in "".join(x)]
+
+                            if new_menu:
+                                new_word = self.menu_deroulant( new_menu , search = False , *args)
+                                if new_word < len(new_menu):
+                                    return menu.index( new_menu[new_word])
+
+                else:
+                    word = ninput(text="", error=None, chrs=[Key.UP, Key.DOWN], quick=1, escape=None,*args)
+
                 if  word == None :
                     return len(menu) + 1
 
