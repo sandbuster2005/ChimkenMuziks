@@ -148,7 +148,7 @@ def old_select( self ):
 
 def select( self ):
     print(self.files)
-    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit("/",1)[1]}" for x in self.files ] , self.update_logic , search = True)
+    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.files ] , self.update_logic , search = True)
     if song < len(self.files):
         self.song = self.files[song]
         self.play_song(choose = 0)
