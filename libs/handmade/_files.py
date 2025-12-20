@@ -311,16 +311,16 @@ def get_words(self):
                     new_data.append( data[ x ] )
                     
             data = new_data
-            
+            print(data)
             for x in range( len( data ) ): 
                 data[ x ][ 0 ] = int(data[ x ][ 0 ][ :2 ] ) * 60 + int( data[ x ][ 0 ][ 3:5 ] ) + int( data[ x ][ 0 ][ 6:8 ] ) / 100 
-                if type(data[x][1]) == str:
+                if data[x][1]:
                     # enlever espace au début
                     if data[x][1][0] == ' ':
                         data[x][1] = data[x][1][1:]
                            
             self.words = data
-            
+
 def change_extension(self):
     """
     cette fonction permet de convertir les fichier musique a l'aide de ffmpeg
