@@ -78,6 +78,16 @@ def get_song_database(self):
     base.commit()
     base.close()
     return [ x[0] for x in result ]
+
+def find_song_database(self,num):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT id_song,nom FROM song WHERE id_song = ?",[num])
+    result = cursor.fetchall()
+    self.song = [result[0][0],result[0][1]]
+    base.commit()
+    base.close()
+
     
 def update_favorite_database(self,mode):
     base = sqlite3.connect("appdata/cache/data.db")
