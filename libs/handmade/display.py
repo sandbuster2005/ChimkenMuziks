@@ -119,7 +119,7 @@ class Display:
                         else:
                             print(" " + "".join(menu[x]))
                 if search:
-                    word = ninput(text = "", error = None , chrs = Key.UPS +  Key.DOWNS + ["r"]
+                    word = ninput(text = "", error = None , chrs = [Key.SHIFT_UP ,Key.UP, Key.DOWN,  Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP , "r"]
                                   , quick = 1 ,escape = None ,before = "press r to research",*args)
                     if word == 'r':
                         white()
@@ -134,7 +134,7 @@ class Display:
                                     return menu.index( new_menu[new_word])
 
                 else:
-                    word = ninput(text="", error=None, chrs= Key.UPS + Key.DOWNS
+                    word = ninput(text="", error=None, chrs= [Key.UP , Key.DOWN]
                                   , quick=1, escape=None,*args)
 
                 if  word == None :
@@ -144,7 +144,7 @@ class Display:
                     cursor = min( len(menu) - 1 , cursor + 1 )
                     #lup(2)
 
-                elif word == Key.CTRL_DOWN:
+                elif word == Key.CONTROL_DOWN:
                     cursor = len(menu) -1
 
                 elif word == Key.SHIFT_DOWN:
@@ -153,7 +153,7 @@ class Display:
                 elif word == Key.UP:
                     cursor = max(0 , cursor - 1 )
 
-                elif word == Key.CTRL_UP:
+                elif word == Key.CONTROL_UP:
                     cursor = 0
 
                 elif word == Key.SHIFT_UP:

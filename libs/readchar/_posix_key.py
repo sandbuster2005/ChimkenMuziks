@@ -1,50 +1,249 @@
 from ._base_key import *
-
-
 # common
 BACKSPACE = "\x7f"
+import subprocess
+import re
+import sys
+import logging
 
-# cursors
-UP = "\x1b\x5b\x41"
-DOWN = "\x1b\x5b\x42"
-LEFT = "\x1b\x5b\x44"
-RIGHT = "\x1b\x5b\x43"
+module = sys.modules[__name__]
 
-# navigation keys
-INSERT = "\x1b\x5b\x32\x7e"
-SUPR = "\x1b\x5b\x33\x7e"
-HOME = "\x1b\x5b\x48"
-END = "\x1b\x5b\x46"
-PAGE_UP = "\x1b\x5b\x35\x7e"
-PAGE_DOWN = "\x1b\x5b\x36\x7e"
+def _remove( text : str, chrs : list[str] ) -> str:
+    """
+    cette fonction permet de remplacer dans word les string contenu dans chr par new
+    """
+    return [text := f"".join( text.split( chraracter ) ) for chraracter  in chrs ][-1]
 
-# function keys
-F1 = "\x1b\x4f\x50"
-F2 = "\x1b\x4f\x51"
-F3 = "\x1b\x4f\x52"
-F4 = "\x1b\x4f\x53"
-F5 = "\x1b\x5b\x31\x35\x7e"
-F6 = "\x1b\x5b\x31\x37\x7e"
-F7 = "\x1b\x5b\x31\x38\x7e"
-F8 = "\x1b\x5b\x31\x39\x7e"
-F9 = "\x1b\x5b\x32\x30\x7e"
-F10 = "\x1b\x5b\x32\x31\x7e"
-F11 = "\x1b\x5b\x32\x33\x7e"
-F12 = "\x1b\x5b\x32\x34\x7e"
+name_correspondances = {
+    "ESC"                : "kbs",        #backslash key ?
+    "BEGIN"              : "kbeg",       #begin key
+    "CLEAR_ALL_TAB"      : "ktbc",       #clear-all-tabs key
+    "CLEAR"              : "kclr",       #clear-screen or erase key
+    "CLEAR_TAB"          : "kctab",      #clear-tab key
+    "BACK_TAB"           : "kcbt",       #back tab key
+    "ENTER"              : "kent",       #enter key
+    "DELETE"             : "kdch1",      #delete-character key
+    "DELETE_LINE"        : "kdl1",       #delete-line key
+    "END"                : "kend",       #end key
+    "END_OF_LINE"        : "kel",        #clear-to-end-of-line key
+    "END_OF_SCREEN"      : "ked",        #clear-to-end-of-screen key
+    "HOME"               : "khome",      #home key
+    "INSERT"             : "kich1",      #insert-character key
+    "INSERT_LINE"        : "kil1",       #insert-line key
+    "HOME_DOWN"          : "kll",        #lower-left key (home down)
+    "PAGE_UP"            : "knp",        #next-page key
+    "PAGE_DOWN"          : "kpp",        #previous-page key
+    "SCROLL_FORWARD"     : "kind",       #scroll-forward key
+    "SCROLL_BACKWARD"    : "kri",        #scroll-backward key
+    "SET_TAB"            : "khts",       #set-tab key
 
-# SHIFT+_
-SHIFT_TAB = "\x1b\x5b\x5a"
+    "RIGHT"              : "kcuf1",      #right-arrow key
+    "LEFT"               : "kcub1",      #left-arrow key
+    "UP"                 : "kcuu1",      # up arrow key
+    "DOWN"               : "kcud1",      # down-arrow key
 
-# other
-CTRL_ALT_SUPR = "\x1b\x5b\x33\x5e"
+    "PAD_UP_DOWN"        : "ka1",        #upper left of keypad
+    "PAD_UP_RIGHT"       : "ka3",        #upper right of keypad
+    "PAD_CENTER"         : "kb2",        #center of keypad
+    "PAD_DOWN_LEFT"      : "kc1",        #lower left of keypad
+    "PAD_DOWN_RIGHT"     : "kc3",        #lower right of keypad
 
-# ALT+_
-ALT_A = "\x1b\x61"
+    "SHIFT_EXIT"         : "kEXT",       #shifted exit key
+    "SHIFT_FIND"         : "kFND",       #shifted find key
+    "SHIFT_HELP"         : "kHLP",       #shifted help key
+    "SHIFT_HOME"         : "kHOM",       #shifted home key
+    "SHIFT_INSERT"       : "kIC",        #shifted insert-character key
+    "SHIFT_LEFT"         : "kLFT",       #shifted left-arrow key
+    "SHIFT_RIGHT"        : "kRIT",       #shifted right-arrow key
+    "SHIFT_MESSAGE"      : "kMSG",       #shifted message key
+    "SHIFT_MOVE"         : "kMOV",       #shifted move key
+    "SHIFT_NEXT"         : "kNXT",       #shifted next key
+    "SHIFT_OPTIONS"      : "kOPT",       #shifted options key
+    "SHIFT_PREVIOUS"     : "kPRV",       #shifted previous key
+    "SHIFT_PRINT"        : "kPRT",       #shifted print key
+    "SHIFT_REDO"         : "kRDO",       #shifted redo key
+    "SHIFT_REPLACE"      : "kRPL",       #shifted replace key
+    "SHIFT_RESUME"       : "kRES",       #shifted resume key
+    "SHIFT_SAVE"         : "kSAV",       #shifted save key
+    "SHIFT_SUSPEND"      : "kSPD",       #shifted suspend key
+    "SHIFT_UNDO"         : "kUND",       #shifted undo key
+    "SHIFT_DELETE_LINE"  : "kDL",        #shifted delete line
+    "SHIFT_DELETE"       : "kDC",        #shifted delete chracter
+    "SHIFT_END"          : "kEND",       #shifted end key
 
-# CTRL+ALT+_
-CTRL_ALT_A = "\x1b\x01"
+    "F0"                 : "kf0",        #F0 function key
+    "F1"                 : "kf1",        #F1 function key
+    "F2"                 : "kf2",        #F2 function key
+    "F3"                 : "kf3",        #F3 function key
+    "F4"                 : "kf4",        #F4 function key
+    "F5"                 : "kf5",        #F5 function key
+    "F6"                 : "kf6",        #F6 function key
+    "F7"                 : "kf7",        #F7 function key
+    "F8"                 : "kf8",        #F8 function key
+    "F9"                 : "kf9",        #F9 function key
+    "F10"                : "kf10",       #F10 function key
+    "F11"                : "kf11",       #F11 function key
+    "F12"                : "kf12",       #F12 function key
+    "F13"                : "kf13",       #F13 function key
+    "F14"                : "kf14",       #F14 function key
+    "F15"                : "kf15",       #F15 function key
+    "F16"                : "kf16",       #F16 function key
+    "F17"                : "kf17",       #F17 function key
+    "F18"                : "kf18",       #F18 function key
+    "F19"                : "kf19",       #F19 function key
+    "F20"                : "kf20",       #F20 function key
+    "F21"                : "kf21",       #F21 function key
+    "F22"                : "kf22",       #F22 function key
+    "F23"                : "kf23",       #F23 function key
+    "F24"                : "kf24",       #F24 function key
+    "F25"                : "kf25",       #F25 function key
+    "F26"                : "kf26",       #F26 function key
+    "F27"                : "kf27",       #F27 function key
+    "F28"                : "kf28",       #F28 function key
+    "F29"                : "kf29",       #F29 function key
+    "F30"                : "kf30",       #F30 function key
+    "F31"                : "kf31",       #F31 function key
+    "F32"                : "kf32",       #F32 function key
+    "F33"                : "kf33",       #F33 function key
+    "F34"                : "kf34",       #F34 function key
+    "F35"                : "kf35",       #F35 function key
+    "F36"                : "kf36",       #F36 function key
+    "F37"                : "kf37",       #F37 function key
+    "F38"                : "kf38",       #F38 function key
+    "F39"                : "kf39",       #F39 function key
+    "F40"                : "kf40",       #F40 function key
+    "F41"                : "kf41",       #F41 function key
+    "F42"                : "kf42",       #F42 function key
+    "F43"                : "kf43",       #F43 function key
+    "F44"                : "kf44",       #F44 function key
+    "F45"                : "kf45",       #F45 function key
+    "F46"                : "kf46",       #F46 function key
+    "F47"                : "kf47",       #F47 function key
+    "F48"                : "kf48",       #F48 function key
+    "F49"                : "kf49",       #F49 function key
+    "F50"                : "kf50",       #F50 function key
+    "F51"                : "kf51",       #F51 function key
+    "F52"                : "kf52",       #F52 function key
+    "F53"                : "kf53",       #F53 function key
+    "F54"                : "kf54",       #F54 function key
+    "F55"                : "kf55",       #F55 function key
+    "F56"                : "kf56",       #F56 function key
+    "F57"                : "kf57",       #F57 function key
+    "F58"                : "kf58",       #F58 function key
+    "F59"                : "kf59",       #F59 function key
+    "F60"                : "kf60",       #F60 function key
+    "F61"                : "kf61",       #F61 function key
+    "F62"                : "kf62",       #F62 function key
+    "F63"                : "kf63",       #F63 function key
 
 
-# aliases
+    #from here its user defined with standards names
+
+    "ALT_DELETE"             : "kDC3",
+    "ALT_SHIFT_DELETE"       : "kDC4",
+    "CONTROL_DELETE"         : "kDC5",
+    "CONTROL_SHIFT_DELETE"   : "kDC6",
+    "ALT_CONTROL_DELETE"     : "kDC7",
+
+    "SHIFT_DOWN"             : "kDN",
+    "ALT_DOWN"               : "kDN3",
+    "ALT_SHIFT_DOWN"         : "kDN4",
+    "CONTROL_DOWN"           : "kDN5",
+    "SHIFT_CONTROL_DOWN"     : "kDN6",
+    "ALT_CONTROL_DOWN"       : "kDN7",
+
+    "SHIFT_UP"               : "kUP",
+    "ALT_UP"                 : "kUP3",
+    "ALT_SHIFT_UP"           : "kUP4",
+    "CONTROL_UP"             : "kUP5",
+    "CONTROL_SHIFT_UP"       : "kUP6",
+    "ALT_CONTROL_UP"         : "kUP7",
+
+    "ALT_LEFT"               : "kLFT3",
+    "ALT_SHIFT_LEFT"         : "kLFT4",
+    "CONTROL_LEFT"           : "kLFT5",
+    "CONTROL_SHIFT_LEFT"     : "kLFT6",
+    "ALT_CONTROL_LEFT"       : "kLFT7",
+
+    "ALT_RIGHT"              : "kRIT3",
+    "ALT_SHIFT_RIGHT"        : "kRIT4",
+    "CONTROL_RIGHT"          : "kRIT5",
+    "CONTROL_SHIFT_RIGHT"    : "kRIT6",
+    "ALT_CONTROL_RIGHT"      : "kRIT7",
+
+    "ALT_END"                : "kEND3",
+    "ALT_SHIFT_END"          : "kEND4",
+    "CONTROL_END"            : "kEND5",
+    "CONTROL_SHIFT_END"      : "kEND6",
+    "ALT_CONTROL_END"        : "kEND7",
+
+    "ALT_HOME"               : "kHOM3",
+    "ALT_SHIFT_HOME"         : "kHOM4",
+    "CONTROL_HOME"           : "kHOM5",
+    "CONTROL_SHIFT_HOME"     : "kHOM6",
+    "ALT_CONTROL_HOME"       : "kHOM7",
+
+    "ALT_INSERT"             : "kIC3",
+    "ALT_SHIFT_INSERT"       : "kIC4",
+    "CONTROL_INSERT"         : "kIC5",
+    "CONTROL_SHIFT_INSERT"   : "kIC6",
+    "ALT_CONTROL_INSERT"     : "kIC7",
+
+    "ALT_NEXT"               : "kNXT3",
+    "ALT_SHIFT_NEXT"         : "kNXT4",
+    "CONTROL_NEXT"           : "kNXT5",
+    "CONTROL_SHIFT_NEXT"     : "kNXT6",
+    "ALT_CONTROL_NEXT"       : "kNXT7",
+
+    "ALT_PREVIOUS"           : "kPRV3",
+    "ALT_SHIFT_PREVIOUS"     : "kPRV4",
+    "CONTROL_PREVIOUS"       : "kPRV5",
+    "CONTROL_SHIFT_PREVIOUS" : "kPRV6",
+    "ALT_CONTROL_PREVIOUS"   : "kPRV7"
+}
+normal_mode = [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+    "END",
+    "BEGIN",
+    "ENTER",
+    "HOME",
+    "PAD_CENTER",
+    "PAD_UP_DOWN",
+    "PAD_UP_RIGHT",
+    "PAD_DOWN_LEFT",
+    "PAD_DOWN_RIGHT"
+]
+
+data = subprocess.check_output(["infocmp","-x"])
+print(data)
+data = data.decode("utf-8")
+data = _remove(data , ["\n","\t"," "]) # new line tabs and spaces
+data = re.split("(?<=(?!\\\\).)," ,data) # split by "," and avoid "\,"
+keys = {}  # create dico with existing key
+
+for x in range( len(data) ):
+    new_data = data[x].split("=")
+    if len(new_data) > 1 and new_data[0][0] == "k": # is a key and is attributed
+        keys[new_data[0]] = new_data[1]
+
+for key in name_correspondances.keys():
+
+    value = None
+
+    if name_correspondances[key] in keys.keys():
+        if key in normal_mode:
+            print(keys[name_correspondances[key]])
+            value = "\x1B" + "\x5B" + keys[name_correspondances[key]][3:] # terminals tend to be in normal mode and termnfo give app mode
+        else:
+            value = "\x1B" + keys[name_correspondances[key]][2:] # convert \E  to his code
+
+    setattr(module,key,value)
+
+    if not value:
+        logging.warn(f'{key} is not supported on this device')
+
 ENTER = LF
-DELETE = SUPR
+SUPR = DELETE

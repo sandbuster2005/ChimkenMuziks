@@ -8,6 +8,7 @@ from os import name as sysname
 from .utils import *
 from .ffiles import *
 from .terminal import *
+from libs.readchar import key
 import libs.vlc as vlc
 import threading
 import random
@@ -45,13 +46,12 @@ def main( self ):
     """
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 
     """
-    self.get_param()#get param from file if it exist else create it
+    self.get_param()#get param from file if it exists else create it
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
     self.check_adress()#see if current file adress exist
-    self.update_song_database()
     self.load_songs()#try to load the song
     self.load_script()
-   
+
     while len( self.files ) == 0:# if folder is empty
         self.out( "no song in folder" )
         self.change_main_path()
@@ -154,9 +154,7 @@ def load_all( self ):
     """
     self.player.stop()
     self.load_songs()
-    self.load_favorite_database()
     self.get_img( self.path_to_img, start = 1 ) #charge toute les image en memoire
-    self.check_favorite()
     self.write_param()
     
 def wind( self, mode, pause = False  ):

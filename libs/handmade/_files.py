@@ -337,8 +337,6 @@ def change_extension(self):
         if confirm == "y":
             rm_file( self.song )
 
-def check_favorite(self):
-    self.favorite = [ x for x in self.favorite if x in self.files]
     
 
                 

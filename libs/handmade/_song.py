@@ -16,16 +16,23 @@ def load_songs( self ):
     cette fonction permet de charge en memoire les chanson de la playlist selectionné/toute
     et de remmetre a 0 le lecteur
     """
+    self.update_song_database()
+
     #use arg from exterior
     if self.exterior:
         self.files = self.get_file( self.exterior, [] )
     
     else:    
         self.files = self.get_file( self.path_to_file, [] )
-        
+
+
+
     self.indexs = self.get_index_data( self.files )
-    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) ]# [index in database , song file]
+
+    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
     self.song = None
+
+    self.load_favorite_database()
 
 
 def play_song( self ,choose = 1):
@@ -152,6 +159,7 @@ def select( self ):
     if song < len(self.files):
         self.song = self.files[song]
         self.play_song(choose = 0)
+
 def play_midi(self):
     """
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné

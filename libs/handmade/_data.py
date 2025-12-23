@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from os.path import isfile
 from .utils import *
 
 def init_data(self):
@@ -102,7 +103,7 @@ def load_favorite_database(self):
     cursor = base.cursor()
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
     result = cursor.fetchall()
-    self.favorite = [  [ x[0],x[1] ] for x in result ]
+    self.favorite = [  [ x[0],x[1] ] for x in result if self.path_to_file in x[1] and isfile( x[1] ) ]
     base.commit()
     base.close()
     
@@ -138,7 +139,7 @@ def load_playlist_database(self):
     result = cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files =  [  [ x[0],x[1] ] for x in result ]
+    self.playlist_files =  [  [ x[0],x[1] ] for x in result if isfile(x[1]) ]
 
 def update_playlist_database(self, playlist, value):
     base = sqlite3.connect("appdata/cache/data.db")
@@ -186,7 +187,7 @@ def load_album_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files = [  [ x[0],x[1] ] for x in result if os.path.isfile(x[1])]
+    self.playlist_files = [  [ x[0],x[1] ] for x in result if isfile(x[1])]
 
 
 def get_artists(self):
@@ -205,6 +206,6 @@ def load_artist_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files =  [  [ x[0],x[1] ] for x in result if os.path.isfile(x[1]) ]
+    self.playlist_files =  [  [ x[0],x[1] ] for x in result if isfile(x[1]) ]
     
     

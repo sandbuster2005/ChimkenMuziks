@@ -4,7 +4,6 @@ CR = "\x0d"
 SPACE = "\x20"
 ESC = "\x1b"
 TAB = "\x09"
-
 # CTRL
 CTRL_A = "\x01"
 CTRL_B = "\x02"
