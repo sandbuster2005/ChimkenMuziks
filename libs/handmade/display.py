@@ -90,86 +90,108 @@ class Display:
         else:
             return None
 
-    def menu_deroulant(self , menu , *args ,text ="" ,cursor = 0 ,search = False):
+    def menu_deroulant(self, menu, *args, text="", cursor=0, search=False):
 
         if self.graphic_manager == "base":
-            size = floor(os.get_terminal_size().lines/2)
-            chrs_search = [  chr( x ) for x in range( 32, 127 ) ]
-            chrs = [Key.SHIFT_UP ,Key.UP, Key.DOWN,  Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP ]
-            word = "start"
+
+            size = floor(os.get_terminal_size().lines / 2)
+
+            chrs_search = [chr(x) for x in range(32, 127)] + [ Key.BACKSPACE ]
+            chrs = [Key.SHIFT_UP, Key.UP, Key.DOWN, Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP]
+
+            word = ""
             text += "\n"
 
-            while word != "":
+            word_search = ""
+            global_pos = cursor
+            temp_menu = [x for x in menu if word_search.lower() in "".join(x).lower() ]
 
-                out( text )
+            while word != Key.ENTER:
 
-                if len(menu) < size:
-                    for x in range( len (menu ) ) :
+                out(text)
+
+                if word_search != "":
+                    out("search: ")
+
+                out(word_search + "\n" )
+
+                if len(temp_menu) < size:
+                    for x in range(len(temp_menu)):
                         if x == cursor:
                             out(">")
-                            tforeground(0,0,255,"".join(menu[x]))
-                            out( "\n" )
+                            tforeground(0, 0, 255, "".join(temp_menu[x]))
+                            out("\n")
 
                         else:
-                            print( " " + "".join(menu[x]) )
+                            print(" " + "".join(temp_menu[x]))
                 else:
                     before = cursor - size
                     after = cursor + size
 
-                    for x in range( max(0,before + min(after * -1 , len(menu) )) + min( after + max(0, before * -1 -1 ), len(menu) ) ):
+                    for x in range( max( 0, before + min( after * -1, len( temp_menu ) ) ) + min( after + max(0, before * -1 - 2 ), len( temp_menu ) ) ):
                         if x == cursor:
                             out(">")
-                            tforeground(0, 0, 255, "".join(menu[x]))
+                            tforeground(0, 0, 255, "".join(temp_menu[x]) )
                             out("\n")
 
                         else:
-                            print(" " + "".join(menu[x]))
+                            print(" " + "".join(temp_menu[x]))
+
+                word = ninput(text="", error=None, simple=True, quick=1, escape=None, *args)
+
                 if search:
-                    word = ninput(text = "", error = None , chrs = chrs + chrs_search, quick = 1 ,escape = None ,*args)
 
                     if word in chrs_search:
                         white()
-                        choice = ninput(text = "rechercher:" , value = word )
 
-                        if choice:
-                            new_menu = [ "".join(x) for x in menu if choice.lower() in "".join(x).lower()]
+                        if word == Key.BACKSPACE:
+                            word_search = word_search[ :-1 ]
 
-                            if new_menu:
-                                new_word = self.menu_deroulant( new_menu , *args)
+                        else:
+                            word_search += word
 
-                                if new_word < len(new_menu):
-                                    return menu.index( new_menu[new_word])
+                        if temp_menu != []:
+                            global_pos = menu.index( temp_menu[ cursor ] )
 
-                else:
-                    word = ninput(text="", error=None, chrs= chrs, quick=1, escape=None,*args)
+                        temp_menu = [x for x in menu if word_search.lower() in "".join( x ).lower() ]
 
-                if  word == None :
+                        if menu[ global_pos ] in temp_menu:
+                            cursor = temp_menu.index( menu[ global_pos ] )
+
+                        else:
+                            cursor = 0
+
+                if word == Key.ESC:
                     return len(menu) + 1
 
                 elif word == Key.DOWN:
-                    cursor = min( len(menu) - 1 , cursor + 1 )
-                    #lup(2)
+                    cursor = min(len(temp_menu) - 1, cursor + 1)
+                    # lup(2)
 
                 elif word == Key.CONTROL_DOWN:
-                    cursor = len(menu) -1
+                    cursor = len(temp_menu) - 1
 
                 elif word == Key.SHIFT_DOWN:
-                    cursor = min( len(menu) - 1 , cursor + (size - 1) )
+                    cursor = min(len(temp_menu) - 1, cursor + (size - 1))
 
                 elif word == Key.UP:
-                    cursor = max(0 , cursor - 1 )
+                    cursor = max(0, cursor - 1)
 
                 elif word == Key.CONTROL_UP:
                     cursor = 0
 
                 elif word == Key.SHIFT_UP:
-                    cursor = max(0, cursor - (size - 1) )
+                    cursor = max(0, cursor - (size - 1))
 
                 lup(len(menu) + text.count("\n"))
                 wipe()
 
-            #ldown( len(menu) )
-            return cursor
+            if temp_menu != []:
+                global_pos = menu.index(temp_menu[cursor])
+            else:
+                return len(menu) + 1
+            # ldown( len(menu) )
+            return global_pos
 
         return None
 
