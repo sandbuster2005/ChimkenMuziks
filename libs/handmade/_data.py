@@ -89,6 +89,12 @@ def find_song_database(self,num):
     base.commit()
     base.close()
 
+def played_database(self):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute("SELECT id_song, nom, played FROM song WHERE played != 0 ORDER BY played DESC")
+    return cursor.fetchall()
+
     
 def update_favorite_database(self,mode):
     base = sqlite3.connect("appdata/cache/data.db")

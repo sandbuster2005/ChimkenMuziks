@@ -18,7 +18,6 @@ def ninput(*arg : Callable , **kwarg) -> str:
     quick : int = 0
     value : str = ""
     simple : bool = False
-    pos = len(value)
 
     for k,x in kwarg.items():
 
@@ -43,6 +42,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
 
     stop = False
     le = len(before)
+    pos = len(value)
 
     if text:
         print(text)
@@ -51,6 +51,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
         print("")
 
     out(before)
+    out(value)
 
     with ReadChar() as Ninput:
         while not stop:

@@ -5,6 +5,7 @@ from math import floor,ceil
 from time import sleep,strftime
 from os import listdir
 from os import name as sysname
+from os.path import isfile
 from .utils import *
 from .ffiles import *
 from .terminal import *
@@ -72,10 +73,11 @@ def main( self ):
         if self.playlist: #load playlist if there one
             self.load_playlist()
         
-        if self.last_song and self.auto_last_song: #launch last played sont if configured to 
-            self.last_song[ 0 ] = int( self.last_song[ 0 ] )
-            self.song = self.last_song
-            self.play_song(0)
+        if self.last_song and self.auto_last_song: #launch last played sont if configured to
+            if isfile(self.last_song[1]):
+                self.last_song[ 0 ] = int( self.last_song[ 0 ] )
+                self.song = self.last_song
+                self.play_song(0)
         
     while self.stay:
         self.get_input()#interface
@@ -119,7 +121,7 @@ def get_input( self ):
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
     got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished , escape = None )
-    lup()# permet d'eviter de recharger l ecran a chaque impur en conservant la ligne
+    lup()# permet d'eviter de recharger l ecran a chaque impuT en conservant la ligne
 
     if got == None:
         self.stay = False

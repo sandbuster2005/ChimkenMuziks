@@ -37,7 +37,9 @@ def init_command( self ):
          ["f",  self.set_timer , {}, "pour mettre un timer "],
          ["bb", self.wind, { 15 : "mode" }, "pour la musique en cours a 0"],
          ["pl", self.playlist_manager, {}, "permet de gerer les playlist"],
-         ["add", self.add_to_playlist, {}, "permet d'ajouter la chanson a une playlist / au favoris"]
+         ["add", self.add_to_playlist, {}, "permet d'ajouter la chanson a une playlist / au favoris"],
+         ["played", self.most_played, {} , "affiche la liste des chanson les plus joué" ],
+         ["fav", self.select_fav, {}, "pour rechercher une chanson dans les favoris" ]
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add

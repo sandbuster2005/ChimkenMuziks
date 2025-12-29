@@ -133,14 +133,6 @@ def update_display(self):
         wipe()
         self.changed.remove("space")
 
-    if "bar" in self.changed and not self.search and self.bar:
-        save()
-        up()
-        self.bar.update()
-        load()
-        self.changed.remove("bar")
-
-
     if "word" in self.changed:
         lyrics = self.words[self.last_word][1]
         space = floor(self.term_size.columns / 2 - len(lyrics) / 2)
@@ -214,6 +206,13 @@ def update_display(self):
 
             if "display" in self.changed:
                 self.changed.remove("display")
+
+        if "bar" in self.changed and not self.search and self.bar:
+            save()
+            up()
+            self.bar.update()
+            load()
+            self.changed.remove("bar")
 
 def is_finished(self):
     if not self.stay:

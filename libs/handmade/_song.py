@@ -154,11 +154,36 @@ def old_select( self ):
         self.out("no song corresponding")
 
 def select( self ):
-    print(self.files)
+    white()
     song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.files ] , self.update_logic , search = True)
+
     if song < len(self.files):
         self.song = self.files[song]
         self.play_song(choose = 0)
+
+    self.display()
+
+def select_fav( self ):
+    white()
+    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.favorite ] , self.update_logic , search = True)
+
+    if song < len(self.favorite):
+        self.song = self.favorite[song]
+        self.play_song(choose = 0)
+    self.display()
+
+
+def most_played( self ):
+    liste = self.played_database()
+    menu = [f" {x[2]} : {x[1]}" for x in liste]
+
+    song = self.asker.menu_deroulant( menu )
+
+    if song < len(self.files):
+        self.song = [ liste[song][0] , liste[song][1] ] # convert to list
+        self.play_song(choose = 0)
+
+    self.display()
 
 def play_midi(self):
     """

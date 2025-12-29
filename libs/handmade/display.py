@@ -91,13 +91,18 @@ class Display:
             return None
 
     def menu_deroulant(self , menu , *args ,text ="" ,cursor = 0 ,search = False):
+
         if self.graphic_manager == "base":
             size = floor(os.get_terminal_size().lines/2)
+            chrs_search = [  chr( x ) for x in range( 32, 127 ) ]
+            chrs = [Key.SHIFT_UP ,Key.UP, Key.DOWN,  Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP ]
             word = "start"
             text += "\n"
+
             while word != "":
 
                 out( text )
+
                 if len(menu) < size:
                     for x in range( len (menu ) ) :
                         if x == cursor:
@@ -110,6 +115,7 @@ class Display:
                 else:
                     before = cursor - size
                     after = cursor + size
+
                     for x in range( max(0,before + min(after * -1 , len(menu) )) + min( after + max(0, before * -1 -1 ), len(menu) ) ):
                         if x == cursor:
                             out(">")
@@ -119,23 +125,23 @@ class Display:
                         else:
                             print(" " + "".join(menu[x]))
                 if search:
-                    word = ninput(text = "", error = None , chrs = [Key.SHIFT_UP ,Key.UP, Key.DOWN,  Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP , "r"]
-                                  , quick = 1 ,escape = None ,before = "press r to research",*args)
-                    if word == 'r':
+                    word = ninput(text = "", error = None , chrs = chrs + chrs_search, quick = 1 ,escape = None ,*args)
+
+                    if word in chrs_search:
                         white()
-                        choice = ninput(text = "rechercher:" )
+                        choice = ninput(text = "rechercher:" , value = word )
 
                         if choice:
                             new_menu = [ "".join(x) for x in menu if choice.lower() in "".join(x).lower()]
 
                             if new_menu:
                                 new_word = self.menu_deroulant( new_menu , *args)
+
                                 if new_word < len(new_menu):
                                     return menu.index( new_menu[new_word])
 
                 else:
-                    word = ninput(text="", error=None, chrs= [Key.UP , Key.DOWN]
-                                  , quick=1, escape=None,*args)
+                    word = ninput(text="", error=None, chrs= chrs, quick=1, escape=None,*args)
 
                 if  word == None :
                     return len(menu) + 1
