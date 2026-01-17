@@ -6,40 +6,40 @@ from .terminal import *
 def init_command( self ):
         #command , linked fonction , fonction arg , tooltip in help
     self.commands = [
-         ["h", self.help_menu, {} , "pour afficher le menu help"],
-         ["q", self.wind, { 7 : "mode" }, "pour quitter le lecteur"],
-         ["r", self.select, {}, "pour rechercher un son dans le catalogue"],
-         ["g", self.change_sound_manager, {}, "changer de gestionnaire de volume"],
-         ["i", self.historic, {}, "pour afficher l'historique"],
-         ["j", self.select_img, {}, "pour selectionner une image dans la galerie"],
-         ["o", self.default_midi, {}, "pour selectionner l'instrumental par defaut des .midi"],
-         ["n", self.play_song, {}, "pour aller a la chanson suivante"],
-         ["k", self.clear_cache, {}, "pour vider la cache"],
-         ["+", self.wind, {1: "mode"}, "pour avancer de 10 seconde"],
-         ["-", self.wind, {2: "mode"}, "pour reculer de 10 seconde"],
-         ["p", self.wind, {3: "mode"}, "pour monter le son de 5%"],
-         ["m", self.wind, {4: "mode"}, "pour baisser le son de 5%"],
-         ["d", self.wind, {5: "mode"}, "pour mute/unmute le son"],
-         ["s", self.param_center, {}, "centre parametre"],
-         ["a", self.load_all, {}, "pour recharger le catalogue de chanson et d'image"],
-         ["c", self.edit_dirs, {}, "pour activer/desactiver des dossiers"],
-         ["b", self.play_last, {}, "pour charger la chanson précédente"],
-         ["y", self.change_main_path, {}, "pour changer le repertoire d'origine"],
-         ["l", self.display, { 1 : "space" }, "pour actualiser l'affichage"],
-         ["t", self.screen_mode, {}, "pour selectionner le mode d'affichage"],
-         ["u", self.write_param, {}, "pour sauvegarder les parametre actuel"],
-         ["v", self.edit_command, {}, "pour modifier une commande"],
-         ["w", self.reset_settings, {}, "pour remetre les paramètre a 0"],
-         ["x", self.dl_yt_playlist, {}, "pour télécharger une playlist youtube"],
-         ["dl", self.yt_search, {}, "pour rechercher sur youtube"],
-         ["z", self.mani_file, {}, "pour supprimer/deplacer/renommer un fichier"],
-         ["e", self.change_confirmation, {}, "pour changer le message de choix"],
-         ["f",  self.set_timer , {}, "pour mettre un timer "],
-         ["bb", self.wind, { 15 : "mode" }, "pour la musique en cours a 0"],
-         ["pl", self.playlist_manager, {}, "permet de gerer les playlist"],
-         ["add", self.add_to_playlist, {}, "permet d'ajouter la chanson a une playlist / au favoris"],
-         ["played", self.most_played, {} , "affiche la liste des chanson les plus joué" ],
-         ["fav", self.select_fav, {}, "pour rechercher une chanson dans les favoris" ]
+         ["h", self.help_menu, {} , "Show the help menu"], #pour afficher le menu help
+         ["q", self.wind, { 7 : "mode" }, "Close the program"], #pour quitter le lecteur
+         ["r", self.select, {}, "Search for a song in the catalogue"], #pour rechercher un son dans le catalogue
+         ["g", self.change_sound_manager, {}, "Change the volume controller"], #changer de gestionnaire de volume
+         ["i", self.historic, {}, "Show song history"], #pour afficher l'historique
+         ["j", self.select_img, {}, "Select an image in the gallery"], #pour selectionner une image dans la galerie
+         ["o", self.default_midi, {}, "Select default instruments for .midi files"], #pour selectionner l'instrumental par defaut des .midi
+         ["n", self.play_song, {}, "Go to next song"], #pour aller a la chanson suivante
+         ["k", self.clear_cache, {}, "Empty the cache"], #pour vider la cache
+         ["+", self.wind, {1: "mode"}, "Skip forward 10 seconds"], #pour avancer de 10 seconde
+         ["-", self.wind, {2: "mode"}, "Rewind 10 seconds"], #pour reculer de 10 seconde
+         ["p", self.wind, {3: "mode"}, "Raise volume by 5%"], #pour monter le son de 5%
+         ["m", self.wind, {4: "mode"}, "Lower volume by 5%"], #pour baisser le son de 5%
+         ["d", self.wind, {5: "mode"}, "Mute/unmute sound"], #pour mute/unmute le son
+         ["s", self.param_center, {}, "Go to settings"], #centre parametre
+         ["a", self.load_all, {}, "Reload song and image catalogues"], #pour recharger le catalogue de chanson et d'image
+         ["c", self.edit_dirs, {}, "Enable/disable folders"], #pour activer/desactiver des dossiers
+         ["b", self.play_last, {}, "Go back to previous song"], #pour charger la chanson précédente
+         ["y", self.change_main_path, {}, "Change base directory"], #pour changer le repertoire d'origine
+         ["l", self.display, { 1 : "space" }, "Reload the display"], #pour actualiser l'affichage
+         ["t", self.screen_mode, {}, "Select display mode"], #pour selectionner le mode d'affichage
+         ["u", self.write_param, {}, "Save current settings"], #pour sauvegarder les parametre actuel
+         ["v", self.edit_command, {}, "Edit a command"], #pour modifier une commande
+         ["w", self.reset_settings, {}, "Reset settings"], #pour remetre les paramètre a 0
+         ["x", self.dl_yt_playlist, {}, "Download a Youtube playlist"], #pour télécharger une playlist youtube
+         ["dl", self.yt_search, {}, "Search on Youtube"], #pour rechercher sur youtube
+         ["z", self.mani_file, {}, "Delete, move or rename a file"], #pour supprimer/deplacer/renommer un fichier
+         ["e", self.change_confirmation, {}, "Change choice message"], #pour changer le message de choix
+         ["f",  self.set_timer , {}, "Set a timer"], #pour mettre un timer
+         ["bb", self.wind, { 15 : "mode" }, "Rewind to start of the song"], #pour la musique en cours a 0
+         ["pl", self.playlist_manager, {}, "Go to playlist menu"], #permet de gerer les playlist
+         ["add", self.add_to_playlist, {}, "Add song to favorites/to a playlist"], #permet d'ajouter la chanson a une playlist / au favoris
+         ["played", self.most_played, {} , "Display most played songs" ], #affiche la liste des chanson les plus joué
+         ["fav", self.select_fav, {}, "Search song in favorites" ] #pour rechercher une chanson dans les favoris
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add
@@ -114,7 +114,7 @@ def help_menu( self ):
     liste de toute les info
     """
 
-    menu =  [ "entrer un nombre pour lancer la chanson correspondante", "ne rien rentrer pour mettre pause" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "]
+    menu =  [ "Input a number to play corresponding song", "Press enter to pause/unpause song" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "] #entrer un nombre pour lancer la chanson correspondante / ne rien rentrer pour mettre pause
     self.show_list(menu , num = False)
     self.search = True
 
