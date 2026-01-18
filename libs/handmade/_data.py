@@ -154,10 +154,12 @@ def update_playlist_database(self, playlist, value):
     base.commit()
     base.close()
 
-def is_in_playlist(self,playlist):
+def is_in_playlist(self,playlist , song = None):
+    if song == None:
+        song = self.song[ 1 ]
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute(f" select {playlist} FROM song where nom = ? ",[ self.song[ 1 ] ] )
+    cursor.execute(f" select {playlist} FROM song where nom = ? ",[ song ] )
     result =  cursor.fetchone()[0]
     base.commit()
     base.close()

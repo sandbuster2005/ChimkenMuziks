@@ -8,7 +8,7 @@ def init_command( self ):
     self.commands = [
          ["h", self.help_menu, {} , "Show the help menu"], #pour afficher le menu help
          ["q", self.wind, { 7 : "mode" }, "Close the program"], #pour quitter le lecteur
-         ["r", self.select, {}, "Search for a song in the catalogue"], #pour rechercher un son dans le catalogue
+         ["r", self.select, {}, "Search for a song in the gallery"], #pour rechercher un son dans le catalogue
          ["g", self.change_sound_manager, {}, "Change the volume controller"], #changer de gestionnaire de volume
          ["i", self.historic, {}, "Show song history"], #pour afficher l'historique
          ["j", self.select_img, {}, "Select an image in the gallery"], #pour selectionner une image dans la galerie
@@ -21,7 +21,7 @@ def init_command( self ):
          ["m", self.wind, {4: "mode"}, "Lower volume by 5%"], #pour baisser le son de 5%
          ["d", self.wind, {5: "mode"}, "Mute/unmute sound"], #pour mute/unmute le son
          ["s", self.param_center, {}, "Go to settings"], #centre parametre
-         ["a", self.load_all, {}, "Reload song and image catalogues"], #pour recharger le catalogue de chanson et d'image
+         ["a", self.load_all, {}, "Reload song and image gallery"], #pour recharger le catalogue de chanson et d'image
          ["c", self.edit_dirs, {}, "Enable/disable folders"], #pour activer/desactiver des dossiers
          ["b", self.play_last, {}, "Go back to previous song"], #pour charger la chanson précédente
          ["y", self.change_main_path, {}, "Change base directory"], #pour changer le repertoire d'origine
@@ -31,7 +31,7 @@ def init_command( self ):
          ["v", self.edit_command, {}, "Edit a command"], #pour modifier une commande
          ["w", self.reset_settings, {}, "Reset settings"], #pour remetre les paramètre a 0
          ["x", self.dl_yt_playlist, {}, "Download a Youtube playlist"], #pour télécharger une playlist youtube
-         ["dl", self.yt_search, {}, "Search on Youtube"], #pour rechercher sur youtube
+         ["dl", self.yt_search, {}, "Search on Youtube and download"], #pour rechercher sur youtube
          ["z", self.mani_file, {}, "Delete, move or rename a file"], #pour supprimer/deplacer/renommer un fichier
          ["e", self.change_confirmation, {}, "Change choice message"], #pour changer le message de choix
          ["f",  self.set_timer , {}, "Set a timer"], #pour mettre un timer

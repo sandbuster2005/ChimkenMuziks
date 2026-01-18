@@ -55,7 +55,6 @@ def play_song( self ,choose = 1):
 
         elif self.played[-1] != self.song:  # add to historic if song as changed
             self.played.append(self.song)# add to historic
-            self.song_saved = False # tell backend is can save a play in the database
 
         self._play() #send song to the player
 
@@ -116,7 +115,8 @@ def _play( self ):
 
     else:
         self.player.set_mrl( self.song[1] )# load song
-    
+
+    self.song_saved = False  # tell backend is can save a play in the database
     self.bar = None # reset bar
     self.player.play()
     self.display()
@@ -153,7 +153,22 @@ def old_select( self ):
     else:
         self.out("no song corresponding")
 
+def _select_song( self , file_list , display_list = None , text = ""):
+    white()
+    if display_list == None:
+        display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( '/', 1 )[ 1 ] }" for x in file_list ]
+
+    song = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
+
+    if song < len( file_list ):
+        self.song = file_list[ song ]
+        self.play_song( choose = 0 )
+
+    self.display()
+
 def select( self ):
+    self._select_song( self.files, text = "song library" )
+    """
     white()
     song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.files ] , self.update_logic , search = True)
 
@@ -162,29 +177,37 @@ def select( self ):
         self.play_song(choose = 0)
 
     self.display()
+    """
 
 def select_fav( self ):
+    self._select_song( self.favorite, text = "favorite songs" )
+
+    """
     white()
     song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.favorite ] , self.update_logic , search = True)
 
     if song < len(self.favorite):
         self.song = self.favorite[song]
         self.play_song(choose = 0)
-    self.display()
 
+    self.display()
+    """
 
 def most_played( self ):
     liste = self.played_database()
-    menu = [f" {x[2]} : {x[1]}" for x in liste]
+    display_list = [ f"{ str(x[2]) }: {x[1].rsplit('/',1)[1]}" for x in liste ]
+    liste = [ [ x[0], x[1] ] for x in liste ]
+    self._select_song( liste , display_list, "most played")
+    """
+    white()
+    song = self.asker.menu_deroulant([f"{str(x[0])}: {x[1].rsplit('/', 1)[1]}" for x in liste],self.update_logic, search=True)
 
-    song = self.asker.menu_deroulant( menu )
-
-    if song < len(self.files):
-        self.song = [ liste[song][0] , liste[song][1] ] # convert to list
-        self.play_song(choose = 0)
+    if song < len(liste):
+        self.song = liste[song]
+        self.play_song( choose = 0 )
 
     self.display()
-
+    """
 def play_midi(self):
     """
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné

@@ -90,52 +90,58 @@ class Display:
         else:
             return None
 
-    def menu_deroulant(self, menu, *args, text="", cursor=0, search=False):
+    def menu_deroulant(self, menu, *args, text="", cursor=0, search=False, word_search = "" ):
 
         if self.graphic_manager == "base":
 
             size = floor(os.get_terminal_size().lines / 2)
-
+            lenght = os.get_terminal_size().columns
             chrs_search = [chr(x) for x in range(32, 127)] + [ Key.BACKSPACE ]
             chrs = [Key.SHIFT_UP, Key.UP, Key.DOWN, Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP]
 
             word = ""
             text += "\n"
 
-            word_search = ""
             global_pos = cursor
-            temp_menu = [x for x in menu if word_search.lower() in "".join(x).lower() ]
+            temp_menu = [ x for x in menu if word_search.lower() in "".join(x).lower() ]
 
             while word != Key.ENTER:
 
-                out(text)
+                out( text )
+
+                out(f"{len(temp_menu)} items\n")
 
                 if word_search != "":
                     out("search: ")
 
                 out(word_search + "\n" )
 
-                if len(temp_menu) < size:
+                if len(temp_menu) < size and None == True: # unused
                     for x in range(len(temp_menu)):
+
                         if x == cursor:
-                            out(">")
-                            tforeground(0, 0, 255, "".join(temp_menu[x]))
+                            tforeground(0, 0, 255, ">" + val[1:] )
                             out("\n")
 
                         else:
-                            print(" " + "".join(temp_menu[x]))
+                            print( val )
                 else:
+
                     before = cursor - size
                     after = cursor + size
 
-                    for x in range( max( 0, before + min( after * -1, len( temp_menu ) ) ) + min( after + max(0, before * -1 - 2 ), len( temp_menu ) ) ):
+                    for x in range( max(0, before - 1  ), max( 0, before + min( after * -1 , len( temp_menu ) ) ) + min( after + max(0, before * -1 ) -5 , len( temp_menu ) ) ):
+                        val = " " + "".join(temp_menu[x])
+
+                        if len(val) > lenght:
+                            val = val[: (lenght - 3) ] + "..."
+
                         if x == cursor:
-                            out(">")
-                            tforeground(0, 0, 255, "".join(temp_menu[x]) )
+                            tforeground(0, 0, 255, ">" + val[1:] )
                             out("\n")
 
                         else:
-                            print(" " + "".join(temp_menu[x]))
+                            print( val )
 
                 word = ninput(text="", error=None, simple=True, quick=1, escape=None, *args)
 
@@ -171,6 +177,7 @@ class Display:
                 elif word == Key.CONTROL_DOWN:
                     cursor = len(temp_menu) - 1
 
+
                 elif word == Key.SHIFT_DOWN:
                     cursor = min(len(temp_menu) - 1, cursor + (size - 1))
 
@@ -183,7 +190,7 @@ class Display:
                 elif word == Key.SHIFT_UP:
                     cursor = max(0, cursor - (size - 1))
 
-                lup(len(menu) + text.count("\n"))
+                lup(len(menu) + text.count("\n") )
                 wipe()
 
             if temp_menu != []:

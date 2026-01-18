@@ -122,7 +122,6 @@ def readkey() -> str:
     read and returned as noted in `_posix_key.py`."""
 
     c1 = readchar()
-    print(c1)
     if c1 in config.INTERRUPT_KEYS:
         raise KeyboardInterrupt
 
@@ -130,25 +129,20 @@ def readkey() -> str:
         return c1
 
     c2 = readchar()
-    print(c2)
     if c2 not in "\x4F\x5B":
         return c1 + c2
 
     c3 = readchar()
-    print(c3)
     if c3 not in "\x31\x32\x33\x35\x36":
         return c1 + c2 + c3
 
     c4 = readchar()
-    print(c4)
     if c4 not in "\x30\x31\x33\x34\x35\x37\x38\x39\x3b":
         return c1 + c2 + c3 + c4
 
     c5 = readchar()
-    print(c5)
     if c4 not in "\x30\x31\x33\x34\x35\x37\x38\x39":
         return c1 + c2 + c3 + c4 + c5
 
     c6 = readchar()
-    print(c6)
     return c1 + c2 + c3 + c4 + c5 + c6

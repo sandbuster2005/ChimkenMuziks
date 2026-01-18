@@ -196,10 +196,11 @@ def wind( self, mode, pause = False  ):
     if mode == 4:# baisse le volume de 5
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
+        sleep(0.02)
         if not "volume" in self.changed:#si l'affichage n'a pas deja ete prevenu
             self.changed.append("volume")#previens l'affichage que le volume a changer
             
-        sleep(0.001)
+
         
         
     if mode == 5:# mute the music
@@ -215,6 +216,7 @@ def wind( self, mode, pause = False  ):
     if mode == 15:# go back to music start
         self.player.set_time( 0 )
         self.bar.index = 0
+        self.changed.append("bar")
         
 def set_timer( self ):
     """

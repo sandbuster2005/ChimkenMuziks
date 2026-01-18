@@ -47,9 +47,9 @@ def add_to_playlist(self):
             
             
 def playlist_manager(self):
-    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode"], self.update_logic)
+    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist"], self.update_logic)
     
-    if  word < 4:
+    if  word < 5:
         playlists = self.get_column()
         
         if word == 3:
@@ -116,10 +116,20 @@ def playlist_manager(self):
             if new < len( playlists ):
                  if self.playlist!= playlists [ new ]:
                     self.drop_column( playlists[ new ] )
-                
+
             else:
                 print("no playlist")
                 input("press any key to continue")
+
+        elif word == 4 and playlists:
+            playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
+            menu = [ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]} in"  if self.is_in_playlist(playlist,x) else f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]} not in " for x in self.files ]
+            res = self.asker.menu_deroulant(menu , self.update_logic, search=True)
+
+
+
+
+
             
         
     self.display()

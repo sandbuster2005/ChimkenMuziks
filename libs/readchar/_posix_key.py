@@ -218,7 +218,6 @@ normal_mode = [
 ]
 
 data = subprocess.check_output(["infocmp","-x"])
-print(data)
 data = data.decode("utf-8")
 data = _remove(data , ["\n","\t"," "]) # new line tabs and spaces
 data = re.split("(?<=(?!\\\\).)," ,data) # split by "," and avoid "\,"
@@ -235,7 +234,6 @@ for key in name_correspondances.keys():
 
     if name_correspondances[key] in keys.keys():
         if key in normal_mode:
-            print(keys[name_correspondances[key]])
             value = "\x1B" + "\x5B" + keys[name_correspondances[key]][3:] # terminals tend to be in normal mode and termnfo give app mode
         else:
             value = "\x1B" + keys[name_correspondances[key]][2:] # convert \E  to his code
