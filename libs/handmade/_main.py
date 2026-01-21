@@ -40,7 +40,9 @@ def init_main( self, directory, song ):
     self.played = []  # historique
     self.timer = None
     self.words = None # parole si existante
-    self.input = ReadChar() # systeme d'input 
+    self.input = ReadChar() # systeme d'input
+
+    self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
  
    
 def main( self ):
@@ -54,6 +56,7 @@ def main( self ):
     self.load_script()
 
     while len( self.files ) == 0:# if folder is empty
+        self.logger["main"].warning( "music folder is empty" )
         self.out( "no song in folder" )
         self.change_main_path()
         self.load_songs()
@@ -64,9 +67,11 @@ def main( self ):
     
     if self.exterior: # if an argument was pasted from command line
         if self.exterior_song:
+            self.logger["main"].info("loading song from command line")
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
             self.song = [ self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ]
+            self.logger["main"].debug(f"loaded {self.song}")
             self.play_song(0)
     
     else:
@@ -75,6 +80,7 @@ def main( self ):
         
         if self.last_song and self.auto_last_song: #launch last played sont if configured to
             if isfile(self.last_song[1]):
+                self.logger["main"].info("loading last played song")
                 self.last_song[ 0 ] = int( self.last_song[ 0 ] )
                 self.song = self.last_song
                 self.play_song(0)

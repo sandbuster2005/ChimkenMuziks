@@ -3,6 +3,8 @@ from .ffiles import *
 
 def init_param( self ):
     self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
+    self.new_logger("param")
+
     #              [ param name, tooltip ,defaut value ,type ,param center ?]
     self.params =  [
                    [ "path_to_file", "chemin vers le dossier source musique", "" ,"str", False ],
@@ -43,11 +45,11 @@ def get_param( self , param = ""):
     """
     cette fonction permet de recuperer les variables cité dans le fichier  param si presence de celle si
     """
+    self.logger["param"].info("loading param")
     data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
     data = remove_list( data )
     co = [ data[ x ][ 0 ] for x in range( len( data ) ) ]
     param = [ x[ 0 ] for x in self.params ]
-    print( "param :", co )
     for y,x in enumerate( co ):
 
         if data[ y ][ 1 ] =="":
@@ -59,6 +61,7 @@ def get_param( self , param = ""):
                 continue
 
         #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
+        self.logger["param"].debug(f"{x} : {data[y]} ")
         if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
             setattr( self, x, [ data[ y ][ 1 ] ])
         
@@ -86,12 +89,14 @@ def write_param( self , param = ""):
     data += [ ["holders" ,[x[0] for x in self.commands] ] ]
     data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
     write_file( self.param, data )
+    self.logger["param"].info("saved param")
 
 def reset( self ):
     """
     cette fonction permet de remmetre a 0 les parrametre actuel et
     se enregistrer dans le fichier param
     """
+    self.logger["param"].info("reset")
     self.__init__()#remise a 0
     self.write_param()
 

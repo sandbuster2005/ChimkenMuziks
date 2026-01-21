@@ -6,6 +6,7 @@ from .utils import *
 from .terminal import *
 from ..readchar import readchar
 import importlib
+import logging
 
 def init_image( self ):
     self.img_mode = "img"
@@ -13,7 +14,9 @@ def init_image( self ):
     self.thumbnail = None
     self.screen = None
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
-    
+
+    self.new_logger("image")
+
     #if self.sysname == 'nt':
     #    self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
 
@@ -36,7 +39,7 @@ def get_img( self, path, files = [], start = 0 ):
     limite:
     cette fonction d'accéde pas au sous dossier
     """
-    
+    self.logger["image"].info("loading imgs")
     if self.sysname == 'nt':
         path = path.replace("/", "\\")
     
@@ -60,6 +63,7 @@ def get_img( self, path, files = [], start = 0 ):
             
             if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# format d'image supporté par la librairie
                 self.imgs.append( path + f )
+                self.logger["image"].debug(f"found { path + f }")
     
     
 def display_img( self ):
@@ -129,6 +133,7 @@ def select_img( self ):
                 if "y" in confirm:
                     self.img = self.imgs[  word ] # selection
                     word = len(self.imgs)
+                    self.logger["image"].debug(f"User selected {self.img} ")
             
         self.display()
 

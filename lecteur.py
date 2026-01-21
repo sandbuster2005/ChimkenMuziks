@@ -3,21 +3,24 @@
 import argparse
 import sys
 import logging
+import datetime
 from mimetypes import inited
 
 
 class App:
-    def __init__( self, directory = "" , song = ""):
-        self.logger = logging.getLogger( "main" )
-        self.logger.setLevel( logging.INFO )
+    def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
+        self.logger = {}
 
-        self.log_formatter = logging.Formatter(fmt="%(name)s : %(levelname)-7s, %(message)s")
+        self.logging_level = logging_level
+        self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
 
-        self.log_file_handler = logging.FileHandler( "main.log")
+        self.log_file_handler = logging.FileHandler(f"{datetime.datetime.now()}.log")
         self.log_file_handler.setFormatter( self.log_formatter )
 
-        self.logger.addHandler(self.log_file_handler)
-        self.logger.warning( "initiated logger" )
+        self.new_logger("main")
+        self.logger["main"].info("APP STARTED")
+
+        self.logger["main"].debug("initializing methods")
         self.init_param()
         self.init_main( directory , song)
         self.init_sound()
@@ -32,8 +35,7 @@ class App:
         self.init_data()
         self.init_playlist()
         self.init_update()
-
-
+        self.logger["main"].info("initiated methods")
 
     from libs.handmade._external import external_call, external_return
     from libs.handmade._display import init_display, out, ask, ask_list, show_list, change_confirmation
@@ -52,6 +54,13 @@ class App:
     from libs.handmade._update import init_update , is_finished , update_logic , update_display,end
     import libs.colorama.__init__ as colorama
     colorama.init()
+
+
+    def new_logger(self , name ):
+        self.logger[name] = logging.getLogger( name )
+        self.logger[name].setLevel( self.logging_level )
+        self.logger[name].addHandler( self.log_file_handler )
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--song")
