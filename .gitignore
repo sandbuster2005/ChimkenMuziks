@@ -3,8 +3,8 @@ __pycache__/
 **/cache/**
 **/.idea/
 !/appdata/cache/static
-!/log/static
 **/log/**
+!log/static
 update
 appdata/image/wallpapers/
 main.log

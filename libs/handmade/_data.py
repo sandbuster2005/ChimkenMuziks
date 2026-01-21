@@ -4,7 +4,7 @@ from os.path import isfile
 from .utils import *
 
 def init_data(self):
-    pass
+    self.new_logger("data")
 
 def write_song_database(self,song):
     self.create_song_database()
@@ -49,24 +49,19 @@ def add_song_database(self, song):
     result = cursor.fetchall()
     return [result[ 0 ][0],result[ 0 ][1]]
 
-def update_song_database(self):
+def update_song_database(self, file ):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
     
     cursor = base.cursor()
-    noms = self.get_song_database()
+    name = self.get_song_database()
 
-    if self.exterior:# if song was sent through command
-        for x in self.get_file( self.exterior, [] ):
-            artist, album = self.get_song_info(x)
+    self.logger["data"].info("updating song database")
+    for x in file:
+        if x not in name:
+            artist,album = self.get_song_info(x)
             cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
-    
-    else:
-        for x in self.get_file( self.path_to_file, [] ):
-            if x not in noms:
-                artist,album = self.get_song_info(x)
-                cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
-        
+
     base.commit()
     base.close()
 
@@ -107,9 +102,13 @@ def load_favorite_database(self):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
+    self.logger["data"].info("loading favorites")
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
     result = cursor.fetchall()
     self.favorite = [  [ x[0],x[1] ] for x in result if self.path_to_file in x[1] and isfile( x[1] ) ]
+    self.logger["data"].info(f"loaded {len(self.favorite)} files")
+    self.logger["data"].debug(f"files : {self.favorite}")
+
     base.commit()
     base.close()
     
@@ -117,7 +116,8 @@ def get_index_data(self,nom):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     result = []
-    
+    self.logger["data"].info("fetching indexes")
+
     for x in nom:
         cursor.execute("SELECT id_song FROM song WHERE nom = ?" ,[x])
         result.append(cursor.fetchone()[0])

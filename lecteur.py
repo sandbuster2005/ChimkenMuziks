@@ -4,18 +4,16 @@ import argparse
 import sys
 import logging
 import datetime
-from mimetypes import inited
-
 
 class App:
     def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
         self.logger = {}
-
         self.logging_level = logging_level
         self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
 
-        self.log_file_handler = logging.FileHandler(f"{datetime.datetime.now()}.log")
+        self.log_file_handler = logging.FileHandler(f"log/{datetime.datetime.now()}.log")
         self.log_file_handler.setFormatter( self.log_formatter )
+        self.log_file_handler.setLevel( self.logging_level )
 
         self.new_logger("main")
         self.logger["main"].info("APP STARTED")
@@ -55,11 +53,16 @@ class App:
     import libs.colorama.__init__ as colorama
     colorama.init()
 
-
     def new_logger(self , name ):
         self.logger[name] = logging.getLogger( name )
-        self.logger[name].setLevel( self.logging_level )
-        self.logger[name].addHandler( self.log_file_handler )
+        self.logger[name].setLevel(self.logging_level)
+        self.logger[name].addHandler(self.log_file_handler)
+        self.logger[name].propagate = False
+
+
+
+
+
 
 
 parser = argparse.ArgumentParser()

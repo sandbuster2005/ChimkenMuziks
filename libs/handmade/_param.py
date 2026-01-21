@@ -70,8 +70,7 @@ def get_param( self , param = ""):
            
         else:
             setattr( self, x, data[ y ][ 1 ] )
-    
-    self.load_favorite_database()
+
     self.sort_command()
 
 def write_param( self , param = ""):

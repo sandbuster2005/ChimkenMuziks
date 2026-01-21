@@ -50,16 +50,22 @@ def main( self ):
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 
     """
     self.get_param()#get param from file if it exists else create it
+
+    self.logger["image"].info("loading imgs")
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
+
     self.check_adress()#see if current file adress exist
+
     self.load_songs()#try to load the song
+
     self.load_script()
 
-    while len( self.files ) == 0:# if folder is empty
-        self.logger["main"].warning( "music folder is empty" )
-        self.out( "no song in folder" )
-        self.change_main_path()
-        self.load_songs()
+    if len( self.files) == 0:
+        while len( self.files ) == 0:# if folder is empty
+            self.logger["main"].warning( "music folder is empty" )
+            self.out( "no song in folder" )
+            self.change_main_path()
+            self.load_songs()
 
     if self.sound_manager != "base":#base sound manager need a media playing to get volume
         self.start_sound()

@@ -32,14 +32,13 @@ def init_image( self ):
     
     
     
-def get_img( self, path, files = [], start = 0 ):
+def get_img( self, path, start = 0 ):
     """
     cette fonction permet de lister tout les png et jpg contenu dans le dossier image du programme 
     
     limite:
     cette fonction d'accéde pas au sous dossier
     """
-    self.logger["image"].info("loading imgs")
     if self.sysname == 'nt':
         path = path.replace("/", "\\")
     
@@ -49,7 +48,7 @@ def get_img( self, path, files = [], start = 0 ):
     for f in listdir( path ):
         
         if isdir( path + f ):# un sous dossier existe
-            self.get_img( path + f + self.separator , [] )
+            self.get_img( path + f + self.separator )
             
         #elif self.sysname == 'nt':
         #    
@@ -64,6 +63,7 @@ def get_img( self, path, files = [], start = 0 ):
             if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# format d'image supporté par la librairie
                 self.imgs.append( path + f )
                 self.logger["image"].debug(f"found { path + f }")
+
     
     
 def display_img( self ):

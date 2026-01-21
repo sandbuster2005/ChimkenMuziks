@@ -1,4 +1,5 @@
 #made by sand
+from logging import exception
 from os import listdir
 from os.path import isdir,isfile
 from .ffiles import *
@@ -10,6 +11,7 @@ import re
 
 def init_file( self ):
     self.files = []# chanson chargé
+    self.new_logger("file")
         
 def get_file( self, path, files = [] ):
     """
@@ -26,7 +28,8 @@ def get_file( self, path, files = [] ):
     self.song = None
     self.played = []
     self.player.stop()
-    
+
+
     for f in listdir( path ):
         if isdir( path + f ):
             
@@ -42,7 +45,9 @@ def get_file( self, path, files = [] ):
                 
         if f[ -4: ] == ".mp3"  or f[ -4: ] == ".m4a" or f[ -4: ] == ".wav" or f[ -5: ] == ".flac" or f[ -4: ] == ".mid" or f[ -4: ] == ".ogg":#le fichier est un audio supporté
             files.append( path + self.separator + f )
-            
+
+    self.logger["file"].info(f"indexed file in {path} ")
+    self.logger["file"].debug(f" files : {files} ")
     return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )#sorted by music name
 
 
@@ -51,6 +56,7 @@ def edit_dirs(self):
     cette fonction permet a l'utilisateur d'activer/desactiver des dossiers
     en suivant l'architecture de dossier en partant de la racine
     """
+    self.logger["file"].info("User launched dir edit menu")
     self.select_dir( self.switch_dir )
     self.load_songs()
 
@@ -184,6 +190,7 @@ def switch_dir( self, word ):
     cette fonction permet d'activer ou desactiver un dossier de la liste
     """
     self.dirs[ word ][ 1 ] = str( 1 - int( self.dirs[ word ][ 1 ] ) )
+    self.logger["file"].debug(f" {self.dirs[word][0]} set to {self.dirs[word][1]}")
   
   
 def find_file( self, word ):
@@ -194,12 +201,14 @@ def find_file( self, word ):
     limite:
     toute les charactère sont considérée comme minuscule
     """
-    files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules      
+    self.logger["file"].info(f"basic search for {word } ")
+    files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules
     #basic search
 
 
     #allow searching with a 1 character error if few result
     if len(files) < 10 and len(word) > 3:
+        self.logger["file"].info(f"advanced search for {word} ")
         for y in range( len( word ) ):
             for i,x in enumerate( self.files ):
                 if [x[1].rsplit( self.separator )[ -1 ], i ] not in files:
@@ -212,7 +221,9 @@ def check_adress( self ):
     """
     cette fonction permet de verifier si l'adresse existe et est un dossier
     """
+    self.logger["file"].info("checking file path")
     if not isdir( self.path_to_file ) or self.path_to_file == "":
+        self.logger["file"].warning("path to file incorrect , asking User for correct one")
         while not isdir( self.path_to_file ):
             
             try:
@@ -223,6 +234,7 @@ def check_adress( self ):
                 
                 if self.path_to_file[-1] != self.separator:
                     self.path_to_file += self.separator
+        self.logger["file"].info(f" new path to file : {self.path_to_file}")
     
         self.write_param()
     
@@ -231,6 +243,7 @@ def change_main_path( self ):
     """
     cette fonction permet de changer l'adresse des chansons
     """
+    self.logger["file"].info("User asked to change file path")
     self.path_to_file = ""
     self.check_adress()#obviously "" is not good
     self.load_songs()
@@ -254,19 +267,28 @@ def mani_file(self):
                 choice = self.ask( "are you sure (y/n)" )
                 
                 if choice == "y":#delete
+                    self.logger["file"].info(f"User deleted {self.song[1]}")
                     rm_file( self.song[ 1 ] )
                     self.files.remove( self.song )
                 
             elif  word == 1:#move
+                # TODO make it work
+                raise exception("Not Working")
+
                 choice = str( self.select_dir( retour = 1 ) )
-                
+
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
+                    self.logger["file"].debug(self.song)
+                    self.logger["file"].info(f"User moved  {self.files[ index ]} to { self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ] } ")
 
                     mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
 
             elif  word  == 2:#rename
+                # TODO make it work
+                raise exception("Not Working")
                 choice = self.ask( "new_name :" )
+
                 mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
                 self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
                 
@@ -274,6 +296,7 @@ def mani_file(self):
                 self.change_extension()
                  
             if word < 4 : #obviously whathever happended changed file and its not playable anymore like before
+                self.logger["file"].info("player stopped")
                 self.song = None
                 self.played = self.played[:-1]
                 self.player.stop()
@@ -297,6 +320,7 @@ def get_words(self):
         file = self.song[1].rsplit( ".", 1 )[ 0 ] + ".lrc"
         
         if isfile( file ):
+            self.logger["file"].info("loading lyrics")
             data = getfile( file )
             data = data.split("[" )
             data = data[ 1: ]
@@ -320,12 +344,15 @@ def get_words(self):
                         data[x][1] = data[x][1][1:]
                            
             self.words = data
+            self.logger["file"].debug(f"lyrics : {self.words} ")
 
 def change_extension(self):
     """
     cette fonction permet de convertir les fichier musique a l'aide de ffmpeg
     """
     white()
+    # TODO make it work
+    raise exception("Not working")
     option = [".mp3", ".m4a", ".wav" , ".flac" ]
     word = self.asker.menu_deroulant( option, self.update_logic )
     
