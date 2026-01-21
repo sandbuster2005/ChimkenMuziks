@@ -2,11 +2,22 @@
 #made by sand
 import argparse
 import sys
+import logging
 from mimetypes import inited
 
 
 class App:
     def __init__( self, directory = "" , song = ""):
+        self.logger = logging.getLogger( "main" )
+        self.logger.setLevel( logging.INFO )
+
+        self.log_formatter = logging.Formatter(fmt="%(name)s : %(levelname)-7s, %(message)s")
+
+        self.log_file_handler = logging.FileHandler( "main.log")
+        self.log_file_handler.setFormatter( self.log_formatter )
+
+        self.logger.addHandler(self.log_file_handler)
+        self.logger.warning( "initiated logger" )
         self.init_param()
         self.init_main( directory , song)
         self.init_sound()

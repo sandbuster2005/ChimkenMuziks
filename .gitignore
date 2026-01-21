@@ -5,3 +5,4 @@ __pycache__/
 !/appdata/cache/static
 update
 appdata/image/wallpapers/
+main.log
