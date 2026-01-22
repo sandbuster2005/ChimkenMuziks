@@ -47,7 +47,7 @@ def get_file( self, path, files = [] ):
             files.append( path + self.separator + f )
 
     self.logger["file"].info(f"indexed file in {path} ")
-    self.logger["file"].debug(f" files : {files} ")
+    self.logger["file"].trace(f" files : {files} ")
     return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )#sorted by music name
 
 

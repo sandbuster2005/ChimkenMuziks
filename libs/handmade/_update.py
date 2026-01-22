@@ -15,12 +15,13 @@ def init_update(self):
     self.current_time = current_time()
     self.time = False
     self.time_check = [False, 0, 0, 0]
-
-
+    self.new_logger("update")
 
 def update_logic(self):
     if self.timer:
         if self.timer[1] < 1:
+            self.logger["update"].info("timer finished")
+
             if self.timer_mode == 0:
                 self.end()
 
@@ -33,6 +34,7 @@ def update_logic(self):
     if not "time" in self.changed:
         if self.current_time != current_time():
             self.current_time = current_time()
+            self.logger["update"].debug("time as changed")
             self.changed.append("time")
 
     if self.timer:
@@ -41,12 +43,14 @@ def update_logic(self):
             if monotonic() > self.timer[2] + ( self.timer[0] * 60 ):
                 self.timer[0] += 1
                 self.timer[1] -= 1
+                self.logger["update"].debug(f"timer as changed : {self.timer}")
                 self.changed.append("timer")
 
 
     if self.sound_manager == "alsa":
 
         if self.volume != self.get_volume():
+            self.logger["update"].info("global volume")
             self.volume = self.get_volume()
             self.changed.append("volume")
 
@@ -56,6 +60,7 @@ def update_logic(self):
         if not self.bar:
             if self.player.get_length() > 0:
                 sleep(0.01)
+                self.logger["update"].info("creating new bar")
                 if self.color:
                     color = random.randint(0, 252)
                     color += 3 - (color % 3)
@@ -70,7 +75,6 @@ def update_logic(self):
         else:
                     
             self.time = self.player.get_time()
-
             if self.bar.index  < floor( self.time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
                 self.bar.index = floor( self.time / 1000 )
                 if not "bar" in self.changed:
@@ -81,24 +85,30 @@ def update_logic(self):
                     if ( close := closest( int( self.time / 1000 ), [x[0] for x in self.words])) != self.last_word and self.words[close][0] - self.time / 1000 < 1:
                             self.last_word = close
                             if not "word" in self.changed:
+                                self.logger["update"].debug(f"lyric changed : { self.words[self.last_word] }")
                                 self.changed.append("word")
                     
             if self.time < 0:  # en cas de reculer en dessous du debut
                 self.time = 0
+                self.logger["update"].warning("time went under 0")
 
             if self.bar.index < 0:  ##en cas de reculer en desosus du debut
                 self.bar.index = 0
+                self.changed.append("bar")
+                self.logger["update"].warning("bar went under 0")
 
 
             if self.term_size != ( _ := os.get_terminal_size() ) :
                 self.term_size = _
                 if not "display" in self.changed:
                     self.changed.append("display")
+                self.logger["update"].debug(f"terminal size changed to {self.term_size}")
 
 
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
                 self.song_saved = True
                 self.write_song_database( self.song[ 1 ] )
+
 
             """
             if self.time_check[3]:
@@ -124,6 +134,7 @@ def update_logic(self):
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause:   # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                    self.logger["update"].info("song finished, next one")
                     self.play_song((1 - self.repeat))
                     self.display()
 
@@ -131,6 +142,7 @@ def update_logic(self):
 def update_display(self):
     if "space" in self.changed and not self.search:
         wipe()
+        self.logger["update"].debug("cleared screen")
         self.changed.remove("space")
 
     if "word" in self.changed:
@@ -141,6 +153,7 @@ def update_display(self):
         wipe_line()
         out(f"{' ' * space * self.center}{lyrics}")
         load()
+        self.logger["update"].trace("updated lyric")
         self.changed.remove("word")
 
     if self.song:
@@ -148,6 +161,7 @@ def update_display(self):
             if self.show and "display" in self.changed:
                 white()
                 self.display_img()
+                self.logger["update"].debug("printed image ")
                 ldown(3)
 
             time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
@@ -207,11 +221,14 @@ def update_display(self):
             if "display" in self.changed:
                 self.changed.remove("display")
 
+            self.logger["update"].debug("updated main display")
+
         if "bar" in self.changed and not self.search and self.bar:
             save()
             up()
             self.bar.update()
             load()
+            self.logger["update"].trace("updated bar")
             self.changed.remove("bar")
 
 def is_finished(self):
@@ -221,9 +238,7 @@ def is_finished(self):
 
 def end(self):
     self.stay = False
+    self.logger["update"].info("EXITING APP")
     self.player.stop()
     if self.save_param:
         self.write_param()
-
-a = Bar(f"", max = 8)
-a.index = 2

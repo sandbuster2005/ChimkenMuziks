@@ -16,6 +16,7 @@ def write_song_database(self,song):
     WHERE nom = ?
     """
     cursor.execute(requete,[ song ])
+    self.logger["data"].info("updated song playcount ")
     base.commit()
     base.close()
 

@@ -5,8 +5,40 @@ import sys
 import logging
 import datetime
 
+def add_logging_level(level_name,level_num):
+    method_name = level_name.lower()
+    level_name = level_name.upper()
+
+    def logForLevel(self, message, *args, **kwargs):
+        if self.isEnabledFor(level_num):
+            self._log(level_num, message, args, **kwargs)
+
+    def logToRoot(message, *args, **kwargs):
+        logging.log(level_num, message, *args, **kwargs)
+
+    logging.addLevelName(level_num, level_name)
+
+    setattr(logging, level_name, level_num)
+    setattr(logging.getLoggerClass(), method_name, logForLevel)
+    setattr(logging, method_name, logToRoot)
+
+add_logging_level("TRACE",5)
+
+#NOTSET : 0
+# [CUSTOM] TRACE : 5
+#DEBUG : 10
+#INFO : 20
+#WARNING : 30
+#ERROR : 40
+#CRITICAL : 50
+
+
+
 class App:
     def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
+
+
+
         self.logger = {}
         self.logging_level = logging_level
         self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
@@ -58,12 +90,6 @@ class App:
         self.logger[name].setLevel(self.logging_level)
         self.logger[name].addHandler(self.log_file_handler)
         self.logger[name].propagate = False
-
-
-
-
-
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--song")

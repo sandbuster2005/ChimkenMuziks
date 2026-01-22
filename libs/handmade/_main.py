@@ -133,14 +133,14 @@ def get_input( self ):
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
     got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished , escape = None )
-    lup()# permet d'eviter de recharger l ecran a chaque impuT en conservant la ligne
-
+    lup()# permet d'eviter de recharger l ecran a chaque input en conservant la ligne
+    self.logger["main"].info(f"user input : {got}")
     if got == None:
         self.stay = False
         return
 
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
-            self.find_song_database(int(got))
+            self.find_song_database( int( got ) )
             self.play_song( 0 )
             
     if self.search:#recherche terminé
@@ -166,6 +166,7 @@ def load_all( self ):
     cette fonction permet de recharger toute les images ainsi que toute les chanson et
     remmetre a 0 le lecteur en passant
     """
+    self.LOGGER["main"].info("reloading all")
     self.player.stop()
     self.load_songs()
     self.get_img( self.path_to_img, start = 1 ) #charge toute les image en memoire
@@ -191,17 +192,22 @@ def wind( self, mode, pause = False  ):
     if mode == 1: # avance de 10 seconde
         if  self.bar:
             self.player.set_time( min( self.player.get_length() - 1000, self.player.get_time() + 10000 ) )
+            self.logger["main"].info("fowarded 10 sec")
             
     if mode == 2:# recule de 10 seconde
         if self.bar:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
+            self.logger["main"].info("rewinded 10s")
 
     if mode == 3: # augmente le volume de 5
         self.volume = min( 100, self.volume + 5 )
         self.set_volume()
+
         if not "volume" in self.changed: #si l'affichage n'a pas deja ete prevenu
             self.changed.append("volume")#previens l'affichage que le volume a changer
 
+        self.logger["main"].info("up volume by 5")
+        self.logger["main"].debug("f new volume: {self.volume}")
         sleep(0.001)
         
         
@@ -209,23 +215,29 @@ def wind( self, mode, pause = False  ):
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
         sleep(0.02)
+
         if not "volume" in self.changed:#si l'affichage n'a pas deja ete prevenu
             self.changed.append("volume")#previens l'affichage que le volume a changer
+
+        self.logger["main"].info("down volume by 5")
+        self.logger["main"].debug("f new volume: {self.volume}")
             
 
         
         
     if mode == 5:# mute the music
         self.deafen()
-        
+
     if mode == 6:# pause the music
         self.pause = 1 - self.pause
         self.player.pause()
+        self.logger["main"].debug(f" pause state { self.pause }")
 
     if mode == 7:# quit the player
         self.stay = False
 
     if mode == 15:# go back to music start
+        self.logger["main"].info("rewind song to the start")
         self.player.set_time( 0 )
         self.bar.index = 0
         self.changed.append("bar")
@@ -243,7 +255,8 @@ def set_timer( self ):
     
         if all_numbers( choice ):
             self.timer = [ 1, int( choice ), monotonic() ]# [elapsed time (m), time remaining (m) , starting time]
-        
+            self.logger["main"].info("set timer")
+            self.logger["main"].debug(f"timer : {self.timer}")
         else:
             self.timer = None
         
@@ -272,6 +285,7 @@ def param_center( self ):
         
         if word < len( tooltip ):
                 setattr(self,param[  word  ][ 1 ], 1 - tooltip[  word  ][ 1 ] ) # if choice is a param , edit it
+                self.logger["main"].info(f"modified {param[word][1]} to {1 - tooltip[word][1]}")
 
     self.display()
                 
@@ -291,6 +305,7 @@ def clear_cache(self):
     cette fonction permet de suprimer les fichier temporaire (thumbnail , fichier généré a partir de midi...)
     """
     for f in listdir( "appdata/cache" ):
+        self.logger["main"].info("cleared cache")
         rm_file( "appdata/cache/" + f )
         
     self.display()
