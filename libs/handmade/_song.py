@@ -187,7 +187,7 @@ def _select_song( self , file_list , display_list = None , text = ""):
         display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( '/', 1 )[ 1 ] }" for x in file_list ]
 
     self.logger["song"].info("showing select song menu to user")
-    self.logger["song"].debug(f"display menu : {", ".join( display_list ) }")
+    self.logger["song"].debug(f"display menu : {', '.join( display_list ) }")
     self.logger["song"].debug(f"file list : { file_list }")
 
     song = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )

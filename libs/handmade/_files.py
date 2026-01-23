@@ -279,7 +279,7 @@ def mani_file(self):
 
                 if all_numbers( choice, len( self.dirs ), mode = 1 ):
                     self.logger["file"].debug(self.song)
-                    self.logger["file"].info(f"User moved  {self.files[ index ]} to { self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ] } ")
+                    self.logger["file"].info(f"User moved  {self.files[ index ]} to { self.song.rsplit( self.separator,1 )[ 0 ] + choice + '.' + self.song.rsplit( '.',1 )[ 1 ] } ")
 
                     mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
                     self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
