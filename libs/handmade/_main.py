@@ -112,7 +112,7 @@ def display( self , space = False ):
     limite:
     il est nécessaire qu'une chanson soit selectionné
     """
-    self.logger["main"].tracer("called display update")
+    self.logger["main"].trace("called display update")
 
     if space:
         self.changed.append("space")

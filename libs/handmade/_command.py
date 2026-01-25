@@ -78,9 +78,9 @@ def sort_command( self ):
         
     command = [ base.index(command[x]) for x in range(len(command) ) ]
 
-    self.logger["command"].debug(f"emmited commands : { self.command_pos }")
-    self.command_pos = command
 
+    self.command_pos = command
+    self.logger["command"].debug(f"emmited commands : {self.command_pos}")
 
 def edit_command( self ):
     """
