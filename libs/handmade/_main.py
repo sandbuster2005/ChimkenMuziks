@@ -112,6 +112,8 @@ def display( self , space = False ):
     limite:
     il est nécessaire qu'une chanson soit selectionné
     """
+    self.logger["main"].tracer("called display update")
+
     if space:
         self.changed.append("space")
 
@@ -166,7 +168,7 @@ def load_all( self ):
     cette fonction permet de recharger toute les images ainsi que toute les chanson et
     remmetre a 0 le lecteur en passant
     """
-    self.LOGGER["main"].info("reloading all")
+    self.logger["main"].info("reloading all")
     self.player.stop()
     self.load_songs()
     self.get_img( self.path_to_img, start = 1 ) #charge toute les image en memoire

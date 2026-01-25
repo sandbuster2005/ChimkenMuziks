@@ -1,5 +1,5 @@
 #made by sand
-
+#not used anymore
 
 def init_battery( self ):
     self.battery = [ 0, 0 ]#valeur brut de la batterie et moment du relevé

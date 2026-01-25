@@ -43,6 +43,7 @@ def init_command( self ):
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add
+    self.new_logger("command")
     
 def sort_command( self ):
     """
@@ -51,6 +52,7 @@ def sort_command( self ):
     """
     # all this THING sort commands by lenght then by alphabetical order and put the h on top of the alphabet
     base = [x[0] for x in self.commands ]
+    self.logger["command"].debug(f"received commands : {base}")
     command = base[1:]
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
@@ -76,7 +78,9 @@ def sort_command( self ):
         
     command = [ base.index(command[x]) for x in range(len(command) ) ]
 
+    self.logger["command"].debug(f"emmited commands : { self.command_pos }")
     self.command_pos = command
+
 
 def edit_command( self ):
     """
@@ -96,11 +100,13 @@ def edit_command( self ):
             return
         
         if cmd in commands:
+            self.logger["command"].debug(f"selected : {cmd}")
             key = self.ask( "new command call :" )
             
             if not all_numbers( key ) and key != "":
                  if key not in commands:#if key don't already exist
                      a = f"{  self.commands[ commands.index( cmd ) ][0] } changed to {key}"
+                     self.logger["command"].debug(f"changed to {key}")
                      self.commands[ commands.index( cmd ) ][0] = key # set key
                      self.write_param()
                      self.sort_command()
@@ -113,7 +119,7 @@ def help_menu( self ):
     cette fonction se sert du dico qui contient les info pour renvoier une
     liste de toute les info
     """
-
+    self.logger["command"].debug("showing help menu")
     menu =  [ "Input a number to play corresponding song", "Press enter to pause/unpause song" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "] #entrer un nombre pour lancer la chanson correspondante / ne rien rentrer pour mettre pause
     self.show_list(menu , num = False)
     self.search = True
