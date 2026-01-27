@@ -1,4 +1,3 @@
-import termios
 import sys
 from collections.abc import Callable
 from copy import copy

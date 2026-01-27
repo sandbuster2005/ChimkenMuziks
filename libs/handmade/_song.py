@@ -31,11 +31,13 @@ def load_songs( self ):
     self.update_song_database( self.files )
 
     self.indexs = self.get_index_data( self.files )
-
+    self.logger("song").debug(f"loaded indexes : {self.index}")
+    
     self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
     self.song = None
     self.logger["song"].info(f"loaded {len( self.files)} song in memory")
-
+    self.logger["song"].trace(f"file : { self.files }")
+    
     self.load_favorite_database()
 
 
