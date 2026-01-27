@@ -186,7 +186,7 @@ def old_select( self ):
 def _select_song( self , file_list , display_list = None , text = ""):
     white()
     if display_list == None:
-        display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( '/', 1 )[ 1 ] }" for x in file_list ]
+        display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( self.separator, 1 )[ 1 ] }" for x in file_list ]
 
     self.logger["song"].info("showing select song menu to user")
     self.logger["song"].debug(f"display menu : {', '.join( display_list ) }")
