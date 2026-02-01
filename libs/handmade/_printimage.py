@@ -86,43 +86,45 @@ def print_image_to_screen(self, path, top_offset=0):
     
     #heightprint = height
     #widthprint = height*2
-    width = imwidth/widthprint
-    height = imheight/heightprint
+    if widthprint and heightprint > 0:
 
-    for i in range(heightprint): # height
-        out(centerspace)
-        
-        for j in range(widthprint): # width
-            left = width * j
-            up = height * i
-            right = left + width
-            down = up + height
-            
-            pixel = image[int(up):int(down)+1, int(left):int(right)+1]
-            #cv2.imshow('test', pixel)
-            #cv2.waitKey(0)
-            if self.nearest:
-                average_color = pixel[0][0]
-                
-            else:
-                average_color = numpy.mean(pixel, axis=(0,1))
-            
-            if self.invert:
-                average_color[0] = 255 - average_color[0]
-                average_color[1] = 255 - average_color[1]
-                average_color[2] = 255 - average_color[2]
-                
-            if len(pixel) == 0:
-                #print('\033[42mERROR: Empty pixel.\033[0m')
-                #print(pixel, i, j, size, left, up, right, down)
-                pass
-            
-            colors.append(average_color)
-            if not self.true_color:
-                print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
-            
-            else:
-                tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
-        
-        print('\033[0m')
+        width = imwidth/widthprint
+        height = imheight/heightprint
+
+        for i in range(heightprint): # height
+            out(centerspace)
+
+            for j in range(widthprint): # width
+                left = width * j
+                up = height * i
+                right = left + width
+                down = up + height
+
+                pixel = image[int(up):int(down)+1, int(left):int(right)+1]
+                #cv2.imshow('test', pixel)
+                #cv2.waitKey(0)
+                if self.nearest:
+                    average_color = pixel[0][0]
+
+                else:
+                    average_color = numpy.mean(pixel, axis=(0,1))
+
+                if self.invert:
+                    average_color[0] = 255 - average_color[0]
+                    average_color[1] = 255 - average_color[1]
+                    average_color[2] = 255 - average_color[2]
+
+                if len(pixel) == 0:
+                    #print('\033[42mERROR: Empty pixel.\033[0m')
+                    #print(pixel, i, j, size, left, up, right, down)
+                    pass
+
+                colors.append(average_color)
+                if not self.true_color:
+                    print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
+
+                else:
+                    tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
+
+            print('\033[0m')
     self.search = False

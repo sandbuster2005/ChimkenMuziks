@@ -17,6 +17,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
     quick : int = 0
     value : str = ""
     simple : bool = False
+    Ufonc: Callable = None
 
     for k,x in kwarg.items():
 
@@ -38,6 +39,8 @@ def ninput(*arg : Callable , **kwarg) -> str:
             escape = x
         if k == "simple":
             simple = x
+        if k == "Ufonc":
+            Ufonc = x
 
     stop = False
     le = len(before)
@@ -127,6 +130,9 @@ def ninput(*arg : Callable , **kwarg) -> str:
 
             for func in arg:
                 func()
+
+            if Ufonc:
+                Ufonc( before + value )
 
             if condition:
                 if condition():

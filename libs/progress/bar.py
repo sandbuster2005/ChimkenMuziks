@@ -47,11 +47,27 @@ class Bar(Progress):
             real_width = self.width
 
         message = self.message % self
-        bar = color(self.fill * filled_length ,bg = self.color )
-        empty = color(self.empty_fill * empty_length, bg = self.bg_color)
+        if os.get_terminal_size().columns < 20:
+            filled_length = 0
+            empty_length = 0
+            real_width = 0
+
+        if os.get_terminal_size().columns < 30:
+            filled_length = floor(filled_length / 4)
+            empty_length = floor(empty_length / 4 )
+            real_width = filled_length + empty_length
+
+        if os.get_terminal_size().columns < 60:
+            filled_length = floor( filled_length / 2 )
+            empty_length = floor( empty_length / 2 )
+            real_width =  filled_length + empty_length
+
+        bar = color( self.fill * filled_length, bg = self.color )
+        empty = color( self.empty_fill * empty_length , bg = self.bg_color)
+
         if self.max > 0:
             if not self.center:
-                self.suffix = f' {self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}    '
+                self.suffix = f' {self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}     '
             else:
                 self.prefix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} '
                 self.suffix = f' {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}'

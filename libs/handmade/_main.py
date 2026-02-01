@@ -135,8 +135,10 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    got = ninput( self.update_logic, self.update_display, error = False, text = "" , before = ":",condition = self.is_finished , escape = None )
+    got = ninput( self.update_logic, error = False, text = "" , before = ":",condition = self.is_finished , escape = None , Ufonc = self.update_display )
     lup()# permet d'eviter de recharger l ecran a chaque input en conservant la ligne
+    wipe_line()
+
     self.logger["main"].info(f"user input : {got}")
     if got == None:
         self.stay = False
@@ -196,11 +198,14 @@ def wind( self, mode, pause = False  ):
         if  self.bar:
             self.player.set_time( min( self.player.get_length() - 1000, self.player.get_time() + 10000 ) )
             self.logger["main"].info("fowarded 10 sec")
+            self.changed.append("bar")
             
     if mode == 2:# recule de 10 seconde
         if self.bar:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
+            self.bar.index -= 10
             self.logger["main"].info("rewinded 10s")
+            self.changed.append("bar")
 
     if mode == 3: # augmente le volume de 5
         self.volume = min( 100, self.volume + 5 )

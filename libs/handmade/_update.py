@@ -139,7 +139,7 @@ def update_logic(self):
                     self.display()
 
 
-def update_display(self):
+def update_display(self, value ):
     if "space" in self.changed and not self.search:
         wipe()
         self.logger["update"].trace("cleared screen")
@@ -208,7 +208,8 @@ def update_display(self):
 
             load()
             wipe_line()
-            out(":")
+            line_start()
+            out( value )
             if "time" in self.changed:
                 self.changed.remove("time")
 
@@ -225,9 +226,13 @@ def update_display(self):
 
         if "bar" in self.changed and not self.search and self.bar:
             save()
-            up()
+            lup()
             self.bar.update()
             load()
+            wipe_line()
+            line_start()
+            out(value)
+
             self.logger["update"].trace("updated bar")
             self.changed.remove("bar")
 
