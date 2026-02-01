@@ -58,11 +58,11 @@ def play_song( self ,choose = 1):
 
         if not self.played:#if list is empty
             self.played.append(self.song)# add to historic
-            self.logger["song"].info(f"added {self.song} to historic")
+            self.logger["song"].trace(f"added {self.song} to historic")
 
         elif self.played[-1] != self.song:  # add to historic if song as changed
             self.played.append(self.song)# add to historic
-            self.logger["song"].info(f"added {self.song} to historic")
+            self.logger["song"].trace(f"added {self.song} to historic")
 
         self._play() #send song to the player
 
@@ -76,50 +76,54 @@ def _choose_song(self):
     choisit la chanson qui suit dans la liste : mode 1
     """
     self.logger["song"].info("choosing song")
-    if self.playlist:# choose in playlist if there one
-        if self.playlist_files:
-            files = self.playlist_files
-            self.logger["song"].debug("choosing song in playlist")
+    if self.to_play != []:
+        self.song = self.to_play.pop()
 
-    elif self.play_favorite: #choose in favorite if the option is on
-        if self.favorite:
-            files = self.favorite
-            self.logger["song"].debug("choosing song in favorite")
+    else:
+        if self.playlist:# choose in playlist if there one
+            if self.playlist_files:
+                files = self.playlist_files
+                self.logger["song"].debug("choosing song in playlist")
 
-        else:# check if theres file in favorite
-            self.play_favorite = 0
+        elif self.play_favorite: #choose in favorite if the option is on
+            if self.favorite:
+                files = self.favorite
+                self.logger["song"].debug("choosing song in favorite")
+
+            else:# check if theres file in favorite
+                self.play_favorite = 0
+                files = self.files
+                self.logger["song"].debug("choosing song in files")
+
+        else: #normal files
             files = self.files
             self.logger["song"].debug("choosing song in files")
 
-    else: #normal files
-        files = self.files
-        self.logger["song"].debug("choosing song in files")
+        if self.mode == 1: # random
+            self.logger["song"].debug("choosing randomly")
 
-    if self.mode == 1: # random
-        self.logger["song"].debug("choosing randomly")
+            if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
+                self.logger["song"].debug("choosing via favorite biased method:")
+                num = randint(1, min(100, 50 + len(self.favorite) * 5))
 
-        if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
-            self.logger["song"].debug("choosing via favorite biased method:")
-            num = randint(1, min(100, 50 + len(self.favorite) * 5))
+                if num > 50:
+                    files = self.favorite
+                    self.logger["song"].debug("choosing in favorite")
 
-            if num > 50:
-                files = self.favorite
-                self.logger["song"].debug("choosing in favorite")
-
-        self.song = files[randint(0, len(files) - 1)]  # chanson aleatoire
+            self.song = files[randint(0, len(files) - 1)]  # chanson aleatoire
 
 
-    if self.mode == 0: # in order
-        self.logger["song"].debug("choosing via order:")
+        if self.mode == 0: # in order
+            self.logger["song"].debug("choosing via order:")
 
-        if not self.song:# if its first song playing
-            self.song = files[0]
+            if not self.song:# if its first song playing
+                self.song = files[0]
 
-        else:
-            if self.song not in files: # if there's a problem fall back to global
-                files = self.files
+            else:
+                if self.song not in files: # if there's a problem fall back to global
+                    files = self.files
 
-            self.song = files[(files.index(self.song) + 1) % len(files)]  # chanson suivante : index+1
+                self.song = files[(files.index(self.song) + 1) % len(files)]  # chanson suivante : index+1
 
     self.logger["song"].debug(f"chose {self.song}")
 
@@ -189,14 +193,25 @@ def _select_song( self , file_list , display_list = None , text = ""):
         display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( self.separator, 1 )[ 1 ] }" for x in file_list ]
 
     self.logger["song"].info("showing select song menu to user")
-    self.logger["song"].debug(f"display menu : {', '.join( display_list ) }")
-    self.logger["song"].debug(f"file list : { file_list }")
+    self.logger["song"].trace(f"display menu : {', '.join( display_list ) }")
+    self.logger["song"].trace(f"file list : { file_list }")
 
     song = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
 
     if song < len( file_list ):
-        self.song = file_list[ song ]
-        self.play_song( choose = 0 )
+        if self.waitlist:
+            self.to_play = [ file_list[ song ] ] + self.to_play
+
+        else:
+
+            choice = self.asker.menu_deroulant( ["play now","add to waitlist"], self.update_logic )
+
+            if choice == 1:
+                self.to_play = [ file_list[ song ] ] + self.to_play
+
+            if choice == 0:
+                self.song = file_list[ song ]
+                self.play_song( choose = 0 )
 
     self.display()
 

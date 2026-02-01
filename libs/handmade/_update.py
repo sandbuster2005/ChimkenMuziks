@@ -34,7 +34,7 @@ def update_logic(self):
     if not "time" in self.changed:
         if self.current_time != current_time():
             self.current_time = current_time()
-            self.logger["update"].debug("time as changed")
+            self.logger["update"].trace("time as changed")
             self.changed.append("time")
 
     if self.timer:
@@ -142,7 +142,7 @@ def update_logic(self):
 def update_display(self):
     if "space" in self.changed and not self.search:
         wipe()
-        self.logger["update"].debug("cleared screen")
+        self.logger["update"].trace("cleared screen")
         self.changed.remove("space")
 
     if "word" in self.changed:
@@ -221,7 +221,7 @@ def update_display(self):
             if "display" in self.changed:
                 self.changed.remove("display")
 
-            self.logger["update"].debug("updated main display")
+            self.logger["update"].trace("updated main display")
 
         if "bar" in self.changed and not self.search and self.bar:
             save()

@@ -130,7 +130,7 @@ class Display:
                     before = cursor - size
                     after = cursor + size
 
-                    for x in range( max(0, before - 1  ), max( 0, before + min( after * -1 , len( temp_menu ) ) ) + min( after + max(0, before * -1 ) -5 , len( temp_menu ) ) ):
+                    for x in range( max(0, before - 1  ), max( 0, before + min( after * -1 , len( temp_menu ) ) ) + min( after + max(0, before * -1 ) -3 , len( temp_menu ) ) ):
                         val = " " + "".join(temp_menu[x])
 
                         if len(val) > lenght:
@@ -190,7 +190,7 @@ class Display:
                 elif word == Key.SHIFT_UP:
                     cursor = max(0, cursor - (size - 1))
 
-                lup(len(menu) + text.count("\n") )
+                lup(len(menu) + text.count("\n") + 2 )
                 wipe()
 
             if temp_menu != []:

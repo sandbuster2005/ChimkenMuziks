@@ -38,6 +38,7 @@ def init_main( self, directory, song ):
     os.environ["VLC_VERBOSE"] = str("-1") # retire les message de warning vlc cassant l affichage
     self.player = vlc.MediaPlayer()  # lecteur
     self.played = []  # historique
+    self.to_play = []
     self.timer = None
     self.words = None # parole si existante
     self.input = ReadChar() # systeme d'input
