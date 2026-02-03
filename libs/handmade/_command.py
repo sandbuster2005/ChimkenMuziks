@@ -37,12 +37,13 @@ def init_command( self ):
          ["f",  self.set_timer , {}, "Set a timer"], #pour mettre un timer
          ["bb", self.wind, { 15 : "mode" }, "Rewind to start of the song"], #pour la musique en cours a 0
          ["pl", self.playlist_manager, {}, "Go to playlist menu"], #permet de gerer les playlist
+         ["nn", self.play_now, {}, "show to be played song"],
          ["add", self.add_to_playlist, {}, "Add song to favorites/to a playlist"], #permet d'ajouter la chanson a une playlist / au favoris
          ["played", self.most_played, {} , "Display most played songs" ], #affiche la liste des chanson les plus joué
          ["fav", self.select_fav, {}, "Search song in favorites" ] #pour rechercher une chanson dans les favoris
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
-    #dl bb pl add
+    #dl bb pl add nn
     self.new_logger("command")
     
 def sort_command( self ):

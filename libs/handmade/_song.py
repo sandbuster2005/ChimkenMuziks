@@ -187,7 +187,7 @@ def old_select( self ):
 
 
 
-def _select_song( self , file_list , display_list = None , text = ""):
+def _select_song( self , file_list , display_list = None , text = "", play_next = False ):
     white()
     if display_list == None:
         display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( self.separator, 1 )[ 1 ] }" for x in file_list ]
@@ -199,18 +199,33 @@ def _select_song( self , file_list , display_list = None , text = ""):
     song = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
 
     if song < len( file_list ):
-        if self.waitlist:
-            self.to_play = [ file_list[ song ] ] + self.to_play
+        song = file_list[ song ]
+        self.logger["song"].debug(f"user selected {song} ")
+
+        if self.waitlist and not play_next:
+            if song not in self.to_play:
+                self.to_play = [ song ] + self.to_play
+                self.logger["song"].debug(f" added { song } to be played")
+
+        elif play_next:
+
+            self.song = song
+
+            if self.song in self.to_play:
+                self.to_play.remove(self.song)
+
+            self.play_song( choose = 0 )
 
         else:
-
             choice = self.asker.menu_deroulant( ["play now","add to waitlist"], self.update_logic )
 
             if choice == 1:
-                self.to_play = [ file_list[ song ] ] + self.to_play
+                if song not in self.to_play:
+                    self.to_play = [ song ] + self.to_play
+                    self.logger["song"].debug(f" added { song } to be played")
 
             if choice == 0:
-                self.song = file_list[ song ]
+                self.song = song
                 self.play_song( choose = 0 )
 
     self.display()
@@ -260,6 +275,14 @@ def most_played( self ):
 
     self.display()
     """
+
+def play_now( self ):
+    if self.to_play:
+        display_list = [f"{ x[1].rsplit('/', 1)[1] }" for x in self.to_play ]
+        liste = [[x[0], x[1]] for x in self.to_play]
+        self.logger["song"].info("showing to be played song to the User")
+        self._select_song(liste, display_list, "most played", play_next = True )
+
 def play_midi(self):
     """
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné
