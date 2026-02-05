@@ -13,7 +13,7 @@ def init_update(self):
     self.changed = []
     self.song_saved = False
     self.current_time = current_time()
-    self.time = False
+    self.time = {"vlc": 0 , "python": 0 }
     self.time_check = [False, 0, 0, 0]
     self.new_logger("update")
 
@@ -73,23 +73,36 @@ def update_logic(self):
 
 
         else:
-                    
-            self.time = self.player.get_time()
-            if self.bar.index  < floor( self.time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
-                self.bar.index = floor( self.time / 1000 )
+            time = self.player.get_time()
+
+            if self.time["vlc"] != time :
+                self.time["vlc"] = time
+                self.time["python"] = monotonic()
+
+            time = self.time["vlc"] + monotonic() * 1000 - self.time["python"] * 1000
+
+            self.logger["update"].trace( f" UPDATE LOOP : time : { time  } , vlc time : {self.time['vlc'] }")
+
+            if self.bar.index  < floor( time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
+                self.bar.index = floor( time / 1000 )
                 if not "bar" in self.changed:
                     self.changed.append("bar")
+                    self.logger["update"].debug("bar changed ")
+
 
             if self.word:
                 if self.words:
-                    if ( close := closest( int( self.time / 1000 ), [x[0] for x in self.words])) != self.last_word and self.words[close][0] - self.time / 1000 < 1:
-                            self.last_word = close
+
+                    if self.words[self.last_word][0] + ( self.words[self.last_word + 1][0] - self.words[self.last_word][0] ) / 1.2 < time  / 1000:
+                            self.last_word += 1
+
                             if not "word" in self.changed:
                                 self.logger["update"].debug(f"lyric changed : { self.words[self.last_word] }")
-                                self.changed.append("word")
-                    
-            if self.time < 0:  # en cas de reculer en dessous du debut
-                self.time = 0
+                                self.changed.append( "word" )
+
+            if time < 0:  # en cas de reculer en dessous du debut
+                self.time["vlc"] = 0
+                self.time["python"] = monotonic()
                 self.logger["update"].warning("time went under 0")
 
             if self.bar.index < 0:  ##en cas de reculer en desosus du debut
@@ -140,6 +153,7 @@ def update_logic(self):
 
 
 def update_display(self, value ):
+    #self.logger["update"].trace("display loop")
     if "space" in self.changed and not self.search:
         wipe()
         self.logger["update"].trace("cleared screen")
@@ -153,6 +167,7 @@ def update_display(self, value ):
         wipe_line()
         out(f"{' ' * space * self.center}{lyrics}")
         load()
+
         self.logger["update"].trace("updated lyric")
         self.changed.remove("word")
 
@@ -232,7 +247,6 @@ def update_display(self, value ):
             wipe_line()
             line_start()
             out(value)
-
             self.logger["update"].trace("updated bar")
             self.changed.remove("bar")
 

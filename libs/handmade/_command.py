@@ -4,6 +4,7 @@ from .utils import *
 from .terminal import *
 
 def init_command( self ):
+        #WARNING add new command to the end
         #command , linked fonction , fonction arg , tooltip in help
     self.commands = [
          ["h", self.help_menu, {} , "Show the help menu"], #pour afficher le menu help

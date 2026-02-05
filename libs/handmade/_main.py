@@ -82,7 +82,7 @@ def main( self ):
             self.play_song(0)
     
     else:
-        if self.playlist: #load playlist if there one
+        if self.playlist: #load playlist if there's one
             self.load_playlist()
         
         if self.last_song and self.auto_last_song: #launch last played sont if configured to
