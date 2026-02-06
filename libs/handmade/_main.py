@@ -254,15 +254,17 @@ def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
     """
-    word = self.asker.menu_deroulant( [ "quit", "mute", "pause" ] ,self.update_logic)# timer modes
+    menu = [ "quit", "mute", "pause" ]
+    word = self.asker.menu_deroulant( menu ,self.update_logic)# timer modes
     if  word < 3:
-        self.timer_mode = word
+        #self.timer_mode = word
         
         self.out( "enter nothing to delete current timer" )
         choice = self.ask( "shutdown in  x minutes :" )
     
         if all_numbers( choice ):
-            self.timer = [ 1, int( choice ), monotonic() ]# [elapsed time (m), time remaining (m) , starting time]
+            self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "mode": menu[ int( word ) ] }
+            #self.timer = [ 1, int( choice ), monotonic() ]# [elapsed time (m), time remaining (m) , starting time]
             self.logger["main"].info("set timer")
             self.logger["main"].debug(f"timer : {self.timer}")
         else:

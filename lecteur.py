@@ -23,19 +23,23 @@ def add_logging_level(level_name,level_num):
     setattr(logging, method_name, logToRoot)
 
 add_logging_level("TRACE",5)
+add_logging_level("BULLSHIT",1)
 
-#NOTSET : 0
-# [CUSTOM] TRACE : 5
-#DEBUG : 10
-#INFO : 20
-#WARNING : 30
-#ERROR : 40
-#CRITICAL : 50
+
+#debug levels :
+    #NOTSET : 0
+    # [CUSTOM] BULLSHIT : 1
+    # [CUSTOM] TRACE : 5
+    #DEBUG : 10
+    #INFO : 20
+    #WARNING : 30
+    #ERROR : 40
+    #CRITICAL : 50
 
 
 
 class App:
-    def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
+    def __init__( self, directory = "" , song = "", logging_level = logging.BULLSHIT ):
 
 
 

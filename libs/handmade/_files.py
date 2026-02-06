@@ -335,7 +335,6 @@ def get_words(self):
                     new_data.append( data[ x ] )
                     
             data = new_data
-            print(data)
             for x in range( len( data ) ): 
                 data[ x ][ 0 ] = int(data[ x ][ 0 ][ :2 ] ) * 60 + int( data[ x ][ 0 ][ 3:5 ] ) + int( data[ x ][ 0 ][ 6:8 ] ) / 100 
                 if data[x][1]:
@@ -343,7 +342,7 @@ def get_words(self):
                     if data[x][1][0] == ' ':
                         data[x][1] = data[x][1][1:]
                            
-            self.words = data
+            self.words = [ [0.0 , "" ] ] + data
             self.logger["file"].debug(f"lyrics : {self.words} ")
 
 def change_extension(self):

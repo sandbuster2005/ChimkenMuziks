@@ -19,16 +19,16 @@ def init_update(self):
 
 def update_logic(self):
     if self.timer:
-        if self.timer[1] < 1:
+        if self.timer["remaining"] < 1:
             self.logger["update"].info("timer finished")
 
-            if self.timer_mode == 0:
+            if self.timer["mode"] == "quit":
                 self.end()
 
-            elif self.timer_mode == 1:
+            elif self.timer_mode == "mute" :
                 self.wind(5)
 
-            elif self.timer_mode == 2:
+            elif self.timer_mode == "pause":
                 self.wind(6)
 
     if not "time" in self.changed:
@@ -40,9 +40,9 @@ def update_logic(self):
     if self.timer:
 
         if not "timer" in self.changed:
-            if monotonic() > self.timer[2] + ( self.timer[0] * 60 ):
-                self.timer[0] += 1
-                self.timer[1] -= 1
+            if monotonic() > self.timer["start"] + ( self.timer["elapsed"] * 60 ):
+                self.timer["elapsed"] += 1
+                self.timer["remaining"] -= 1
                 self.logger["update"].debug(f"timer as changed : {self.timer}")
                 self.changed.append("timer")
 
@@ -68,7 +68,7 @@ def update_logic(self):
                     color = "white"
 
                 lenght = self.player.get_length()
-                self.bar = Bar(f"", max = floor(lenght / 1000), color = color, addaptative_bar = self.addaptive_bar,
+                self.bar = Bar(f"", max = floor( lenght / 1000 ), color = color, addaptative_bar = self.addaptive_bar,
                                center = self.center)
 
 
@@ -79,9 +79,16 @@ def update_logic(self):
                 self.time["vlc"] = time
                 self.time["python"] = monotonic()
 
-            time = self.time["vlc"] + monotonic() * 1000 - self.time["python"] * 1000
+            if self.time["vlc"] > 0:
+                if self.pause:
+                    time = self.time["vlc"]
+                    self.time["python"] = monotonic()
+                else:
+                    time = self.time["vlc"] + monotonic() * 1000 - self.time["python"] * 1000
+            else:
+                time = 0
 
-            self.logger["update"].trace( f" UPDATE LOOP : time : { time  } , vlc time : {self.time['vlc'] }")
+            self.logger["update"].bullshit( f" UPDATE LOOP : time : { time  } , vlc time : {self.time['vlc'] }")
 
             if self.bar.index  < floor( time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
                 self.bar.index = floor( time / 1000 )
@@ -89,16 +96,18 @@ def update_logic(self):
                     self.changed.append("bar")
                     self.logger["update"].debug("bar changed ")
 
-
             if self.word:
+
                 if self.words:
 
-                    if self.words[self.last_word][0] + ( self.words[self.last_word + 1][0] - self.words[self.last_word][0] ) / 1.2 < time  / 1000:
-                            self.last_word += 1
+                    if self.last_word != len( self.words ) -1 :
 
-                            if not "word" in self.changed:
-                                self.logger["update"].debug(f"lyric changed : { self.words[self.last_word] }")
-                                self.changed.append( "word" )
+                        if self.words[self.last_word][0] + ( self.words[self.last_word + 1][0] - self.words[self.last_word][0] ) / 1.2 < time  / 1000:
+                                self.last_word += 1
+
+                                if not "word" in self.changed:
+                                    self.logger["update"].debug(f"lyric changed : { self.words[self.last_word] }")
+                                    self.changed.append( "word" )
 
             if time < 0:  # en cas de reculer en dessous du debut
                 self.time["vlc"] = 0
@@ -113,8 +122,10 @@ def update_logic(self):
 
             if self.term_size != ( _ := os.get_terminal_size() ) :
                 self.term_size = _
+
                 if not "display" in self.changed:
                     self.changed.append("display")
+
                 self.logger["update"].debug(f"terminal size changed to {self.term_size}")
 
 
@@ -122,38 +133,15 @@ def update_logic(self):
                 self.song_saved = True
                 self.write_song_database( self.song[ 1 ] )
 
-
-            """
-            if self.time_check[3]:
-                self.time_check[3] -= 1
-
-            if not self.time_check[0] and not self.time_check[3]:
-                self.time_check[0] = True
-                self.time_check[1] = self.player.get_time()
-                self.time_check[2] = monotonic()
-
-            if self.time_check[0] and not self.pause:
-
-                if self.time_check[2] + 5 < monotonic():
-
-                    if self.player.get_time() == self.time_check[1]:
-
-                        self.play_song( (1 - self.repeat ) )
-                        self.display()
-
-                    else:
-                        self.time_check = [False, 0, 0, 60]
-            """
-
             if self.bar:
-                if not self.player.is_playing() and not self.pause:   # la chanson est fini# la chason est bien fini et ne vien pas de commencer
+                if not self.player.is_playing() and not self.pause:
                     self.logger["update"].info("song finished, next one")
                     self.play_song((1 - self.repeat))
                     self.display()
 
 
 def update_display(self, value ):
-    #self.logger["update"].trace("display loop")
+    self.logger["update"].bullshit("display loop")
     if "space" in self.changed and not self.search:
         wipe()
         self.logger["update"].trace("cleared screen")
@@ -193,7 +181,7 @@ def update_display(self, value ):
                 string = self.playlist + "   " + string
 
             if self.timer:
-                string += "   " + f"timer :{self.timer[1]} mins"
+                string += "   " + f"timer :{self.timer["remaining"]} mins"
 
             space = floor((self.term_size.columns - len(string)) / 2)
 
