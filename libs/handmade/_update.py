@@ -29,11 +29,14 @@ def update_logic(self):
             self.logger["update"].trace("time as changed")
             self.changed.append("time")
 
+    if self.pause:
+        self.logger["update"].bullshit("player is paused")
+
     if self.timer:
 
         if not "timer" in self.changed:
 
-            if monotonic() > self.timer["start"] + ( self.timer["elapsed"] * 60 ) and self.timer["update_mode"] in [ "time" ]:
+            if monotonic() > self.timer["start"] + ( self.timer["elapsed"] * 60 ) and self.timer["update_mode"] in [ "time","time-song" ]:
                 self.timer["elapsed"] += 1
                 self.timer["remaining"] -= 1
                 self.logger["update"].debug(f"timer as changed : {self.timer}")
@@ -87,7 +90,7 @@ def update_logic(self):
                 self.bar.index = floor( time / 1000 )
                 if not "bar" in self.changed:
                     self.changed.append("bar")
-                    self.logger["update"].debug("bar changed ")
+                    self.logger["update"].trace("bar changed ")
 
             if self.word:
 
@@ -127,7 +130,7 @@ def update_logic(self):
                 self.write_song_database( self.song[ 1 ] )
 
             if self.bar:
-                if not self.player.is_playing() and not self.pause:
+                if not self.player.is_playing() and not self.pause and self.stay:
                     self.logger["update"].info("song finished, next one")
                     self.play_song((1 - self.repeat))
                     self.display()
@@ -174,7 +177,7 @@ def update_display(self, value ):
                 string = self.playlist + "   " + string
 
             if self.timer:
-                string += "   " + f"timer :{self.timer["remaining"]} mins"
+                string += "   " + f"timer :{self.timer["remaining"]} {self.timer["display"]}"
 
             space = floor((self.term_size.columns - len(string)) / 2)
 

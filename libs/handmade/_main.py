@@ -259,15 +259,16 @@ def set_timer( self ):
 
     update_menu = [ "time", "song", "time-song"]
     update_count = [ "minute" , "songs" ,"minute and wait till end of the song"]
+    display = ["mins","songs","mins+"]
     update = self.asker.menu_deroulant( update_menu ,self.update_logic)
-    if  word < 3 and update < 2:
+    if  word < 3 and update < 3:
         #self.timer_mode = word
         
         self.out( "enter nothing to delete current timer" )
         choice = self.ask( f"shutdown in  x  {update_count[update]} :" )
     
         if all_numbers( choice ):
-            self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "end_mode": end_menu[  word ] , "update_mode" : update_menu[ update ] }
+            self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "end_mode": end_menu[  word ] , "update_mode" : update_menu[ update ], "display": display[update] }
             self.logger["main"].info("set timer")
             self.logger["main"].debug(f"timer : {self.timer}")
         else:
@@ -279,6 +280,7 @@ def set_timer( self ):
     self.display()
 
 def end_timer(self):
+    self.logger["main"].debug(f"called end of timer : {self.timer}")
     if self.timer["end_mode"] == "quit":
         self.end()
 
@@ -286,6 +288,7 @@ def end_timer(self):
         self.wind(5)
 
     elif self.timer["end_mode"] == "pause":
+        sleep(0.1)
         self.wind(6)
 
     self.timer = None

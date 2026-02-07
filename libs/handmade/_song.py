@@ -72,6 +72,7 @@ def play_song( self ,choose = 1):
         if self.timer:
             if self.timer["update_mode"] == "song":
                 self.timer["remaining"] -= 1
+
             if self.timer["update_mode"] in ["song","time-song"] and self.timer["remaining"] < 1:
                 self.end_timer()
 
@@ -240,31 +241,11 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 def select( self ):
     self.logger["song"].info("showing song gallery to the User")
     self._select_song( self.files, text = "song library" )
-    """
-    white()
-    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.files ] , self.update_logic , search = True)
-
-    if song < len(self.files):
-        self.song = self.files[song]
-        self.play_song(choose = 0)
-
-    self.display()
-    """
 
 def select_fav( self ):
     self.logger["song"].info("showing favorite song to the User")
     self._select_song( self.favorite, text = "favorite songs" )
 
-    """
-    white()
-    song = self.asker.menu_deroulant([ f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.favorite ] , self.update_logic , search = True)
-
-    if song < len(self.favorite):
-        self.song = self.favorite[song]
-        self.play_song(choose = 0)
-
-    self.display()
-    """
 
 def most_played( self ):
     liste = self.played_database()
@@ -272,16 +253,7 @@ def most_played( self ):
     liste = [ [ x[0], x[1] ] for x in liste ]
     self.logger["song"].info("showing most played song to the User")
     self._select_song( liste , display_list, "most played")
-    """
-    white()
-    song = self.asker.menu_deroulant([f"{str(x[0])}: {x[1].rsplit('/', 1)[1]}" for x in liste],self.update_logic, search=True)
 
-    if song < len(liste):
-        self.song = liste[song]
-        self.play_song( choose = 0 )
-
-    self.display()
-    """
 
 def play_now( self ):
     if self.to_play:
