@@ -39,7 +39,7 @@ add_logging_level("BULLSHIT",1)
 
 
 class App:
-    def __init__( self, directory = "" , song = "", logging_level = logging.BULLSHIT ):
+    def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
 
 
 
@@ -47,7 +47,7 @@ class App:
         self.logging_level = logging_level
         self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
 
-        self.log_file_handler = logging.FileHandler(f"log/{datetime.datetime.now()}.log")
+        self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(":","|")}.log")
         self.log_file_handler.setFormatter( self.log_formatter )
         self.log_file_handler.setLevel( self.logging_level )
 
@@ -81,7 +81,7 @@ class App:
     from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode
     from libs.handmade._download import init_download, yt_search, dl_yt_playlist  
     from libs.handmade._song import init_song, _choose_song, load_songs, play_song, play_last, historic, select, _play, play_midi, convert_midi, default_midi, get_metadata, most_played, select_fav,_select_song,play_now
-    from libs.handmade._main import init_main, main, get_input, load_all, wind, display, set_timer, param_center, clear_cache, n_input, reset_settings
+    from libs.handmade._main import init_main, main, get_input, load_all, wind, display, set_timer, param_center, clear_cache, n_input, reset_settings, end_timer
     from libs.handmade._printimage import print_image_to_screen, init_printer
     from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database, find_song_database, played_database
     from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist

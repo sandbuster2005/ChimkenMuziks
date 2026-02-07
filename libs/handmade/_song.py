@@ -48,6 +48,7 @@ def play_song( self ,choose = 1):
     
     if len( self.files ) != 0: # if there are song
 
+
         if choose:
             self._choose_song()
             
@@ -67,6 +68,12 @@ def play_song( self ,choose = 1):
         self._play() #send song to the player
 
         self.pause = 0
+
+        if self.timer:
+            if self.timer["update_mode"] == "song":
+                self.timer["remaining"] -= 1
+            if self.timer["update_mode"] in ["song","time-song"] and self.timer["remaining"] < 1:
+                self.end_timer()
 
 
 def _choose_song(self):

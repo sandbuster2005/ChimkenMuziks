@@ -254,17 +254,20 @@ def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
     """
-    menu = [ "quit", "mute", "pause" ]
-    word = self.asker.menu_deroulant( menu ,self.update_logic)# timer modes
-    if  word < 3:
+    end_menu = [ "quit", "mute", "pause" ]
+    word = self.asker.menu_deroulant( end_menu ,self.update_logic)
+
+    update_menu = [ "time", "song", "time-song"]
+    update_count = [ "minute" , "songs" ,"minute and wait till end of the song"]
+    update = self.asker.menu_deroulant( update_menu ,self.update_logic)
+    if  word < 3 and update < 2:
         #self.timer_mode = word
         
         self.out( "enter nothing to delete current timer" )
-        choice = self.ask( "shutdown in  x minutes :" )
+        choice = self.ask( f"shutdown in  x  {update_count[update]} :" )
     
         if all_numbers( choice ):
-            self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "mode": menu[ int( word ) ] }
-            #self.timer = [ 1, int( choice ), monotonic() ]# [elapsed time (m), time remaining (m) , starting time]
+            self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "end_mode": end_menu[  word ] , "update_mode" : update_menu[ update ] }
             self.logger["main"].info("set timer")
             self.logger["main"].debug(f"timer : {self.timer}")
         else:
@@ -275,6 +278,17 @@ def set_timer( self ):
         
     self.display()
 
+def end_timer(self):
+    if self.timer["end_mode"] == "quit":
+        self.end()
+
+    elif self.timer["end_mode"] == "mute":
+        self.wind(5)
+
+    elif self.timer["end_mode"] == "pause":
+        self.wind(6)
+
+    self.timer = None
 def param_center( self ):
     """
     cette fonction permet de gérer les différents paramétre boolean

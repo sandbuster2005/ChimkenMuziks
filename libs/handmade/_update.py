@@ -19,17 +19,9 @@ def init_update(self):
 
 def update_logic(self):
     if self.timer:
-        if self.timer["remaining"] < 1:
+        if self.timer["remaining"] < 1 and self.timer["update_mode"] == "time":
             self.logger["update"].info("timer finished")
-
-            if self.timer["mode"] == "quit":
-                self.end()
-
-            elif self.timer_mode == "mute" :
-                self.wind(5)
-
-            elif self.timer_mode == "pause":
-                self.wind(6)
+            self.end_timer()
 
     if not "time" in self.changed:
         if self.current_time != current_time():
@@ -40,7 +32,8 @@ def update_logic(self):
     if self.timer:
 
         if not "timer" in self.changed:
-            if monotonic() > self.timer["start"] + ( self.timer["elapsed"] * 60 ):
+
+            if monotonic() > self.timer["start"] + ( self.timer["elapsed"] * 60 ) and self.timer["update_mode"] in [ "time" ]:
                 self.timer["elapsed"] += 1
                 self.timer["remaining"] -= 1
                 self.logger["update"].debug(f"timer as changed : {self.timer}")
