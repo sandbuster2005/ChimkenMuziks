@@ -47,7 +47,7 @@ class App:
         self.logging_level = logging_level
         self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
 
-        self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(":","|")}.log")
+        self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(':','|')}.log")
         self.log_file_handler.setFormatter( self.log_formatter )
         self.log_file_handler.setLevel( self.logging_level )
 
