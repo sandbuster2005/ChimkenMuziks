@@ -177,7 +177,7 @@ def update_display(self, value ):
                 string = self.playlist + "   " + string
 
             if self.timer:
-                string += "   " + f"timer :{self.timer["remaining"]} {self.timer["display"]}"
+                string += "   " + f"timer :{self.timer['remaining']} {self.timer['display']}"
 
             space = floor((self.term_size.columns - len(string)) / 2)
 
