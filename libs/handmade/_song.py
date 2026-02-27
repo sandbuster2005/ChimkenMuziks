@@ -210,6 +210,10 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
         song = file_list[ song ]
         self.logger["song"].debug(f"user selected {song} ")
 
+        if self.song == None :
+            self.song = song
+            self.play_song( choose = 0 )
+
         if self.waitlist and not play_next:
             if song not in self.to_play:
                 self.to_play = [ song ] + self.to_play

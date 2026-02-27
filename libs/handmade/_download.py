@@ -23,8 +23,9 @@ def yt_search( self ):
     word = self.ask("votre recherche : ")
     results = YoutubeSearch( word, max_results = 10 ).to_dict()#10 premier resultat de la recherche youtube     
     word = self.asker.menu_deroulant( [ results[ x ].get( "title" ) for x in range ( len( results ) ) ], self.update_logic)# see titles of vid
-    self.logger["download"].debug(f"selected { results[word]} ")
+
     if  word < 10 :
+        self.logger["download"].debug(f"selected {results[word]} ")
         option = ["mp3", "m4a"]# dowload format
         words = self.asker.menu_deroulant( option,self.update_logic )
         
@@ -53,6 +54,10 @@ def yt_search( self ):
                 "format": "ba",
                 "noplaylist" : True,
                 "writethumbnail" : True,
+                "logger" : self.logger["download"],
+                "writesubtitles" : True,
+                #"listsubtitles" : True ,
+                "writeinfojson" : True,
                 "postprocessors": [{  # Extract audio using ffmpeg
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': extension,

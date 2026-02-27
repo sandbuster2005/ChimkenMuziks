@@ -81,6 +81,7 @@ class ReadChar:
             return c1 + c2 + c3
 
         c4 = self.char()
+        print(c4)
         if c4 not in "\x30\x31\x32\x33\x34\x35\x37\x38\x39\x3B":
             return c1 + c2 + c3 + c4
 
@@ -122,6 +123,7 @@ def readkey() -> str:
     read and returned as noted in `_posix_key.py`."""
 
     c1 = readchar()
+
     if c1 in config.INTERRUPT_KEYS:
         raise KeyboardInterrupt
 
@@ -141,7 +143,7 @@ def readkey() -> str:
         return c1 + c2 + c3 + c4
 
     c5 = readchar()
-    if c4 not in "\x30\x31\x33\x34\x35\x37\x38\x39":
+    if c5 not in "\x30\x31\x33\x34\x35\x37\x38\x39":
         return c1 + c2 + c3 + c4 + c5
 
     c6 = readchar()
