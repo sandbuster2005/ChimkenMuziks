@@ -71,6 +71,7 @@ def yt_search( self ):
                 ydl.download( link )
 
             self.display()
+            self.load_songs( reset = 0)
 
             #self.external_call( [ f"yt-dlp -q -x --embed-thumbnail --audio-format { extension } -o { path }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
 

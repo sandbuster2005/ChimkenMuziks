@@ -25,9 +25,6 @@ def get_file( self, path, files = [] ):
     renvoie les ficher déja inclus et ceux du dossier scanné
     """
 
-    self.song = None
-    self.played = []
-    self.player.stop()
 
 
     for f in listdir( path ):

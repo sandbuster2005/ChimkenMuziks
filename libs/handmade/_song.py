@@ -12,7 +12,7 @@ def init_song( self ):
     self.last_word = -1 # pos in current lyrics if there are
     self.new_logger("song")
 
-def load_songs( self ):
+def load_songs( self , reset = 1 ):
     """
     cette fonction permet de charge en memoire les chanson de la playlist selectionné/toute
     et de remmetre a 0 le lecteur
@@ -28,18 +28,23 @@ def load_songs( self ):
         self.logger["song"].info(f"loading song from {self.path_to_file}")
         self.files = self.get_file( self.path_to_file, [] )
 
+    #TODO check self.played if song deleted
+
     self.update_song_database( self.files )
 
     self.indexs = self.get_index_data( self.files )
     self.logger["song"].debug(f"loaded indexes : {self.indexs}")
     
     self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
-    self.song = None
+
+    if reset:
+        self.song = None
+
     self.logger["song"].info(f"loaded {len( self.files)} song in memory")
     self.logger["song"].trace(f"file : { self.files }")
     
     self.load_favorite_database()
-
+    self.load_playlist()
 
 def play_song( self ,choose = 1):
     """
@@ -54,7 +59,7 @@ def play_song( self ,choose = 1):
             
         self.get_words()# check if there are a lyric file
         
-        if self.song[-4:] ==".mid": # if its a midi comvert it with a midi codec to a playable version
+        if self.song[-4:] ==".mid": # if its a midi convert it with a midi codec to a playable version
             self.play_midi()
 
         if not self.played:#if list is empty
