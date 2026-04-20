@@ -2,10 +2,10 @@
 from random import randint
 from .utils import *
 from .ffiles import *
-import libs.midi2audio as midi2audio
+import midi2audio as midi2audio
 from os import listdir
 from os.path import isfile, splitext, dirname
-from libs.tinytag import TinyTag
+from tinytag import TinyTag
 def init_song( self ):
     #SONG variables
     self.song = None# currently playing song

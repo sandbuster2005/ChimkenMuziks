@@ -1,5 +1,5 @@
 #made by sand
-from time import sleep,monotonic
+from time import sleep,monotonic,time
 from libs.progress.bar import Bar
 from math import floor,ceil
 from time import sleep,strftime
@@ -10,11 +10,14 @@ from .utils import *
 from .ffiles import *
 from .terminal import *
 from libs.readchar import key
-import libs.vlc as vlc
+from pypresence import Presence ,ActivityType, StatusDisplayType
+
+import vlc as vlc
 import threading
 import random
 import platform
 import os
+
 
 def init_main( self, directory, song ):
     #process arg passed with the start command
@@ -44,8 +47,31 @@ def init_main( self, directory, song ):
     self.input = ReadChar() # systeme d'input
 
     self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
- 
-   
+    
+    client_id = "1495534597419700264"
+    self.RPC = Presence( client_id )
+    self.RPC.connect()
+    """
+    print(time())
+    sleep(1)
+    print(time())
+    sleep(2)
+    RPC.update(
+        activity_type = ActivityType.LISTENING,
+        status_display_type = StatusDisplayType.NAME ,
+        name = "song21",
+        state = "testing",
+        start = int(time() )  
+        )
+    
+    sleep(2)
+    
+    RPC.clear()
+    
+    RPC.close()
+    """
+    
+    
 def main( self ):
     """
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 

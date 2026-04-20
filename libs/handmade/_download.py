@@ -1,5 +1,5 @@
 #made by sand
-from libs.youtube_search import YoutubeSearch
+from youtube_search import YoutubeSearch
 from .utils import *
 from os import listdir, makedirs
 from os.path import isdir

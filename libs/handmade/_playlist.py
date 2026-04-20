@@ -1,5 +1,5 @@
 from .utils import *
-from libs.tinytag import TinyTag
+from tinytag import TinyTag
 def init_playlist(self):
     pass
 

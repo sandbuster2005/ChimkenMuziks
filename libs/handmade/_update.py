@@ -1,10 +1,14 @@
 import os
 import random
-from time import strftime, monotonic, sleep
+from time import strftime, monotonic, sleep , time as timeS
 from libs.progress.bar import Bar
 from math import floor,ceil
+from pypresence import ActivityType, StatusDisplayType
 from .terminal import *
 from .utils import closest, white
+
+
+
 def current_time():
     return strftime('%H %M').split(" ")
 
@@ -66,6 +70,22 @@ def update_logic(self):
                 lenght = self.player.get_length()
                 self.bar = Bar(f"", max = floor( lenght / 1000 ), color = color, addaptative_bar = self.addaptive_bar,
                                center = self.center)
+                
+                if os.name == 'nt':
+                    separator = '\\'
+                else:
+                    separator = '/'
+                name = self.song[1].rsplit(separator, 1)[1]
+                name = name.rsplit(".",1)[0]
+                
+                self.RPC.update(
+                    activity_type = ActivityType.LISTENING,
+                    status_display_type = StatusDisplayType.NAME ,
+                    name = name,
+                    state = "ChimkenMuziks",
+                    start = int( timeS() ),
+                    end = int( timeS() + lenght / 1000 )
+        )
 
 
         else:
@@ -243,5 +263,7 @@ def end(self):
     self.stay = False
     self.logger["update"].info("EXITING APP")
     self.player.stop()
+    self.RPC.clear()
+    self.RPC.close()
     if self.save_param:
         self.write_param()

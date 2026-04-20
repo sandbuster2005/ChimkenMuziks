@@ -1,7 +1,6 @@
 import os
 import sys
 from .terminal import out , tbackground
-sys.path.append(os.path.abspath("libs"))
 import imageio as iio
 try:
     import numpy
