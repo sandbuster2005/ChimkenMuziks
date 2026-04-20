@@ -10,8 +10,6 @@ from .utils import *
 from .ffiles import *
 from .terminal import *
 from libs.readchar import key
-from pypresence import Presence ,ActivityType, StatusDisplayType
-
 import vlc as vlc
 import threading
 import random
@@ -48,9 +46,8 @@ def init_main( self, directory, song ):
 
     self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
     
-    client_id = "1495534597419700264"
-    self.RPC = Presence( client_id )
-    self.RPC.connect()
+    if self.discordRP:
+        self.connect_to_discord()
     
     
 def main( self ):
@@ -246,35 +243,15 @@ def wind( self, mode, pause = False  ):
     if mode == 6:# pause the music
         self.pause = 1 - self.pause
         
-        if self.song:
-            if os.name == 'nt':
-                separator = '\\'
-            else:
-                separator = '/'
-                        
-            name = self.song[1].rsplit(separator, 1)[1]
-            name = name.rsplit(".",1)[0]
-                    
-                    
+        if self.song and self.discord and self.discordRP:
+              
             if self.pause:
-                self.RPC.update(
-                    activity_type = ActivityType.LISTENING,
-                    status_display_type = StatusDisplayType.NAME ,
-                    name = name,
-                    state = "ChimkenMuziks - Paused", 
-                )
-            
+                self.pause_discord_status()
+                
             elif not self.pause:
-                self.RPC.update(
-                    activity_type = ActivityType.LISTENING,
-                    status_display_type = StatusDisplayType.NAME ,
-                    name = name,
-                    state = "ChimkenMuziks",
-                    start = time() - self.bar.index,
-                    end = time() + self.bar.max - self.bar.index
-                    
-                )
-        
+                self.update_discord_status()
+                
+                
         self.player.pause()
         self.logger["main"].debug(f" pause state { self.pause }")
 

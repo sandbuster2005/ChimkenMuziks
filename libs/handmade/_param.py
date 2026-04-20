@@ -35,7 +35,8 @@ def init_param( self ):
                    [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
                    [ "playlist_type","type de playlist", "", "str" , False],
                    [ "quickselect" , "remove need for confirmation when possible", 0, "bool", True ],
-                   [ "waitlist" , "automatically send song when searching in waiting list ", 0 , "bool", True ]
+                   [ "waitlist" , "automatically send song when searching in waiting list ", 0 , "bool", True ],
+                   [ "discordRP" , "allow app to send playing media to discord status" , 1 , "bool" , True ]
                    ]
     
     for x in self.params:

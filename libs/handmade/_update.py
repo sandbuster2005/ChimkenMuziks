@@ -3,7 +3,7 @@ import random
 from time import strftime, monotonic, sleep , time as timeS
 from libs.progress.bar import Bar
 from math import floor,ceil
-from pypresence import ActivityType, StatusDisplayType
+from pypresence import  Presence, ActivityType, StatusDisplayType
 from .terminal import *
 from .utils import closest, white
 
@@ -71,21 +71,8 @@ def update_logic(self):
                 self.bar = Bar(f"", max = floor( lenght / 1000 ), color = color, addaptative_bar = self.addaptive_bar,
                                center = self.center)
                 
-                if os.name == 'nt':
-                    separator = '\\'
-                else:
-                    separator = '/'
-                name = self.song[1].rsplit(separator, 1)[1]
-                name = name.rsplit(".",1)[0]
-                
-                self.RPC.update(
-                    activity_type = ActivityType.LISTENING,
-                    status_display_type = StatusDisplayType.NAME ,
-                    name = name,
-                    state = "ChimkenMuziks",
-                    start = int( timeS() ),
-                    end = int( timeS() + lenght / 1000 )
-        )
+                if self.discord and self.discordRP:
+                   self.update_discord_status()
 
 
         else:
@@ -143,6 +130,18 @@ def update_logic(self):
                     self.changed.append("display")
 
                 self.logger["update"].debug(f"terminal size changed to {self.term_size}")
+                
+            if self.discordRP and not self.discord_connected and self.discord:
+                self.connect_to_discord()
+                self.update_discord_status()
+                self.discord_connected = True
+                
+            if not self.discordRP and self.discord_connected and self.discord:
+                self.RPC.clear()
+                self.RPC.close()
+                self.discord_connected = False
+            
+            
 
 
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
@@ -154,6 +153,7 @@ def update_logic(self):
                     self.logger["update"].info("song finished, next one")
                     self.play_song((1 - self.repeat))
                     self.display()
+            
 
 
 def update_display(self, value ):
@@ -253,6 +253,54 @@ def update_display(self, value ):
             out(value)
             self.logger["update"].trace("updated bar")
             self.changed.remove("bar")
+
+
+def connect_to_discord(self):
+    client_id = "1495534597419700264"
+    try:
+        self.RPC = Presence( client_id )
+        self.RPC.connect()
+            
+    except:
+        self.discord = False
+        self.discord_connected = False
+            
+    else:
+        self.discord = True
+        self.discord_connected = True    
+
+
+
+def update_discord_status(self):
+    if os.name == 'nt':
+        separator = '\\'
+    else:
+        separator = '/'
+        
+    name = self.song[1].rsplit(separator, 1)[1]
+    name = name.rsplit(".",1)[0]
+    
+    self.RPC.update(
+        activity_type = ActivityType.LISTENING,
+        status_display_type = StatusDisplayType.NAME ,
+        name = name,
+        state = "ChimkenMuziks",
+        start = timeS() - self.bar.index,
+        end = timeS() + self.bar.max - self.bar.index   
+        )
+
+def pause_discord_status(self):
+    self.RPC.update(
+        activity_type = ActivityType.LISTENING,
+        status_display_type = StatusDisplayType.NAME ,
+        name = "Paused",
+        state = "ChimkenMuziks", 
+        )
+            
+
+
+
+
 
 def is_finished(self):
     if not self.stay:
