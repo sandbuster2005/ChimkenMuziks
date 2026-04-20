@@ -10,7 +10,6 @@ def init_song( self ):
     #SONG variables
     self.song = None# currently playing song
     self.last_word = -1 # pos in current lyrics if there are
-    self.new_logger("song")
 
 def load_songs( self , reset = 1 ):
     """

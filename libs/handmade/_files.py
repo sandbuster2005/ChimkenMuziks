@@ -11,7 +11,6 @@ import re
 
 def init_file( self ):
     self.files = []# chanson chargé
-    self.new_logger("file")
         
 def get_file( self, path, files = [] ):
     """

@@ -3,7 +3,6 @@ from .ffiles import *
 
 def init_param( self ):
     self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
-    self.new_logger("param")
 
     #              [ param name, tooltip ,defaut value ,type ,param center ?]
     self.params =  [

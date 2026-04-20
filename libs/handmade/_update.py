@@ -19,7 +19,6 @@ def init_update(self):
     self.current_time = current_time()
     self.time = {"vlc": 0 , "python": 0 }
     self.time_check = [False, 0, 0, 0]
-    self.new_logger("update")
 
 def update_logic(self):
     if self.timer:
@@ -311,7 +310,9 @@ def end(self):
     self.stay = False
     self.logger["update"].info("EXITING APP")
     self.player.stop()
-    self.RPC.clear()
-    self.RPC.close()
+    if self.discord_connected:
+        self.RPC.clear()
+        self.RPC.close()
+        
     if self.save_param:
         self.write_param()

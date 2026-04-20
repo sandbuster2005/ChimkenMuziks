@@ -45,7 +45,6 @@ def init_command( self ):
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add nn
-    self.new_logger("command")
     
 def sort_command( self ):
     """

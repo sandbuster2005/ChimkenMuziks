@@ -4,7 +4,7 @@ from os.path import isfile
 from .utils import *
 
 def init_data(self):
-    self.new_logger("data")
+    pass
 
 def write_song_database(self,song):
     self.create_song_database()
@@ -148,10 +148,14 @@ def load_playlist_database(self):
     base.close()
     self.playlist_files =  [  [ x[0],x[1] ] for x in result if isfile(x[1]) ]
 
-def update_playlist_database(self, playlist, value):
+def update_playlist_database(self, playlist, value , song = None):
+    if not song:
+        song = self.song[ 1 ]
+    
+    self.logger["data"].debug(f"setting {song} value {value} for {playlist} ")
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute( f"UPDATE song SET {playlist} = ? where nom = ?",[ value, self.song[ 1 ] ] )
+    cursor.execute( f"UPDATE song SET {playlist} = ? where nom = ?",[ value, song ] )
     base.commit()
     base.close()
 
@@ -160,7 +164,9 @@ def is_in_playlist(self,playlist , song = None):
         song = self.song[ 1 ]
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute(f" select {playlist} FROM song where nom = ? ",[ song ] )
+    
+    self.logger["data"].debug(f"checking if {song} in {playlist }")
+    cursor.execute(f" select {playlist} FROM song where nom = ? ", [ song ] )
     result =  cursor.fetchone()[0]
     base.commit()
     base.close()

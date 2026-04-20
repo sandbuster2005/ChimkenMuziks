@@ -6,8 +6,7 @@ from os.path import isdir
 import yt_dlp
 
 def init_download( self ):
-    self.new_logger("download")
-
+    pass
 
 def yt_search( self ):
     """

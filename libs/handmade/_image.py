@@ -15,7 +15,6 @@ def init_image( self ):
     self.screen = None
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
 
-    self.new_logger("image")
 
     #if self.sysname == 'nt':
     #    self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"

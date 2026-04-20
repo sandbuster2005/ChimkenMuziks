@@ -2,29 +2,9 @@
 #made by sand
 import argparse
 import sys
+from ChimkenJournalism import Journal
 import logging
 import datetime
-
-def add_logging_level(level_name,level_num):
-    method_name = level_name.lower()
-    level_name = level_name.upper()
-
-    def logForLevel(self, message, *args, **kwargs):
-        if self.isEnabledFor(level_num):
-            self._log(level_num, message, args, **kwargs)
-
-    def logToRoot(message, *args, **kwargs):
-        logging.log(level_num, message, *args, **kwargs)
-
-    logging.addLevelName(level_num, level_name)
-
-    setattr(logging, level_name, level_num)
-    setattr(logging.getLoggerClass(), method_name, logForLevel)
-    setattr(logging, method_name, logToRoot)
-
-add_logging_level("TRACE",5)
-add_logging_level("BULLSHIT",1)
-
 
 #debug levels :
     #NOTSET : 0
@@ -41,18 +21,40 @@ add_logging_level("BULLSHIT",1)
 class App:
     def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
 
-        self.logger = {}
-        self.logging_level = logging_level
-        self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
+        #self.logger = {}
+        #self.logging_level = logging_level
+        #self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
 
-        self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(':','_')}.log")
-        self.log_file_handler.setFormatter( self.log_formatter )
-        self.log_file_handler.setLevel( self.logging_level )
+        #self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(':','_')}.log")
+        #self.log_file_handler.setFormatter( self.log_formatter )
+        #self.log_file_handler.setLevel( self.logging_level )
 
-        self.new_logger("main")
+        #self.new_logger("main")
+        conf ={
+            "default" :{
+                "level": logging_level,
+                "format": "%(asctime)s | %(name)s | %(levelname)s | %(message)s",
+                "loggers": ["main", "param", "command", "file", "image", "download", "song", "data", "update"],
+                "handlers":[
+                    {
+                    "name" : f"log/{str(datetime.datetime.now()).replace(':','_')}.log",
+                    "type" : "file",
+                    "level": 0
+                    }      
+                    ]
+            }
+        }
+        
+        self.logger = Journal( conf )
+        self.logger.add_level("TRACE",5)
+        self.logger.add_level("BULLSHIT",1)
+        
+        
+        
         self.logger["main"].info("APP STARTED")
 
         self.logger["main"].debug("initializing methods")
+        
         self.init_param()
         self.init_main( directory , song)
         self.init_sound()
