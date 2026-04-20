@@ -145,7 +145,7 @@ def update_logic(self):
 
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
                 self.song_saved = True
-                self.write_song_database( self.song[ 1 ] )
+                self.write_song_database( self.song.file )
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause and self.stay:
@@ -200,12 +200,7 @@ def update_display(self, value ):
 
             space = floor((self.term_size.columns - len(string)) / 2)
 
-            if os.name == 'nt':
-                a = '\\'
-            else:
-                a = '/'
-
-            name = self.song[1].rsplit(a, 1)[1]
+            name = self.song.name
 
             if self.song in self.favorite:
                 name = "*" + name + "*"
@@ -255,34 +250,29 @@ def update_display(self, value ):
 
 
 def connect_to_discord(self):
-    client_id = "1495534597419700264"
-    try:
-        self.RPC = Presence( client_id )
-        self.RPC.connect()
+    self.discord = True
+    self.discord_connected = False
+    
+    if self.discordRP:
+        client_id = "1495534597419700264"
+        try:
+            self.RPC = Presence( client_id )
+            self.RPC.connect()
             
-    except:
-        self.discord = False
-        self.discord_connected = False
+        except:
+            self.discord = False
+            self.discord_connected = False
             
-    else:
-        self.discord = True
-        self.discord_connected = True    
+        else:
+            self.discord_connected = True    
 
 
 
 def update_discord_status(self):
-    if os.name == 'nt':
-        separator = '\\'
-    else:
-        separator = '/'
-        
-    name = self.song[1].rsplit(separator, 1)[1]
-    name = name.rsplit(".",1)[0]
-    
     self.RPC.update(
         activity_type = ActivityType.LISTENING,
         status_display_type = StatusDisplayType.NAME ,
-        name = name,
+        name = self.song.name,
         state = "ChimkenMuziks",
         start = timeS() - self.bar.index,
         end = timeS() + self.bar.max - self.bar.index   
@@ -296,15 +286,12 @@ def pause_discord_status(self):
         state = "ChimkenMuziks", 
         )
             
-
-
-
-
-
+            
 def is_finished(self):
     if not self.stay:
         return True
     return False
+
 
 def end(self):
     self.stay = False

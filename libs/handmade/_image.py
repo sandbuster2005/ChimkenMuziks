@@ -76,7 +76,7 @@ def display_img( self ):
     """
     if self.img_mode == "img":
        
-       if not ".mid" in self.song:
+       if not ".mid" in self.song.file:
             self.get_metadata()
         
        if self.thumbnail != None:

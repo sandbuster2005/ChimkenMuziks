@@ -124,17 +124,17 @@ def playlist_manager(self):
         elif word == 4 and playlists:
             playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
             res = 0
-            indexes = { x[0] : self.is_in_playlist(playlists[playlist], x[1] ) for x in self.files }
-            files = [ x for x in self.files ]
+            indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
+            files = [ song for song in self.files ]
             
             while res < len(self.files):
-                menu = [ f"{ str(x[0]) }: *{x[1].rsplit('/',1)[1]}*"  if indexes[ x[0] ] else f"{ str(x[0]) }: {x[1].rsplit('/',1)[1]}" for x in self.files ]
+                menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
                 res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
                 
                 if res < len(self.files):
-                    song = files[res]
-                    indexes[ song[0] ] = 1 - indexes[ song[0] ]
-                    self.update_playlist_database( playlists[playlist] , indexes[ song[0] ], song[1] )
+                    song = files[ res ]
+                    indexes[ song.index ] = 1 - indexes[ song.index ]
+                    self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
 
 
 

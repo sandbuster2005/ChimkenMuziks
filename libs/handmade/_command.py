@@ -33,7 +33,7 @@ def init_command( self ):
          ["w", self.reset_settings, {}, "Reset settings"], #pour remetre les paramètre a 0
          ["x", self.dl_yt_playlist, {}, "Download a Youtube playlist"], #pour télécharger une playlist youtube
          ["dl", self.yt_search, {}, "Search on Youtube and download"], #pour rechercher sur youtube
-         ["z", self.mani_file, {}, "Delete, move or rename a file"], #pour supprimer/deplacer/renommer un fichier
+         ["z", self.help_menu, {}, "empty key"], #pour supprimer/deplacer/renommer un fichier
          ["e", self.change_confirmation, {}, "Change choice message"], #pour changer le message de choix
          ["f",  self.set_timer , {}, "Set a timer"], #pour mettre un timer
          ["bb", self.wind, { 15 : "mode" }, "Rewind to start of the song"], #pour la musique en cours a 0

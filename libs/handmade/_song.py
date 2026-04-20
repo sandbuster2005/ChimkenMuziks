@@ -28,19 +28,22 @@ def load_songs( self , reset = 1 ):
         self.files = self.get_file( self.path_to_file, [] )
 
     #TODO check self.played if song deleted
-
+    
     self.update_song_database( self.files )
 
     self.indexs = self.get_index_data( self.files )
     self.logger["song"].debug(f"loaded indexes : {self.indexs}")
     
-    self.files = [ [self.indexs[x] ,self.files[x]] for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
-
+    #print( self.files[0] )
+    
+    #test = self.Song (file = self.files[0], index = self.indexs[0], separator = self.separator)
+    
+    self.files = [ self.Song( self.indexs[x] ,self.files[x] , self.separator )  for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
     if reset:
         self.song = None
 
     self.logger["song"].info(f"loaded {len( self.files)} song in memory")
-    self.logger["song"].trace(f"file : { self.files }")
+    #self.logger["song"].trace(f"file : { self.files }")
     
     self.load_favorite_database()
     self.load_playlist()
@@ -58,15 +61,15 @@ def play_song( self ,choose = 1):
             
         self.get_words()# check if there are a lyric file
         
-        if self.song[-4:] ==".mid": # if its a midi convert it with a midi codec to a playable version
+        if self.song.extension =="mid": # if its a midi convert it with a midi codec to a playable version
             self.play_midi()
 
         if not self.played:#if list is empty
-            self.played.append(self.song)# add to historic
+            self.played.append( self.song )# add to historic
             self.logger["song"].trace(f"added {self.song} to historic")
 
         elif self.played[-1] != self.song:  # add to historic if song as changed
-            self.played.append(self.song)# add to historic
+            self.played.append( self.song )# add to historic
             self.logger["song"].trace(f"added {self.song} to historic")
 
         self._play() #send song to the player
@@ -96,6 +99,8 @@ def _choose_song(self):
             if self.playlist_files:
                 files = self.playlist_files
                 self.logger["song"].debug("choosing song in playlist")
+            else:
+                playlist = ""
 
         elif self.play_favorite: #choose in favorite if the option is on
             if self.favorite:
@@ -116,7 +121,7 @@ def _choose_song(self):
 
             if self.fchoose and self.favorite and self.song not in self.favorite and not self.exterior and not self.playlist:
                 self.logger["song"].debug("choosing via favorite biased method:")
-                num = randint(1, min(100, 50 + len(self.favorite) * 5))
+                num = randint( 1, min(100, 50 + len( self.favorite ) * 5) )
 
                 if num > 50:
                     files = self.favorite
@@ -135,7 +140,7 @@ def _choose_song(self):
                 if self.song not in files: # if there's a problem fall back to global
                     files = self.files
 
-                self.song = files[(files.index(self.song) + 1) % len(files)]  # chanson suivante : index+1
+                self.song = files[ (files.index( self.song ) + 1) % len(files) ]  # chanson suivante : index+1
 
     self.logger["song"].debug(f"chose {self.song}")
 
@@ -147,14 +152,14 @@ def _play( self ):
     une musique doit étre selectionné au préalable 
     """
 
-    self.logger["song"].info(f"playing {self.song[1]}")
+    self.logger["song"].info(f"playing {self.song.file}")
 
-    if ".mid" in self.song[1]:# if its a midi played converted version
+    if ".mid" in self.song.file:# if its a midi played converted version
         self.logger["song"].info(f"playing midi file")
-        self.player.set_mrl("appdata/cache/" + self.song[1].rsplit(".", 1)[0].rsplit("/", 1)[1] + ".wav")
+        self.player.set_mrl("appdata/cache/" + self.song.name + ".wav")
 
     else:
-        self.player.set_mrl( self.song[1] )# load song
+        self.player.set_mrl( self.song.file )# load song
 
     self.song_saved = False  # tell backend is can save a play in the database
     self.bar = None # reset bar
@@ -170,7 +175,7 @@ def play_last( self ):
         self.logger["song"].info(f"launching previous song ")
         self.played.pop()
         self.song = self.played[ -1 ]
-        self.play_song(choose = 0)
+        self.play_song( choose = 0 )
         
         
 def historic( self ):
@@ -180,40 +185,42 @@ def historic( self ):
     self.logger["song"].info("showing played song to user")
     self.logger["song"].debug(f"played : {self.played }")
     self.search = True
-    self.show_list( [ f"{ self.played[ x ][ 0 ] }: {  self.played [ x ][ 1 ].rsplit( '/',1 )[ -1 ] }" for x in range( len( self.played ) ) ], num = False )# index : nom
-
+    self.show_list( [ f"{ self.played[ x ].index }: {  self.played [ x ].filename }" for x in range( len( self.played ) ) ], num = False )# index : nom
+"""
 def old_select( self ):
-    """
+"""
     #cette fonction permet de chercher une chanson dans la liste chargé de chanson et l'affiche
     
     #limite:
     #cette fonction demande une chaine de charactére a rechercher dans les données de l'utilisateur
-    """
+"""
     self.search = True
     INPUT = self.ask( "rechercher dans la liste de chanson :" )
     result = self.find_file( str( INPUT ) )#recherche dans les fichiers
     if result:
-        self.show_list( [ f"{ result[ x ][ 1 ] } :{ result[ x ][ 0 ] }" for x in range( len( result ) ) ], num = False )
+        self.show_list( [ f"{ result[ x ][1]} :{ result[ x ][ 0 ] }" for x in range( len( result ) ) ], num = False )
     else:
         self.out("no song corresponding")
+"""
 
 
 
 def _select_song( self , file_list , display_list = None , text = "", play_next = False ):
     white()
     if display_list == None:
-        display_list = [ f"{ str( x[ 0 ] ) }: {x[ 1 ].rsplit( self.separator, 1 )[ 1 ] }" for x in file_list ]
+        display_list = [ f"{ str( song.index ) }: { song.filename }" for song in file_list ]
 
     self.logger["song"].info("showing select song menu to user")
     self.logger["song"].trace(f"display menu : {', '.join( display_list ) }")
     self.logger["song"].trace(f"file list : { file_list }")
 
-    song = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
+    song_index= self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
 
-    if song < len( file_list ):
-        song = file_list[ song ]
+    if song_index < len( file_list ):
+        song = file_list[ song_index ]
         self.logger["song"].debug(f"user selected {song} ")
-
+        
+        """
         if self.song == None :
             self.song = song
             self.play_song( choose = 0 )
@@ -222,27 +229,47 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
             if song not in self.to_play:
                 self.to_play = [ song ] + self.to_play
                 self.logger["song"].debug(f" added { song } to be played")
-
-        elif play_next:
+        """
+        
+        if play_next:
 
             self.song = song
 
             if self.song in self.to_play:
-                self.to_play.remove(self.song)
+                self.to_play.remove( self.song )
 
             self.play_song( choose = 0 )
 
         else:
-            choice = self.asker.menu_deroulant( ["play now","add to waitlist"], self.update_logic )
-
+            choice = self.asker.menu_deroulant( ["play now","add to waitlist", "delete ", "move", "rename", "convert"], self.update_logic )
+            if choice == 0:
+                self.song = song
+                self.play_song( choose = 0 )
+                
             if choice == 1:
                 if song not in self.to_play:
                     self.to_play = [ song ] + self.to_play
                     self.logger["song"].debug(f" added { song } to be played")
+            
+            if choice == 2:#delete
+                rm_file( song.file )
+                self.load_songs( reset = 0 )
+            
+            if choice == 3:#move 
+                new_dir = str( self.select_dir( retour = 1 ) )
+                if new_dir:
+                    mv_file( song.file, self.dirs[ int( new_dir ) ][ 0 ] + self.separator + song.filename )
+                    self.load_songs( reset = 0 )
+            
+            if choice == 4:#rename
+                new_name = self.ask( "new_name :" )
+                mv_file( song.file, song.filepath + new_name + "." + song.extension )
+                self.load_songs( reset = 0 )
+                
+            if choice == 5:#extension
+                self.change_extension(song)
 
-            if choice == 0:
-                self.song = song
-                self.play_song( choose = 0 )
+            
 
     self.display()
 
@@ -258,17 +285,17 @@ def select_fav( self ):
 def most_played( self ):
     liste = self.played_database()
     display_list = [ f"{ str(x[2]) }: {x[1].rsplit('/',1)[1]}" for x in liste ]
-    liste = [ [ x[0], x[1] ] for x in liste ]
+    liste = [ Song( x[0], x[1] , self.separator ) for song in liste ]
     self.logger["song"].info("showing most played song to the User")
     self._select_song( liste , display_list, "most played")
 
 
 def play_now( self ):
     if self.to_play:
-        display_list = [f"{ x[1].rsplit('/', 1)[1] }" for x in self.to_play ]
-        liste = [[x[0], x[1]] for x in self.to_play]
+        display_list = [f"{ song.name }" for song in self.to_play ]
+        liste = [[ x.index, x.file ] for song in self.to_play]
         self.logger["song"].info("showing to be played song to the User")
-        self._select_song(liste, display_list, "most played", play_next = True )
+        self._select_song(liste, display_list, "to be played", play_next = True )
 
 def play_midi(self):
     """
@@ -288,11 +315,11 @@ def convert_midi(self,soundmap = ""  , destination = "appdata/cache/" ):
     if soundmap == "":
         soundmap = self.base_soundmap
         
-    destination = destination + self.song.rsplit( ".", 1 )[ 0 ].rsplit("/",1)[1] + ".wav"
+    destination = destination + self.song.name + ".wav"
     
     if not isfile(destination) :
         fs = midi2audio.FluidSynth(soundmap)
-        fs.midi_to_audio(self.song ,destination )
+        fs.midi_to_audio(self.song.file ,destination )
         
 def default_midi(self):
     """
@@ -312,7 +339,7 @@ def get_metadata(self):
     cette fonction permet de recuperer la miniature d'un fichier si elle existe 
     """
     self.logger["song"].info("checking song metadata")
-    tag = TinyTag.get(self.song[1] , image = True)
+    tag = TinyTag.get(self.song.file , image = True)
     artist = tag.artist
     image = tag.images.any
     
@@ -323,7 +350,7 @@ def get_metadata(self):
         image = "appdata/cache/preview"
         
     elif tag.album :
-        for j in [splitext(self.song[1] )[0], dirname(self.song[1])+self.separator+tag.album]:
+        for j in [splitext(self.song.file )[0], dirname(self.song.file)+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
                 if isfile(i):
                     self.logger["song"].info("found img")

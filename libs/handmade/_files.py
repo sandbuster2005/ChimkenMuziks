@@ -198,7 +198,7 @@ def find_file( self, word ):
     toute les charactère sont considérée comme minuscule
     """
     self.logger["file"].info(f"basic search for {word } ")
-    files = [ [ self.files[ x ][ 1 ].rsplit( self.separator )[ -1 ], x ] for x in range(len(self.files)) if word.lower() in self.files[ x ][ 1 ].lower().rsplit( self.separator, 1 )[ -1 ] ]#cherche dans la liste de son en ignorant les majuscules
+    files = [ [ self.files[ x ].filename, x ] for x in range(len(self.files)) if word.lower() in self.files[ x ].filename.lower() ]#cherche dans la liste de son en ignorant les majuscules
     #basic search
 
 
@@ -206,10 +206,10 @@ def find_file( self, word ):
     if len(files) < 10 and len(word) > 3:
         self.logger["file"].info(f"advanced search for {word} ")
         for y in range( len( word ) ):
-            for i,x in enumerate( self.files ):
-                if [x[1].rsplit( self.separator )[ -1 ], i ] not in files:
-                    if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), x[ 1 ].lower() ):
-                        files.append( [ x [1] .rsplit( self.separator )[ -1 ], i ] )
+            for i,song in enumerate( self.files ):
+                if [song.filename, i ] not in files:
+                    if re.search( "".join( [x * ( i != y ) + "."*( i == y ) for i,x in enumerate( word ) ] ), song.filename.lower() ):
+                        files.append( [ song.filename, i ] )
     
     return sorted(files,key = lambda x: x[1] )#sort by index
 
@@ -243,66 +243,6 @@ def change_main_path( self ):
     self.path_to_file = ""
     self.check_adress()#obviously "" is not good
     self.load_songs()
-     
-     
-def mani_file(self):
-    """
-    cette fonction permet de supprimer , deplacer(dans les dossiers connu)
-    et renommer le fichier actuel
-    """
-    if self.song :
-        index = self.files.index( self.song )
-        
-        tooltip = [ "delete ", "move", "rename", "convert"]#option
-
-        word = self.asker.menu_deroulant( tooltip, self.update_logic )
-        
-        if  word < len( tooltip ):
-            
-            if word == 0:
-                choice = self.ask( "are you sure (y/n)" )
-                
-                if choice == "y":#delete
-                    self.logger["file"].info(f"User deleted {self.song[1]}")
-                    rm_file( self.song[ 1 ] )
-                    self.files.remove( self.song )
-                
-            elif  word == 1:#move
-                # TODO make it work
-                raise exception("Not Working")
-
-                choice = str( self.select_dir( retour = 1 ) )
-
-                if all_numbers( choice, len( self.dirs ), mode = 1 ):
-                    self.logger["file"].debug(self.song)
-                    self.logger["file"].info(f"User moved  {self.files[ index ]} to { self.song.rsplit( self.separator,1 )[ 0 ] + choice + '.' + self.song.rsplit( '.',1 )[ 1 ] } ")
-
-                    mv_file( self.song[ 1 ], self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ] )
-                    self.files[index] = self.dirs[ int( choice ) ][ 0 ] + self.separator + self.song.rsplit( self.separator, 1 )[ 1 ]
-
-            elif  word  == 2:#rename
-                # TODO make it work
-                raise exception("Not Working")
-                choice = self.ask( "new_name :" )
-
-                mv_file( self.song[ 1 ], self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ])
-                self.files[ index ] = self.song.rsplit( self.separator,1 )[ 0 ] + choice + "." + self.song.rsplit( ".",1 )[ 1 ]
-                
-            elif word  == 3:#convert
-                self.change_extension()
-                 
-            if word < 4 : #obviously whathever happended changed file and its not playable anymore like before
-                self.logger["file"].info("player stopped")
-                self.song = None
-                self.played = self.played[:-1]
-                self.player.stop()
-                print("")
-            
-            else:
-                self.display()
-        
-        else:
-            self.display()
             
 def get_words(self):
     """
@@ -313,7 +253,7 @@ def get_words(self):
     self.words = []
     
     if self.song:
-        file = self.song[1].rsplit( ".", 1 )[ 0 ] + ".lrc"
+        file = self.song.filepathname + ".lrc"
         
         if isfile( file ):
             self.logger["file"].info("loading lyrics")
@@ -341,23 +281,24 @@ def get_words(self):
             self.words = [ [0.0 , "" ] ] + data
             self.logger["file"].debug(f"lyrics : {self.words} ")
 
-def change_extension(self):
+def change_extension(self, song):
     """
     cette fonction permet de convertir les fichier musique a l'aide de ffmpeg
     """
     white()
     # TODO make it work
-    raise exception("Not working")
     option = [".mp3", ".m4a", ".wav" , ".flac" ]
     word = self.asker.menu_deroulant( option, self.update_logic )
     
     if  word < len( option ):
         confirm = self.ask( "delete original (y/n)?" )
-        new = self.song.rsplit( ".",1 )[ 0 ] + option[  word  ]
-        self.external_call(f"ffmpeg -i '{self.song}' '{new}' " , shell = True)
+        new = song.filepathname + option[  word  ]
+        self.external_call(f"ffmpeg -i '{song.file}' '{new}' " , shell = True)
         
         if confirm == "y":
-            rm_file( self.song )
+            rm_file( song.file )
+    
+        self.load_songs( reset = 0 )
 
     
 

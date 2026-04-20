@@ -48,7 +48,7 @@ def add_song_database(self, song):
     base.commit()
     cursor.execute( " SELECT id_song,nom FROM song WHERE nom = ?", [s])
     result = cursor.fetchall()
-    return [result[ 0 ][0],result[ 0 ][1]]
+    return [ self.Song ( result[ 0 ][0],result[ 0 ][1] , self.separator )  ]
 
 def update_song_database(self, file ):
     self.create_song_database()
@@ -81,7 +81,7 @@ def find_song_database(self,num):
     cursor = base.cursor()
     cursor.execute("SELECT id_song,nom FROM song WHERE id_song = ?",[num])
     result = cursor.fetchall()
-    self.song = [result[0][0],result[0][1]]
+    self.song = self.Song( result[0][0],result[0][1] , self.separator )
     base.commit()
     base.close()
 
@@ -106,7 +106,7 @@ def load_favorite_database(self):
     self.logger["data"].info("loading favorites")
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
     result = cursor.fetchall()
-    self.favorite = [  [ x[0],x[1] ] for x in result if self.path_to_file in x[1] and isfile( x[1] ) ]
+    self.favorite = [  self.Song( x[0],x[1] , self.separator )for x in result if self.path_to_file in x[1] and isfile( x[1] ) ]
     self.logger["data"].info(f"loaded {len(self.favorite)} files")
     self.logger["data"].debug(f"files : {self.favorite}")
 
@@ -140,17 +140,18 @@ def drop_column(self,column):
     base.close()
 
 def load_playlist_database(self):
-    base = sqlite3.connect("appdata/cache/data.db")
-    cursor = base.cursor()
-    cursor.execute(f" SELECT id_song,nom FROM song WHERE {self.playlist} = '1' ")
-    result = cursor.fetchall()
-    base.commit()
-    base.close()
-    self.playlist_files =  [  [ x[0],x[1] ] for x in result if isfile(x[1]) ]
+    if self.playlist:
+        base = sqlite3.connect("appdata/cache/data.db")
+        cursor = base.cursor()
+        cursor.execute(f" SELECT id_song,nom FROM song WHERE {self.playlist} = '1' ")
+        result = cursor.fetchall()
+        base.commit()
+        base.close()
+        self.playlist_files =  [  self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1]) ]
 
 def update_playlist_database(self, playlist, value , song = None):
     if not song:
-        song = self.song[ 1 ]
+        song = self.song.file
     
     self.logger["data"].debug(f"setting {song} value {value} for {playlist} ")
     base = sqlite3.connect("appdata/cache/data.db")
@@ -161,7 +162,7 @@ def update_playlist_database(self, playlist, value , song = None):
 
 def is_in_playlist(self,playlist , song = None):
     if song == None:
-        song = self.song[ 1 ]
+        song = self.song.file
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
     
@@ -193,7 +194,7 @@ def get_albums(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    return [ x[0] for x in result]
+    return [ x[0] for x in result ]
 
 def load_album_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
@@ -202,7 +203,7 @@ def load_album_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files = [  [ x[0],x[1] ] for x in result if isfile(x[1])]
+    self.playlist_files = [  self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1])]
 
 
 def get_artists(self):
@@ -221,6 +222,6 @@ def load_artist_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files =  [  [ x[0],x[1] ] for x in result if isfile(x[1]) ]
+    self.playlist_files =  [ self.Song( x[0], x[1], self.separator ) for x in result if isfile(x[1]) ]
     
     

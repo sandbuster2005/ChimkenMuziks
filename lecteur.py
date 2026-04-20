@@ -77,7 +77,7 @@ class App:
     from libs.handmade._batterie import init_battery, battery_check, get_battery, get_battery_life
     from libs.handmade._command import init_command, sort_command, edit_command, help_menu      
     from libs.handmade._param import init_param, get_param, write_param, reset
-    from libs.handmade._files import init_file, get_file, select_dir, switch_dir, find_file, check_adress, change_main_path, mani_file, get_words, change_extension, edit_dirs
+    from libs.handmade._files import init_file, get_file, select_dir, switch_dir, find_file, check_adress, change_main_path, get_words, change_extension, edit_dirs
     from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode
     from libs.handmade._download import init_download, yt_search, dl_yt_playlist  
     from libs.handmade._song import init_song, _choose_song, load_songs, play_song, play_last, historic, select, _play, play_midi, convert_midi, default_midi, get_metadata, most_played, select_fav,_select_song,play_now
@@ -89,11 +89,18 @@ class App:
     import colorama.__init__ as colorama
     colorama.init()
 
-    def new_logger(self , name ):
-        self.logger[name] = logging.getLogger( name )
-        self.logger[name].setLevel(self.logging_level)
-        self.logger[name].addHandler(self.log_file_handler)
-        self.logger[name].propagate = False
+    class Song:
+        def __init__(self, index , file , separator ):
+            self.index = index
+            self.file = file
+            self.filepathname, self.extension = self.file.rsplit( ".",1 )
+            self.filepath, self.filename = self.file.rsplit( separator, 1 )
+            self.name = self.filename.rsplit( ".",1 )[0]
+    
+    
+    
+    
+    
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--song")

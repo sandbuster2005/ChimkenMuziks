@@ -79,8 +79,8 @@ def write_param( self , param = ""):
     cette fonction permet d'enregistrer les variable cité dans le fichier param
     """
     if not self.stay:
-        if type( self.song ) == list:
-            self.last_song = self.song
+        if self.song:
+            self.last_song = [ self.song.index, self.song.file ]
             
         else:
             self.last_song = ""

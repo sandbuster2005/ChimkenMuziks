@@ -46,8 +46,6 @@ def init_main( self, directory, song ):
 
     self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
     
-    if self.discordRP:
-        self.connect_to_discord()
     
     
 def main( self ):
@@ -55,7 +53,9 @@ def main( self ):
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 
     """
     self.get_param()#get param from file if it exists else create it
-
+    
+    self.connect_to_discord()
+        
     self.logger["image"].info("loading imgs")
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
 
@@ -65,6 +65,8 @@ def main( self ):
 
     self.load_script()
 
+    
+        
     if len( self.files) == 0:
         while len( self.files ) == 0:# if folder is empty
             self.logger["main"].warning( "music folder is empty" )
@@ -81,20 +83,23 @@ def main( self ):
             self.logger["main"].info("loading song from command line")
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
-            self.song = [ self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ]
+            self.song = self.Song(self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ,self.separator )
             self.logger["main"].debug(f"loaded {self.song}")
             self.play_song(0)
     
     else:
         if self.playlist: #load playlist if there's one
             self.load_playlist()
-        
+            
         if self.last_song and self.auto_last_song: #launch last played sont if configured to
-            if isfile(self.last_song[1]):
+            if isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]:
                 self.logger["main"].info("loading last played song")
                 self.last_song[ 0 ] = int( self.last_song[ 0 ] )
-                self.song = self.last_song
+                self.song = self.Song( self.last_song[0] , self.last_song[1], self.separator )
+                
                 self.play_song(0)
+                
+
         
     while self.stay:
         self.get_input()#interface
