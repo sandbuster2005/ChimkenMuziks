@@ -1,8 +1,8 @@
 appdata/param.txt
 __pycache__/
 **/cache/**
-**/.idea/**
-**/.venv/**
+.idea/
+.venv
 !/appdata/cache/static
 **/log/**
 !log/static
