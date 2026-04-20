@@ -51,25 +51,6 @@ def init_main( self, directory, song ):
     client_id = "1495534597419700264"
     self.RPC = Presence( client_id )
     self.RPC.connect()
-    """
-    print(time())
-    sleep(1)
-    print(time())
-    sleep(2)
-    RPC.update(
-        activity_type = ActivityType.LISTENING,
-        status_display_type = StatusDisplayType.NAME ,
-        name = "song21",
-        state = "testing",
-        start = int(time() )  
-        )
-    
-    sleep(2)
-    
-    RPC.clear()
-    
-    RPC.close()
-    """
     
     
 def main( self ):
@@ -264,6 +245,36 @@ def wind( self, mode, pause = False  ):
 
     if mode == 6:# pause the music
         self.pause = 1 - self.pause
+        
+        if self.song:
+            if os.name == 'nt':
+                separator = '\\'
+            else:
+                separator = '/'
+                        
+            name = self.song[1].rsplit(separator, 1)[1]
+            name = name.rsplit(".",1)[0]
+                    
+                    
+            if self.pause:
+                self.RPC.update(
+                    activity_type = ActivityType.LISTENING,
+                    status_display_type = StatusDisplayType.NAME ,
+                    name = name,
+                    state = "ChimkenMuziks - Paused", 
+                )
+            
+            elif not self.pause:
+                self.RPC.update(
+                    activity_type = ActivityType.LISTENING,
+                    status_display_type = StatusDisplayType.NAME ,
+                    name = name,
+                    state = "ChimkenMuziks",
+                    start = time() - self.bar.index,
+                    end = time() + self.bar.max - self.bar.index
+                    
+                )
+        
         self.player.pause()
         self.logger["main"].debug(f" pause state { self.pause }")
 
