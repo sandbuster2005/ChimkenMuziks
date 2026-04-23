@@ -124,6 +124,8 @@ def update_logic(self):
 
             if self.term_size != ( _ := os.get_terminal_size() ) :
                 self.term_size = _
+                if self.show:
+                    self.gen_image()
 
                 if not "display" in self.changed:
                     self.changed.append("display")
@@ -177,15 +179,17 @@ def update_display(self, value ):
 
             self.logger["update"].trace("updated lyric")
             self.changed.remove("word")
+        
 
         if self.song:
             if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
                 if self.show and "display" in self.changed:
-                    white()
-                    self.display_img()
-                    self.logger["update"].debug("printed image ")
-                    ldown(3)
-
+                    self.changed.append("image")
+                    #white()
+                    #self.display_img()
+                    #self.logger["update"].debug("printed image ")
+                    ldown( self.term_size.lines  )
+                        
                 time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
 
                 self.volume = self.get_volume()
@@ -240,6 +244,16 @@ def update_display(self, value ):
                     self.changed.remove("display")
 
                 self.logger["update"].trace("updated main display")
+            
+            if "image" in self.changed:
+                if self.image and self.show :
+                    if self.image.name == self.song.index:
+                        lup( 4 + self.image.height )
+                        out( self.image.image )
+                        ldown( 4 )
+                
+                self.changed.append("bar")
+                self.changed.remove("image")
 
             if "bar" in self.changed and not self.search and self.bar:
                 save()

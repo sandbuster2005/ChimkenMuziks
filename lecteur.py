@@ -78,11 +78,11 @@ class App:
     from libs.handmade._command import init_command, sort_command, edit_command, help_menu      
     from libs.handmade._param import init_param, get_param, write_param, reset
     from libs.handmade._files import init_file, get_file, select_dir, switch_dir, find_file, check_adress, change_main_path, get_words, change_extension, edit_dirs, create_dirs_links, nselect_dir
-    from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode
+    from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode,gen_image
     from libs.handmade._download import init_download, yt_search, dl_yt_playlist, thread_loop 
     from libs.handmade._song import init_song, _choose_song, load_songs, play_song, play_last, historic, select, _play, play_midi, convert_midi, default_midi, get_metadata, most_played, select_fav,_select_song,play_now
     from libs.handmade._main import init_main, main, get_input, load_all, wind, display, set_timer, param_center, clear_cache, n_input, reset_settings, end_timer
-    from libs.handmade._printimage import print_image_to_screen, init_printer
+    from libs.handmade._printimage import print_image_to_screen, init_printer, gen_image_data
     from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database, find_song_database, played_database
     from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist
     from libs.handmade._update import init_update , is_finished , update_logic , update_display,update_discord_status,connect_to_discord,pause_discord_status,end
@@ -104,10 +104,12 @@ class App:
             return self.file
     
     class Image:
-        def __init__(self,data , height , width):
-            self.image = data
+        def __init__(self, height , width, name, image = "" ):
+            self.name = name
+            self.image = image
             self.height = height
             self.width = width
+            
     
     
     

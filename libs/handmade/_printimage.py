@@ -59,6 +59,93 @@ def closest(colors,color):
     else:
         return index_of_smallest
 
+def gen_image_data(self, path, top_offset = 0):
+    self.image = None
+    name = self.song.index
+    
+    size = self.term_size
+    height = size.lines - top_offset
+    width = size.columns /2
+    
+    centerspace = ''
+    
+    image = iio.imread(path)
+    imheight, imwidth, *_ = image.shape
+    
+    colors = []
+    
+    if height/imheight < width/imwidth: # snap avec la hauteur
+        heightprint = height
+        widthprint = int(heightprint*(imwidth/imheight)*2)
+        
+        if self.center:
+            centerspace = (' '*((size.columns-widthprint)//2))
+    
+    else: # snap avec la largeur
+        widthprint = size.columns
+        heightprint = int(widthprint*(imheight/imwidth)/2)
+        
+    
+    self.image = self.Image( height = heightprint, width = widthprint, name = name )
+    #heightprint = height
+    #widthprint = height*2
+    if widthprint and heightprint > 0:
+
+        width = imwidth/widthprint
+        height = imheight/heightprint
+        
+        final_image = "\x1b[2K"
+
+        for i in range(heightprint): # height
+            final_image += centerspace
+            #out(centerspace)
+
+            for j in range(widthprint): # width
+                left = width * j
+                up = height * i
+                right = left + width
+                down = up + height
+
+                pixel = image[int(up):int(down)+1, int(left):int(right)+1]
+                #cv2.imshow('test', pixel)
+                #cv2.waitKey(0)
+                if self.nearest:
+                    average_color = pixel[0][0]
+
+                else:
+                    average_color = numpy.mean(pixel, axis=(0,1))
+
+                if self.invert:
+                    average_color[0] = 255 - average_color[0]
+                    average_color[1] = 255 - average_color[1]
+                    average_color[2] = 255 - average_color[2]
+
+                if len(pixel) == 0:
+                    #print('\033[42mERROR: Empty pixel.\033[0m')
+                    #print(pixel, i, j, size, left, up, right, down)
+                    pass
+
+                colors.append(average_color)
+                if not self.true_color:
+                    final_image += f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m '
+                    
+                    #print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
+
+                else:
+                    final_image += f"\x1b[48;2;{int(average_color[0])};{int(average_color[1]) };{int(average_color[2])}m "
+                    #tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
+             
+            final_image +='\033[0m\n\x1b[2K'
+            
+        #out(final_image)
+        self.image.image = final_image
+        self.changed.append( "display" )
+            #print('\033[0m')
+    
+    
+    
+    
+    
 def print_image_to_screen(self, path, top_offset=0):
     self.search = True
     size = os.get_terminal_size()

@@ -163,7 +163,10 @@ def _play( self ):
 
     else:
         self.player.set_mrl( self.song.file )# load song
-
+    
+    if self.show:
+        self.gen_image()
+        
     self.song_saved = False  # tell backend is can save a play in the database
     self.bar = None # reset bar
     self.player.play()

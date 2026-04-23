@@ -14,7 +14,7 @@ def init_param( self ):
                    [ "repeat", "jouer en boucle ", 0 , "bool", True ],
                    [ "dirs" ,"liste des dossiers / sous dossiers", [], "list", False ],
                    [ "play_favorite", "joue les favoris", 0 , "bool", True],
-                   ["fchoose", "augmente la frequence des favoris", 0 , "bool" , True],
+                   [ "fchoose", "augmente la frequence des favoris", 0 , "bool" , True],
                    [ "holders", "commandes", -1 , "list", False ],
                    [ "graphic_manager", "mode d'affichage", "base" , "str", False ],
                    [ "confirmation", "message de choix", "Your choice", "str", False ],

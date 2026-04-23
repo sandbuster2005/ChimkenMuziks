@@ -7,6 +7,7 @@ from .terminal import *
 from ..readchar import readchar
 import importlib
 import logging
+import threading
 
 def init_image( self ):
     self.img_mode = "img"
@@ -63,7 +64,26 @@ def get_img( self, path, start = 0 ):
                 self.imgs.append( path + f )
                 self.logger["image"].debug(f"found { path + f }")
 
+
+def gen_image( self ):
+    if not ".mid" in self.song.file:
+            self.get_metadata()
+            
+    if self.thumbnail:
+        
+        image = self.thumbnail
     
+    elif self.img:
+        image = self.img
+    
+    else:
+        image = self.imgs[ randint( 0, len( self.imgs ) - 1) ]
+        
+    thread = threading.Thread( target = self.gen_image_data , kwargs = { "path": image , "top_offset" :5 } )
+    thread.start()
+    
+    
+        
     
 def display_img( self ):
     """
