@@ -125,7 +125,7 @@ def nselect_dir(self, display_dict = {} ,start = "" ):
     while index != 0 and not stop :
         home()
         wipe()
-        menu = ["select folder"] + [ f"{folder.rsplit("/",1)[1]}{ display_dict[folder] }" if folder in display_dict.keys() else folder.rsplit("/",1)[1]   for folder in self.dirs_links[ current_folder ] ] + ["go back"]
+        menu = ["select folder"] + [ f"{folder.rsplit('/',1)[1]}{ display_dict[folder] }" if folder in display_dict.keys() else folder.rsplit("/",1)[1]   for folder in self.dirs_links[ current_folder ] ] + ["go back"]
         index = self.asker.menu_deroulant(menu ,self.update_logic, text = f">> { current_folder }" )
 
         
