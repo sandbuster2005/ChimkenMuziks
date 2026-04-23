@@ -7,6 +7,7 @@ from .ffiles import get_file as getfile
 from .utils import *
 from .terminal import up,wipe,out
 from ..readchar import readchar
+from .terminal import home,wipe
 import re
 
 def init_file( self ):
@@ -53,9 +54,103 @@ def edit_dirs(self):
     en suivant l'architecture de dossier en partant de la racine
     """
     self.logger["file"].info("User launched dir edit menu")
+    display = { folder[0] : " : ignored"  for folder in self.dirs if folder[1] == "0" }
+    folder = ""
+    
+    while folder != None:
+        folder = self.nselect_dir( display , folder )
+        
+        if folder:
+            if folder != self.path_to_file:
+            
+                if folder in display.keys():
+                    self.switch_dir( self.dirs.index( [ folder , "0" ] ) )
+                    del display[folder]
+                
+                else:
+                    self.switch_dir( self.dirs.index( [ folder , "1" ] ) )
+                    display[folder] = " : ignored"
+                
+                folder = folder.rsplit(self.separator , 1 )[0]
+        
+            else:
+                folder = ""
+    
+    white()
+        
+        
+        
+    """
     self.select_dir( self.switch_dir )
+    """
     self.load_songs()
+    
+def create_dirs_links(self):
+    result = {}
+    dirs = [ self.path_to_file if self.path_to_file[-1]!="/" else self.path_to_file[:-1] ] + [ folder[ 0 ] for folder in self.dirs ]
+    
+    for folder in dirs:
+        result[folder] = []
+        
+        for link in dirs:
+            if folder in link:
+                if folder.count( self.separator ) + 1 == link.count( self.separator ):
+                    result[folder].append( link )
+        
+        if result[folder] != []:
+            self.logger["file"].debug(f"{folder} linked to {result[folder]}" )
+    
+    self.dirs_links = result
 
+def nselect_dir(self, display_dict = {} ,start = "" ):
+    if self.path_to_file[-1] != "/":
+        root = self.path_to_file
+        
+    else:
+        root = self.path_to_file[ :-1]
+            
+    if start:
+        if start not in self.dirs_links.keys():
+            raise Exception("value doesn't exit ")
+        
+        else:
+            current_folder = start
+    
+    else:
+        current_folder = root
+        
+    index = -1
+    stop = False
+    white()
+    while index != 0 and not stop :
+        home()
+        wipe()
+        menu = ["select folder"] + [ f"{folder.rsplit("/",1)[1]}{ display_dict[folder] }" if folder in display_dict.keys() else folder.rsplit("/",1)[1]   for folder in self.dirs_links[ current_folder ] ] + ["go back"]
+        index = self.asker.menu_deroulant(menu ,self.update_logic, text = f">> { current_folder }" )
+
+        
+        if 0 < index < len( menu ) - 1:
+            current_folder = self.dirs_links[current_folder][ index - 1 ]
+        
+        if index == len( menu ) - 1 or index > len ( menu ):
+            if current_folder != root:
+                current_folder = current_folder.rsplit(self.separator,1)[0]
+            
+            else:
+                stop = True
+    
+    if stop:
+        return None
+    
+    if current_folder == root:
+        return self.path_to_file
+    
+    return current_folder
+                
+                
+        
+        
+          
 def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
     cette fonction permet d'activer/desactiver des dossiers de la liste de dossier sous dossier

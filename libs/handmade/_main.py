@@ -64,7 +64,6 @@ def main( self ):
     self.load_songs()#try to load the song
 
     self.load_script()
-
     
         
     if len( self.files) == 0:

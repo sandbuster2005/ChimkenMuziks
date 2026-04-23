@@ -94,7 +94,7 @@ class Display:
 
         if self.graphic_manager == "base":
 
-            size = floor(os.get_terminal_size().lines / 2)
+            size = floor(os.get_terminal_size().lines / 2) -1
             lenght = os.get_terminal_size().columns
             chrs_search = [chr(x) for x in range(32, 127)] + [ Key.BACKSPACE ]
             chrs = [Key.SHIFT_UP, Key.UP, Key.DOWN, Key.SHIFT_DOWN, Key.CONTROL_DOWN, Key.CONTROL_UP]

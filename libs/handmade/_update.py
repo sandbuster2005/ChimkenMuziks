@@ -161,6 +161,9 @@ def update_display(self, value ):
         wipe()
         self.logger["update"].trace("cleared screen")
         self.changed.remove("space")
+        lup()
+        ldown()
+        out(":")
 
     if "word" in self.changed:
         lyrics = self.words[self.last_word][1]

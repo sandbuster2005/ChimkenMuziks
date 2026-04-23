@@ -29,6 +29,7 @@ def load_songs( self , reset = 1 ):
 
     #TODO check self.played if song deleted
     
+    self.create_dirs_links()
     self.update_song_database( self.files )
 
     self.indexs = self.get_index_data( self.files )
@@ -41,6 +42,8 @@ def load_songs( self , reset = 1 ):
     self.files = [ self.Song( self.indexs[x] ,self.files[x] , self.separator )  for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
     if reset:
         self.song = None
+        self.player.stop()
+        self.display( space = True ) 
 
     self.logger["song"].info(f"loaded {len( self.files)} song in memory")
     #self.logger["song"].trace(f"file : { self.files }")
