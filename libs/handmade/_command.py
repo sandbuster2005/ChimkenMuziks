@@ -122,6 +122,7 @@ def help_menu( self ):
     """
     self.logger["command"].debug("showing help menu")
     menu =  [ "Input a number to play corresponding song", "Press enter to pause/unpause song" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "] #entrer un nombre pour lancer la chanson correspondante / ne rien rentrer pour mettre pause
-    self.show_list(menu , num = False)
     self.search = True
+    self.show_list(menu , num = False)
+    
 

@@ -4,6 +4,7 @@ from .utils import *
 from os import listdir, makedirs
 from os.path import isdir
 import yt_dlp
+import threading
 
 def init_download( self ):
     pass
@@ -121,11 +122,18 @@ def dl_yt_playlist( self ):
                     {"key": "EmbedThumbnail"}
                 ]
             }
-
+            self.thread = True
+            thread = threading.Thread( target = self.thread_loop )
+            thread.start()
+            
             self.logger["download"].info("downloading playlist ...")
-
+            
+            
             with yt_dlp.YoutubeDL(yt_opts) as ydl:
                 ydl.download(playlist)
+            
+            self.thread = False
+            
 
             #self.external_call( [ f"yt-dlp -x --embed-thumbnail --audio-format mp3 -P /{ path }download/ { playlist } " ], shell = True ) # telechargement chanson / playlist en .mp3
 
@@ -139,7 +147,9 @@ def dl_yt_playlist( self ):
             self.display()
 
 
-
+def thread_loop(self):
+    while self.thread:
+        self.update_logic()
 
 
 

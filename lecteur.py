@@ -79,7 +79,7 @@ class App:
     from libs.handmade._param import init_param, get_param, write_param, reset
     from libs.handmade._files import init_file, get_file, select_dir, switch_dir, find_file, check_adress, change_main_path, get_words, change_extension, edit_dirs, create_dirs_links, nselect_dir
     from libs.handmade._image import init_image ,get_img, display_img, select_img, load_script, screen_mode
-    from libs.handmade._download import init_download, yt_search, dl_yt_playlist  
+    from libs.handmade._download import init_download, yt_search, dl_yt_playlist, thread_loop 
     from libs.handmade._song import init_song, _choose_song, load_songs, play_song, play_last, historic, select, _play, play_midi, convert_midi, default_midi, get_metadata, most_played, select_fav,_select_song,play_now
     from libs.handmade._main import init_main, main, get_input, load_all, wind, display, set_timer, param_center, clear_cache, n_input, reset_settings, end_timer
     from libs.handmade._printimage import print_image_to_screen, init_printer
@@ -96,6 +96,18 @@ class App:
             self.filepathname, self.extension = self.file.rsplit( ".",1 )
             self.filepath, self.filename = self.file.rsplit( separator, 1 )
             self.name = self.filename.rsplit( ".",1 )[0]
+            
+        def __str__(self):
+            return self.file
+        
+        def __repr__(self):
+            return self.file
+    
+    class Image:
+        def __init__(self,data , height , width):
+            self.image = data
+            self.height = height
+            self.width = width
     
     
     

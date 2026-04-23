@@ -157,99 +157,100 @@ def update_logic(self):
 
 def update_display(self, value ):
     self.logger["update"].bullshit("display loop")
-    if "space" in self.changed and not self.search:
-        wipe()
-        self.logger["update"].trace("cleared screen")
-        self.changed.remove("space")
-        lup()
-        ldown()
-        out(":")
-
-    if "word" in self.changed:
-        lyrics = self.words[self.last_word][1]
-        space = floor(self.term_size.columns / 2 - len(lyrics) / 2)
-        save()
-        lup(4)
-        wipe_line()
-        out(f"{' ' * space * self.center}{lyrics}")
-        load()
-
-        self.logger["update"].trace("updated lyric")
-        self.changed.remove("word")
-
-    if self.song:
-        if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
-            if self.show and "display" in self.changed:
-                white()
-                self.display_img()
-                self.logger["update"].debug("printed image ")
-                ldown(3)
-
-            time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
-
-            self.volume = self.get_volume()
-            volume_string = f"{self.volume}%"
-
-            if self.volume < 10:
-                volume_string = "0" + volume_string
-
-            string = time_string + "   " + volume_string
-
-            if self.playlist:
-                string = self.playlist + "   " + string
-
-            if self.timer:
-                string += "   " + f"timer :{self.timer['remaining']} {self.timer['display']}"
-
-            space = floor((self.term_size.columns - len(string)) / 2)
-
-            name = self.song.name
-
-            if self.song in self.favorite:
-                name = "*" + name + "*"
-
-            space_name = floor((self.term_size.columns - len(name)) / 2)
-
-            if self.bar:
-                self.bar.center = self.center
-
-            save()
-            lup(3)
-            wipe_line()
-            out(f"{' ' * space * self.center}{string}")
-
-            ldown()
-            wipe_line()
-            out(f"{' ' * space_name * self.center}{name}")
-
-            load()
-            wipe_line()
-            line_start()
-            out( value )
-            if "time" in self.changed:
-                self.changed.remove("time")
-
-            if "timer" in self.changed:
-                self.changed.remove("timer")
-
-            if "volume" in self.changed:
-                self.changed.remove("volume")
-
-            if "display" in self.changed:
-                self.changed.remove("display")
-
-            self.logger["update"].trace("updated main display")
-
-        if "bar" in self.changed and not self.search and self.bar:
-            save()
+    if not self.search:
+        if "space" in self.changed and not self.search:
+            wipe()
+            self.logger["update"].trace("cleared screen")
+            self.changed.remove("space")
             lup()
-            self.bar.update()
-            load()
+            ldown()
+            out(":")
+
+        if "word" in self.changed:
+            lyrics = self.words[self.last_word][1]
+            space = floor(self.term_size.columns / 2 - len(lyrics) / 2)
+            save()
+            lup(4)
             wipe_line()
-            line_start()
-            out(value)
-            self.logger["update"].trace("updated bar")
-            self.changed.remove("bar")
+            out(f"{' ' * space * self.center}{lyrics}")
+            load()
+
+            self.logger["update"].trace("updated lyric")
+            self.changed.remove("word")
+
+        if self.song:
+            if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
+                if self.show and "display" in self.changed:
+                    white()
+                    self.display_img()
+                    self.logger["update"].debug("printed image ")
+                    ldown(3)
+
+                time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
+
+                self.volume = self.get_volume()
+                volume_string = f"{self.volume}%"
+
+                if self.volume < 10:
+                    volume_string = "0" + volume_string
+
+                string = time_string + "   " + volume_string
+
+                if self.playlist:
+                    string = self.playlist + "   " + string
+
+                if self.timer:
+                    string += "   " + f"timer :{self.timer['remaining']} {self.timer['display']}"
+
+                space = floor((self.term_size.columns - len(string)) / 2)
+
+                name = self.song.name
+
+                if self.song in self.favorite:
+                    name = "*" + name + "*"
+
+                space_name = floor((self.term_size.columns - len(name)) / 2)
+
+                if self.bar:
+                    self.bar.center = self.center
+
+                save()
+                lup(3)
+                wipe_line()
+                out(f"{' ' * space * self.center}{string}")
+
+                ldown()
+                wipe_line()
+                out(f"{' ' * space_name * self.center}{name}")
+
+                load()
+                wipe_line()
+                line_start()
+                out( value )
+                if "time" in self.changed:
+                    self.changed.remove("time")
+
+                if "timer" in self.changed:
+                    self.changed.remove("timer")
+
+                if "volume" in self.changed:
+                    self.changed.remove("volume")
+
+                if "display" in self.changed:
+                    self.changed.remove("display")
+
+                self.logger["update"].trace("updated main display")
+
+            if "bar" in self.changed and not self.search and self.bar:
+                save()
+                lup()
+                self.bar.update()
+                load()
+                wipe_line()
+                line_start()
+                out(value)
+                self.logger["update"].trace("updated bar")
+                self.changed.remove("bar")
 
 
 def connect_to_discord(self):
