@@ -9,7 +9,6 @@ except:
 else:
     pass
 def init_printer(self):
-    self.true_color = 1
     self.color_codes = [(12,12,12),
                (197,15,31),
                (19,161,14),
@@ -125,15 +124,7 @@ def gen_image_data(self, path, top_offset = 0):
                     #print(pixel, i, j, size, left, up, right, down)
                     pass
 
-                colors.append(average_color)
-                if not self.true_color:
-                    final_image += f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m '
-                    
-                    #print(f'\033[{self.escape_codes[closest(self.color_codes, list(reversed(average_color)))[0][0]]}m'+' ', end='')
-
-                else:
-                    final_image += f"\x1b[48;2;{int(average_color[0])};{int(average_color[1]) };{int(average_color[2])}m "
-                    #tbackground( int(average_color[0]) , int(average_color[1]) ,int(average_color[2]) , " ")
+                final_image += f"\x1b[48;2;{int(average_color[0])};{int(average_color[1]) };{int(average_color[2])}m "
              
             final_image +='\033[0m\n\x1b[2K'
             

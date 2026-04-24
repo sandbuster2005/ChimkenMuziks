@@ -23,7 +23,7 @@ def init_param( self ):
                    [ "base_soundmap", "codec midi par default" , "appdata/midi_codec/default.sf2" , "str", False ],
                    [ "addaptive_bar", "taille de la bar proportionnel", 1, bool, True ],
                    [ "color", "la bar change de couleur", 0 , "bool", True ],
-                   [ "true_color", "passe les image en true color", 1 ,"bool", True ],
+                   [ "true_color", "passe les image en true color", 1 ,"bool", False ],
                    [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ],
                    [ "invert", "inverse les couleurs des images", 0, "bool", True],
                    [ "center", "centrer les paroles et l'image", 1 ,"bool", True ],

@@ -95,7 +95,7 @@ def played_database(self):
 def update_favorite_database(self,mode):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute( "UPDATE song SET favorite = ? where nom = ?",[ mode, self.song[ 1 ] ] )
+    cursor.execute( "UPDATE song SET favorite = ? where nom = ?",[ mode, self.song.file ] )
     base.commit()
     base.close()
     
