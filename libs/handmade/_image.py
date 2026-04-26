@@ -66,6 +66,7 @@ def get_img( self, path, start = 0 ):
 
 
 def gen_image( self ):
+    self.image = "generating"
     if not ".mid" in self.song.file:
             self.get_metadata()
             
@@ -78,7 +79,7 @@ def gen_image( self ):
     
     else:
         image = self.imgs[ randint( 0, len( self.imgs ) - 1) ]
-        
+    
     thread = threading.Thread( target = self.gen_image_data , kwargs = { "path": image , "top_offset" :5 } )
     thread.start()
     

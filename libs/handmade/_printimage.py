@@ -84,8 +84,6 @@ def gen_image_data(self, path, top_offset = 0):
         widthprint = size.columns
         heightprint = int(widthprint*(imheight/imwidth)/2)
         
-    
-    self.image = self.Image( height = heightprint, width = widthprint, name = name )
     #heightprint = height
     #widthprint = height*2
     if widthprint and heightprint > 0:
@@ -106,6 +104,9 @@ def gen_image_data(self, path, top_offset = 0):
                 down = up + height
 
                 pixel = image[int(up):int(down)+1, int(left):int(right)+1]
+                
+                if self.image != None:
+                    return
                 #cv2.imshow('test', pixel)
                 #cv2.waitKey(0)
                 if self.nearest:
@@ -129,7 +130,7 @@ def gen_image_data(self, path, top_offset = 0):
             final_image +='\033[0m\n\x1b[2K'
             
         #out(final_image)
-        self.image.image = final_image
+        self.image = self.Image( image =final_image , height = heightprint, width = widthprint, name = name )
         self.changed.append( "display" )
             #print('\033[0m')
     
