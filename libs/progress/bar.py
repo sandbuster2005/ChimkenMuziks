@@ -25,11 +25,11 @@ from .colors import color
 
 
 class Bar(Progress):
-    width = 32
+    base_width = 32
     suffix = '%(index)d/%(max)d'
     center = False
-    prefix = '    '
-    suffix = '    '
+    prefix = ''
+    suffix = ''
     empty_fill = ' '
     fill = ' '
     color = "red"
@@ -37,41 +37,46 @@ class Bar(Progress):
     addaptative_bar = True
 
     def update(self):
+        if os.get_terminal_size().columns < 20:
+            self.width = 0
+            
+        elif os.get_terminal_size().columns < 33:
+            self.width = self.base_width / 4
+            
+        elif os.get_terminal_size().columns < 65:
+            self.width = self.base_width / 2
+        
+        else:
+            self.width = self.base_width
+        
+        self._max_width = self.width
+        
+        
+        
         if self.addaptative_bar:
-            filled_length = int(self.width*log(self.max,180) * self.progress)
-            empty_length = int(self.width*log(self.max,180)) - filled_length
-            real_width = int(self.width*log(self.max,180))
+            filled_length = int(self.width * log(self.max,180) * self.progress)
+            empty_length = int(self.width * log(self.max,180)) - filled_length
+            width = int( self.width * log(self.max,180) )
+            real_width = width
+            
         else:
             filled_length = int(self.width * self.progress)
             empty_length = self.width - filled_length
             real_width = self.width
 
         message = self.message % self
-        if os.get_terminal_size().columns < 20:
-            filled_length = 0
-            empty_length = 0
-            real_width = 0
-
-        if os.get_terminal_size().columns < 30:
-            filled_length = floor(filled_length / 4)
-            empty_length = floor(empty_length / 4 )
-            real_width = filled_length + empty_length
-
-        if os.get_terminal_size().columns < 60:
-            filled_length = floor( filled_length / 2 )
-            empty_length = floor( empty_length / 2 )
-            real_width =  filled_length + empty_length
 
         bar = color( self.fill * filled_length, bg = self.color )
         empty = color( self.empty_fill * empty_length , bg = self.bg_color)
 
         if self.max > 0:
             if not self.center:
-                self.suffix = f' {self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}     '
+                self.suffix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} / {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}'
+                self.prefix = ""
             else:
                 self.prefix = f'{self.index // 60}:{"0"* ((self.index % 60) < 10)}{self.index % 60} '
                 self.suffix = f' {self.max // 60}:{"0" * ((self.max % 60) < 10)}{self.max % 60}'
-                self.prefix = f"{' ' * floor((os.get_terminal_size().columns - len(self.suffix) -len(self.prefix) - real_width )/2) }{self.prefix}"
+                self.prefix = f"{' ' * floor((os.get_terminal_size().columns - len(self.suffix) -len( self.prefix ) - real_width )/2) }{self.prefix}"
                 
       
         line = ''.join([message, self.prefix, bar, empty, self.suffix])

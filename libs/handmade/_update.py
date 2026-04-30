@@ -126,6 +126,7 @@ def update_logic(self):
                 self.term_size = _
                 if self.show:
                     self.gen_image()
+                    wipe()
 
                 if not "display" in self.changed:
                     self.changed.append("display")
@@ -191,7 +192,8 @@ def update_display(self, value ):
                     ldown( self.term_size.lines  )
                         
                 time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
-
+                
+                sleep(0.05)
                 self.volume = self.get_volume()
                 volume_string = f"{self.volume}%"
 
@@ -208,11 +210,21 @@ def update_display(self, value ):
 
                 space = floor((self.term_size.columns - len(string)) / 2)
 
-                name = self.song.name
+                name = self.song.name 
+                
+                
 
                 if self.song in self.favorite:
                     name = "*" + name + "*"
-
+                
+                if len(name) > self.term_size.columns:
+                    name = name[:self.term_size.columns]
+                    
+                if len(string) > self.term_size.columns:
+                    string = string[:self.term_size.columns]
+                    
+                
+                    
                 space_name = floor((self.term_size.columns - len(name)) / 2)
 
                 if self.bar:
@@ -248,6 +260,7 @@ def update_display(self, value ):
             if "image" in self.changed:
                 if self.image and self.show :
                     if self.image.name == self.song.index:
+                        self.logger["update"].trace("printed image")
                         lup( 4 + self.image.height )
                         out( self.image.image )
                         ldown( 4 )
@@ -270,7 +283,7 @@ def update_display(self, value ):
 def connect_to_discord(self):
     self.discord = True
     self.discord_connected = False
-    
+    self.logger["discord"].debug("connecting to discord...")
     if self.discordRP:
         client_id = "1495534597419700264"
         try:
@@ -278,31 +291,57 @@ def connect_to_discord(self):
             self.RPC.connect()
             
         except:
+            self.logger["discord"].debug("connection failed")
             self.discord = False
+            
             self.discord_connected = False
             
         else:
+            self.logger["discord"].debug("connected")
             self.discord_connected = True    
 
 
 
 def update_discord_status(self):
-    self.RPC.update(
-        activity_type = ActivityType.LISTENING,
-        status_display_type = StatusDisplayType.NAME ,
-        name = self.song.name,
-        state = "ChimkenMuziks",
-        start = timeS() - self.bar.index,
-        end = timeS() + self.bar.max - self.bar.index   
-        )
+    try :
+        self.logger["discord"].debug("updating status...")
+        self.RPC.update(
+            activity_type = ActivityType.LISTENING,
+            status_display_type = StatusDisplayType.NAME ,
+            name = self.song.name,
+            state = "ChimkenMuziks",
+            start = timeS() - self.bar.index,
+            end = timeS() + self.bar.max - self.bar.index
+            )
+        
+    except:
+        self.logger["discord"].debug("update failed")
+        self.discord = False
+        self.discord_connected = False
+            
+
+    else:
+        self.logger["discord"].debug("updated status")
+        self.discord_connected = True           
+
 
 def pause_discord_status(self):
-    self.RPC.update(
-        activity_type = ActivityType.LISTENING,
-        status_display_type = StatusDisplayType.NAME ,
-        name = "Paused",
-        state = "ChimkenMuziks", 
-        )
+    try :
+        self.logger["discord"].debug("pausing status...")
+        self.RPC.update(
+            activity_type = ActivityType.LISTENING,
+            status_display_type = StatusDisplayType.NAME ,
+            name = "Paused",
+            state = "ChimkenMuziks", 
+            )
+    except:
+        self.logger["discord"].debug("pausing failed")
+        self.discord = False
+        self.discord_connected = False
+
+    else:
+        self.logger["discord"].debug("status paused")
+        self.discord_connected = True  
             
             
 def is_finished(self):

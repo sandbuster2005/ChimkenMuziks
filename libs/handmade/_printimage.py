@@ -62,6 +62,7 @@ def gen_image_data(self, path, top_offset = 0):
     self.image = None
     name = self.song.index
     
+    
     size = self.term_size
     height = size.lines - top_offset
     width = size.columns /2
@@ -83,7 +84,8 @@ def gen_image_data(self, path, top_offset = 0):
     else: # snap avec la largeur
         widthprint = size.columns
         heightprint = int(widthprint*(imheight/imwidth)/2)
-        
+    
+    self.logger["image"].debug(f"creating image with size {widthprint}x{heightprint}")
     #heightprint = height
     #widthprint = height*2
     if widthprint and heightprint > 0:
