@@ -19,7 +19,7 @@ currently its allow you to :
 - forwarding , backwarding
 - go to previous / next song
 - load last played song when starting the player
-- ay song via command
+- play song via command
 - search for song
 - favorites
 - create and edit playlists
