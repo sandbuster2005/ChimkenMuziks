@@ -142,13 +142,15 @@ def update_logic(self):
                 self.RPC.clear()
                 self.RPC.close()
                 self.discord_connected = False
-            
-            
 
 
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
                 self.song_saved = True
                 self.write_song_database( self.song.file )
+
+            if self.database_requests_pool != []:
+                request = self.database_requests_pool.pop()
+                self.exec_sql_request( request )
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause and self.stay:

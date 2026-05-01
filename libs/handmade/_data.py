@@ -1,10 +1,11 @@
 import sqlite3
 import os
+import threading
 from os.path import isfile
 from .utils import *
 
 def init_data(self):
-    pass
+    self.database_requests_pool = []
 
 def write_song_database(self,song):
     self.create_song_database()
@@ -38,6 +39,13 @@ def create_song_database(self):
     base.commit()
     base.close()
 
+def exec_sql_request( self, request ):
+    base = sqlite3.connect("appdata/cache/data.db")
+    cursor = base.cursor()
+    cursor.execute(request[0] , request[1] )
+    base.commit()
+    base.close()
+
 def add_song_database(self, song):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
@@ -50,31 +58,50 @@ def add_song_database(self, song):
     result = cursor.fetchall()
     return [ self.Song ( result[ 0 ][0],result[ 0 ][1] , self.separator )  ]
 
-def update_song_database(self, file ):
+def update_song_database(self, file):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
-    
     cursor = base.cursor()
-    name = self.get_song_database()
-
+    name, artist, album = self.get_song_database()
     self.logger["data"].info("updating song database")
+    base.commit()
     for x in file:
         if x not in name:
-            artist,album = self.get_song_info(x)
-            cursor.execute( ' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',[ x, artist, album ])
+            thread = threading.Thread(target = self.update_song_metadata_info, kwargs={"file": x})
+
+            cursor.execute(' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',
+                                [x, None, None])
+            thread.start()
+
+        else:
+            if artist[name.index(x)] is None or album[name.index(x)] is None:
+                thread = threading.Thread(target = self.update_song_metadata_info, kwargs={"file": x})
+                thread.start()
 
     base.commit()
     base.close()
+
+
+def update_song_metadata_info(self, file):
+    artist, album = self.get_song_info(file)
+
+    if artist is None:
+        artist = "Unknown"
+
+    if album is None:
+        album = "Unknown"
+
+    self.database_requests_pool.append(["UPDATE song SET artist = ? , album = ? where nom = ?", [artist, album, file]])
 
 def get_song_database(self):
     self.create_song_database()
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT nom FROM song")
+    cursor.execute("SELECT nom, artist,album FROM song")
     result = cursor.fetchall()
     base.commit()
     base.close()
-    return [ x[0] for x in result ]
+    return [ x[0] for x in result ], [x[1] for x in result ],[x[2] for x in result ]
 
 def find_song_database(self,num):
     base = sqlite3.connect("appdata/cache/data.db")
