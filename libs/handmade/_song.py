@@ -248,11 +248,11 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 
         else:
             choice = self.asker.menu_deroulant( ["play now","add to waitlist", "delete ", "move", "rename", "convert"], self.update_logic )
-            if choice == 0:
+            if choice == 0:# 
                 self.song = song
                 self.play_song( choose = 0 )
                 
-            if choice == 1:
+            if choice == 1: # add to waitlist
                 if song not in self.to_play:
                     self.to_play = [ song ] + self.to_play
                     self.logger["song"].debug(f" added { song } to be played")

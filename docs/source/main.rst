@@ -216,5 +216,117 @@ Download
 
      run the update logic of the player while downloading playlist
 
+-------
 
+Song
+====
+
+   .. py:method:: init_song(self)
+
+    allow to load necessary variables for the download methods before starting
+
+   .. py:method:: load_songs(self,reset=1)
+
+    load all songs in memory including favorites ,playlist also create dirs_link and update the database
+
+    :param reset: if the screen and player should be stopped 
+    :type reset: Bool
+  
+    :calls:
+     * :py:meth:`get_file <get_file>`
+     * :py:meth:`create_dirs_links <create_dirs_links>`
+     
+
+    .. note::
+     when deleting a song for exemple you should reset to avoid error from unknown file
+   
+   
+   .. py:method:: play_song(self , choose=1)
+
+    chose a song if necessary , loads lyrics , convert midi to playable , add song to played song and update the timer if necessary 
+    
+    then launch :py:meth:`_play <_play>`
+
+    :param choose: tell the method if it should select a new song
+    :type choose: Bool
+
+   .. py:method:: _choose_song(self)
+
+     choose a song depending on waiting list, current playlist , favorite and options 
+
+   .. py:method:: _play(self)
+
+     subsitute file path to converted midi path if needed , then send it to vlc to be played and ask to gen image
+
+
+   .. py:method:: play_last(self)
+ 
+     launch previous played song if there's one
+
+   .. py:method:: historic(self)
+
+     show user the list of played song 
+
+
+   .. py:method:: _select_song(self,file_list,display_list=None,text="",play_next=False)
+
+     allow user to select song from media list and to modify or play it 
+
+     :param file_list: the list of song media available
+     :type file_list: list
+     :param display_list: the list of what should be displayed for each song
+     :type display_list: list
+     :param text: the text to be displayed above the display
+     :type text: str
+     :param play_next: should song be played directly without displaying option menu
+     :type play_next: bool
+
+   .. py:method:: select(self)
+     
+     allow user to select song from media list
+
+
+   .. py:method:: select_fav(self)
+
+     allow user to select song from favorite media list 
+
+   
+   .. py:method:: most_played(self)
+
+     allow user to select song from all time played media list
+
+
+   .. py:method:: play_now(self)
+     
+     allow user to select song from waitinglist and immediatly play it
+
+   .. py:method:: play_midi(self)
+
+     allow to create a mp3 file with a midi and a codec selected by the user
+
+   .. py:method:: convert_midi(self,soundmap="",destination="appdata/cache/")
+
+     convert song to mp3 file and save it in cache using selected codec
+
+     :param soundmap: the codec to be used filepath
+     :type soundmap: str
+     :param destination: the folder where the converted file will be kept
+     :type destination: str
+
+   .. py:method:: default_midi(self)
+   
+    allow user to select default codec to be used with midi
+
+   .. py:method:: get_metadata(self)
+
+    check if there a thumbnail embedded in file and extract it if possible
+
+
+
+
+
+
+
+
+   
 
