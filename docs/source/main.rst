@@ -321,6 +321,185 @@ Song
 
     check if there a thumbnail embedded in file and extract it if possible
 
+------
+
+main
+====
+
+  .. py:method:: init_main(self,directory,song)
+
+   allow to load necessary variables for the download methods before starting
+
+   :param directory: directory passed through at class creation
+   :type directory: str
+   :param song: song passed through at class creation
+   :type song: str
+
+  .. py:method:: main(self)
+
+   start the system , initiating everything
+
+
+
+  .. py:method:: n_input(self)
+
+   go up one line and clear it
+
+
+  .. py:method:: display(self)
+
+   tell the update loop to update the display when possible
+
+   :param space: if it also tell to put space
+   :type space: bool
+
+
+  .. py:method:: get_input(self)
+  
+   read the user input and execute corresponding command
+
+  .. py:method:: load_all(self)
+
+   launch all the loading functions
+
+  .. py:method:: wind(self,mode,pause = False)
+
+   execute various simple task
+
+   :mode: 
+    | 1  : forward 
+    | 2  : rewind 
+    | 3  : volume up 
+    | 4  : volume down
+    | 5  : deafen
+    | 6  : pause 
+    | 7  : quit
+    | 15 : rewind to start
+
+  .. py:method:: set_timer(self)
+
+   allow user to set a timer with multiple option see [TIMER]
+
+  .. py:method:: end_timer(self)
+
+   execute end instruction fo timer , see [TIMER]
+
+  .. py:method:: param_center(self)
+   
+   allow user to modify supported parameter
+
+  .. py:method:: reset_settings(self)
+
+   ask user if he want to reset setting and respond accordingly
+
+-------
+
+printimage
+==========
+
+  .. py:method:: init_printer(self)
+
+   allow to load necessary variables for the printimage methods before starting
+
+  .. py:method:: closest(colors,color)   
+
+   depracated ans should not be used
+
+  .. py:method:: gen_image_data(self,path,top_offset=0)
+
+   generate unique string to be printed to show the chosen image
+
+   :param path: path to image
+   :type path: str
+   :param top_offset: how many line should not be counted from terminal size
+   :type top_offset: int
+
+  .. py:method:: print_image_to_screen(self,path,top_offset=0)
+
+   directly print chosen image to screen
+
+   :param path: path to image
+   :type path: str
+   :param top_offset: how many line should not be counted from terminal size
+   :type top_offset: int
+
+   .. warning::
+    this method is depracated , it should not be used 
+
+-------
+
+playlist
+========
+
+  .. py:method:: init_playlist(self)
+
+   allow to load necessary variables for the playlist methods before starting
+
+  .. py:method:: add_to_playlist(self)
+
+   allow user to add current song to a playlist including favorites
+
+  .. py:method:: playlist_manager(self)
+
+   allow user to manage playlists
+
+  .. py:method:: get_song_info(self,song)
+   
+   read metadata of song , return artist and album
+
+   :param song: song to check
+   :type song: str
+
+  .. py:method:: load_playlist(self)
+
+   load file corresponding to playlist type see [playlist]
+  
+
+-------
+
+
+update
+======
+
+  .. py:function:: current_time()
+   
+   return time to format hour:minute
+
+  .. py:method:: init_update(self)
+
+   allow to load necessary variables for the update methods before starting
+
+  .. py:method:: update_logic(self)
+
+   the update loop for all the logic
+
+  .. py:method:: update_display(self)
+
+   the update loop for all the display parts
+
+  .. py:method:: connect_to_discord(self)
+
+   try to connect to discord with rich presence
+
+  .. py:method:: update_discord_status(self)
+
+   try to update rich presence with current song
+
+  .. py:method:: pause_discord_status(self)
+
+   try to update rich presence with current song paused 
+
+  .. py:method:: is_finished(self)
+
+   return state of program
+
+  .. py:method:: end(self)
+
+   end sequence of the program 
+
+
+ 
+
 
 
 
