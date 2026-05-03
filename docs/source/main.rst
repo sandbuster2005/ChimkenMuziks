@@ -497,7 +497,150 @@ update
 
    end sequence of the program 
 
+------
 
+Data
+====
+
+  .. py:method:: init_data(self)
+
+   allow to load necessary variables for the download methods before starting
+
+  .. py:method:: write_song_database(self,song)
+
+    add one to played count of selected song in database
+
+   :param song: the name of the song to be updated
+   :type song: str
+
+  .. py:method:: create_song_database(self)
+
+    create song table in database if it don't exist already
+
+  .. py:method:: exec_sql_request(self,request)
+   
+    execute given request and save the change in the database
+    
+    :param request: request to be executed
+    :type request: list
+    
+  .. py:method:: add_song_database(self, song)
+  
+    add individual song in the database and return with newly created index see [SONG]
+    
+    :param song: file to add to database
+    :type song: str
+    
+  .. py:method:: update_song_database(self , file)
+  
+    add list of songs to the database and ask to read metadata to add album and playlist later
+    
+    :param file: list of songs to add to database
+    :type file : list
+    
+  
+  .. py:method:: update_song_metadata_info(self,file)
+  
+   get artist and album info of file , then add a request to queue to add info into database
+   
+   :param file: song to process
+   :type file: str
+   
+  .. py:method:: get_song_database(self)
+  
+   return the list of all song's name with their corresponding artist and album
+  
+  
+  .. py:method:: find_song_database(self,num)
+  
+   return song ( see [SONG] ) corresponding to index
+   
+   :param num: the index of song you're searching
+   :type num: int
+   
+  .. py:method:: played_database(self)
+  
+   return list of all song already played ordered by most played 
+   
+  .. py:method:: update_favorite_database(self)
+  
+   change favorite state of current song in database
+   
+   :param mode: new favorite state
+   :type mode: bool
+   
+  .. py:method:: load_favorite_database(self)
+  
+   return list of all favorite songs ( see [SONG] ) in database
+   
+  .. py:method:: get_index_data(self,nom)
+  
+   return index of song with corresponding name
+   
+   :param nom: the song you're searching
+   :type nom: str
+  
+  .. py:method:: add_column(self,column)
+  
+   add a column to song table corresponding to a new playlist
+   
+   :param column: name of the new column
+   :type column: str
+   
+  .. py:method:: drop_column(self,colum)
+  
+   remove a column to song table coresponding to an old playlist
+   
+   :param column: name of the existing column
+   :type column: str
+   
+  .. py:method:: load_playlist_database(self)
+  
+   if there is a selected playlist load the corresponding songs
+   
+  .. py:method:: update_playlist_database(self,playlist,value,song=None)
+  
+   update corresponsing playlist status for selected song
+   
+   :param playlist: the choosen playlist 
+   :type playlist: str
+   :param value: the new state of the song for the playlist
+   :type value: bool
+   :param song: the selected song name
+   :type song: str
+   
+  .. py:method:: is_in_playlist(self,playlist,song=None)
+  
+   check if selected song is in a specific playlist
+   
+   :param playlist: playlist to check
+   :type playlist: str
+   :param song: selected song
+   :type song: str
+   
+  
+  .. py:method:: get_column(self)
+  
+   return list of playlist names in database
+   
+  .. py:method:: get_album(self)
+  
+   return list off all album in database
+  
+  .. py:method:: load_album_database(self)
+  
+   load list of songs corresponding to current album
+   
+  .. py:method:: get_artists(self)
+  
+   return lsit of all artist in database
+   
+  .. py:method:: load_artist_database(self)
+   
+   load all song corresponding to current 
+
+   
+    
  
 
 
