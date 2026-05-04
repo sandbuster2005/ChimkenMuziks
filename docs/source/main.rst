@@ -3,6 +3,279 @@ ChimkenMuziks Devellopement Doc
 ===============================
 
 
+Variable
+========
+
+ .. py:class:: App
+  
+  the main class containing everything due to bad legacy code
+  
+  .. py:attribute:: stay
+   
+   the current state of the program
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: exterior
+  
+   the folder countaining song if song was indicated in command line
+   
+   :type: str
+   :default: None
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: exterior_song
+  
+   the song indicated in command line if there was one
+   
+   :type: str
+   :default: None
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: sysname
+ 
+   name of the os currently running the program
+   
+   :type: str
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: separator
+  
+   the folder path separator depending the os 
+   
+   :type: str
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: sys_architecture
+  
+   the cpu architecture of the computer running the program
+   
+   :type: str
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: pause
+  
+   pause the bar and the screen
+   
+   :type: bool
+   :Default: False
+   :Def: :py:meth:`App.init_main() <init_main>`
+   
+   .. warning::
+    this attribute is depracated and doesn't work as attended anymore
+    
+  .. py:attribute:: bar
+  
+   the current bar instance of the player
+   
+   :type: [Bar]
+   :Default: None
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: search
+   
+   pause the update of the screen
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: player
+  
+   the vlc media instance
+   
+   :type: MediaPlayer
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: played
+  
+   the list of song played this session
+   
+   :type: List
+   :default: []
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: to_play
+  
+   the waiting list containing songs that should be played next
+   
+   :type: list
+   :default: []
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: timer
+  
+   [ to be written doc]
+   
+   :type: dict
+   :default: None
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: words
+  
+   the list of lyrics if the current song as some
+   
+   :type: list
+   :default: None
+   :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: input 
+  
+   the imput system class
+   
+   :type: ReadChar
+   :def: :py:meth:`App.init_main() <init_main>`
+
+--------
+
+
+Lecteur
+=======
+
+ .. py:class:: Song
+  
+  A class for each song to contain basic and usefull import info for each
+  
+  .. py:method:: __init__(self, index,file,separator)
+  
+   :param index: the index of the song in the database
+   :type index: int
+   :param file: the full file path of song
+   :type file: str
+   :param separator: the folder separator see [self.separator] 
+   :type separator: str
+   
+  :atribute:
+     * **index** *(int)* - the index of the song in database 
+     * **file** *(str)* - the full filepath of song
+     * **filepathname** (*str)* - the full filepath excluding extension of the song
+     * **extension** *(str)* - the extension of the song
+     * **filepath** *(str)* - the path to the folder in which the song is
+     * **finename** *(str)* - the name of the file without path of songs
+     * **name** *(str)* - the name of the file without path and extension
+
+ .. py:class:: Image
+  
+  A class to contain basic and usefull information on an image
+  
+  .. py:method:: __init__(self)
+  
+   :param height: the height of the image
+   :type height: int
+   :param width: the width of the image
+   :type width: int
+   :param name: an unique name to recognize it
+   :type name: str
+   :param image: the image converted to printable version
+   :type image: str
+   
+   .. note:: the class atribute share the same names
+   
+------
+
+main
+====
+
+  .. py:method:: init_main(self,directory,song)
+
+   allow to load necessary variables for the download methods before starting
+
+   :param directory: directory passed through at class creation
+   :type directory: str
+   :param song: song passed through at class creation
+   :type song: str
+   
+   
+   :def:
+     * :py:attr:`App.stay <App.stay>`
+     * :py:attr:`App.exterior <App.exterior>`
+     * :py:attr:`App.exterior_song <App.exterior_song>`
+     * :py:attr:`App.sysname <App.sysname>`
+     * :py:attr:`App.separator <App.separator>`
+     * :py:attr:`App.sys_architecture <App.sys_architecture>`
+     * :py:attr:`App.pause <App.pause>`
+     * :py:attr:`App.bar <App.bar>`
+     * :py:attr:`App.search <App.search>`
+     * :py:attr:`App.player <App.player>`
+     * :py:attr:`App.played <App.played>`
+     * :py:attr:`App.to_play <App.to_play>`
+     * :py:attr:`App.timer <App.timer>`
+     * :py:attr:`App.words <App.words>`
+     * :py:attr:`App.input <App.input>`
+     
+   
+   
+
+  .. py:method:: main(self)
+
+   start the system , initiating everything
+
+
+
+  .. py:method:: n_input(self)
+
+   go up one line and clear it
+
+
+  .. py:method:: display(self)
+
+   tell the update loop to update the display when possible
+
+   :param space: if it also tell to put space
+   :type space: bool
+
+
+  .. py:method:: get_input(self)
+  
+   read the user input and execute corresponding command
+
+  .. py:method:: load_all(self)
+
+   launch all the loading functions
+
+  .. py:method:: wind(self,mode,pause = False)
+
+   execute various simple task
+
+   :mode: 
+    | 1  : forward 
+    | 2  : rewind 
+    | 3  : volume up 
+    | 4  : volume down
+    | 5  : deafen
+    | 6  : pause 
+    | 7  : quit
+    | 15 : rewind to start
+
+  .. py:method:: set_timer(self)
+
+   allow user to set a timer with multiple option see [TIMER]
+
+  .. py:method:: end_timer(self)
+
+   execute end instruction fo timer , see [TIMER]
+
+  .. py:method:: param_center(self)
+   
+   allow user to modify supported parameter
+
+  .. py:method:: reset_settings(self)
+
+   ask user if he want to reset setting and respond accordingly
+
+     
+     
+
+
+
+
+
+
+
+-------
+
 external
 ========
   
@@ -321,76 +594,6 @@ Song
 
     check if there a thumbnail embedded in file and extract it if possible
 
-------
-
-main
-====
-
-  .. py:method:: init_main(self,directory,song)
-
-   allow to load necessary variables for the download methods before starting
-
-   :param directory: directory passed through at class creation
-   :type directory: str
-   :param song: song passed through at class creation
-   :type song: str
-
-  .. py:method:: main(self)
-
-   start the system , initiating everything
-
-
-
-  .. py:method:: n_input(self)
-
-   go up one line and clear it
-
-
-  .. py:method:: display(self)
-
-   tell the update loop to update the display when possible
-
-   :param space: if it also tell to put space
-   :type space: bool
-
-
-  .. py:method:: get_input(self)
-  
-   read the user input and execute corresponding command
-
-  .. py:method:: load_all(self)
-
-   launch all the loading functions
-
-  .. py:method:: wind(self,mode,pause = False)
-
-   execute various simple task
-
-   :mode: 
-    | 1  : forward 
-    | 2  : rewind 
-    | 3  : volume up 
-    | 4  : volume down
-    | 5  : deafen
-    | 6  : pause 
-    | 7  : quit
-    | 15 : rewind to start
-
-  .. py:method:: set_timer(self)
-
-   allow user to set a timer with multiple option see [TIMER]
-
-  .. py:method:: end_timer(self)
-
-   execute end instruction fo timer , see [TIMER]
-
-  .. py:method:: param_center(self)
-   
-   allow user to modify supported parameter
-
-  .. py:method:: reset_settings(self)
-
-   ask user if he want to reset setting and respond accordingly
 
 -------
 
