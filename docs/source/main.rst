@@ -212,6 +212,23 @@ main
 
    start the system , initiating everything
 
+  :call:
+   * :py:meth:`App.get_param() <get_param>`
+   * :py:attr:`App.connect_to_discord() <connect_to_discord>`
+   * :py:attr:`App.get_img() <get_img>`
+   * :py:attr:`App.check_adress() <check_adress>`
+   * :py:attr:`App.load_songs() <load_songs>`
+   * :py:attr:`App.load_script() <load_script>`
+   * :py:attr:`App.change_main_path() <change_main_path>`
+   * :py:attr:`App.start_sound() <start_sound>` to add doc
+   * :py:attr:`App.display() <display>`
+   * :py:attr:`App.get_index_data() <get_index_data>`
+   * :py:attr:`App.play_song() <play_song>`
+   * :py:attr:`App.get_input() <get_input>`
+   * :py:attr:`App.end() <end>`
+   
+
+
 
 
   .. py:method:: n_input(self)
@@ -225,11 +242,19 @@ main
 
    :param space: if it also tell to put space
    :type space: bool
+   
+   :called by:
+     
+       * :py:meth:`App.main() <main>`
 
 
   .. py:method:: get_input(self)
   
    read the user input and execute corresponding command
+   
+   :called by:
+       * :py:meth:`App.main() <main>`
+       
 
   .. py:method:: load_all(self)
 
@@ -343,6 +368,10 @@ Param
     .. py:method:: get_param(self)
        
      read param file and set the corresponding variable accordingly
+     
+     :called by:
+       
+       * :py:meth:`App.main() <main>`
 
      .. caution::
       a field should not be removed once added , it would render all previous param file obsolete
@@ -418,10 +447,18 @@ Files
    .. py:method:: check_adress(self)
 
     check if media folder path countain at least one media else ask the user to change until it does
+    
+    :called by:
+     
+       * :py:meth:`App.main() <main>`
 
    .. py:method:: change_main_path( self )
     
     makes the user reselect media folder path and reload the songs
+    
+    :called by:
+     
+       * :py:meth:`App.main() <main>`
     
    .. py:method:: get_word( self )
     
@@ -443,12 +480,16 @@ Image
    .. py:method:: get_img(self)
 
      craws through the default image folder and save the files in memory
+     
+     :called by:
+     
+       * :py:meth:`App.main() <main>`
 
    .. py:method:: gen_img(self)
      
     chose between thumbnail if it exist or default image and launch a thread to generatr it for the current terminal size
 
-   .. py:method:: display_img(self)
+   .. py:method:: display_img(self) 
  
     chose between thumbnail if it exist or default image and directly ask to print it
    
@@ -459,6 +500,10 @@ Image
    .. py:method:: load_script(self)
 
     WIP : currently does nothing
+    
+    :called by:
+     
+       * :py:meth:`App.main() <main>`
 
    .. py:method:: screen_mode(self)
 
@@ -506,8 +551,12 @@ Song
     :type reset: Bool
   
     :calls:
-     * :py:meth:`get_file <get_file>`
-     * :py:meth:`create_dirs_links <create_dirs_links>`
+     * :py:meth:`get_file() <get_file>`
+     * :py:meth:`create_dirs_links() <create_dirs_links>`
+     
+    :called by:
+     
+       * :py:meth:`App.main() <main>`
      
 
     .. note::
@@ -522,6 +571,11 @@ Song
 
     :param choose: tell the method if it should select a new song
     :type choose: Bool
+    
+    :called by:
+     
+       * :py:meth:`App.main() <main>`
+       
 
    .. py:method:: _choose_song(self)
 
@@ -683,6 +737,10 @@ update
   .. py:method:: connect_to_discord(self)
 
    try to connect to discord with rich presence
+   
+   :called by:
+   
+     * :py:meth:`App.main() <main>`
 
   .. py:method:: update_discord_status(self)
 
@@ -699,6 +757,10 @@ update
   .. py:method:: end(self)
 
    end sequence of the program 
+   
+   :called by:
+     
+       * :py:meth:`App.main() <main>`
 
 ------
 
@@ -782,6 +844,10 @@ Data
    
    :param nom: the song you're searching
    :type nom: str
+   
+   :called by:
+     
+       * :py:meth:`App.main() <main>`
   
   .. py:method:: add_column(self,column)
   
