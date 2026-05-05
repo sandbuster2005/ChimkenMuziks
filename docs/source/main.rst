@@ -127,6 +127,248 @@ Variable
    
    :type: ReadChar
    :def: :py:meth:`App.init_main() <init_main>`
+   
+  .. py:attribute:: path_to_file
+   
+   the path to root of music folder
+   
+   :type: str
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py:attribute:: path_to_image
+  
+   the path to root of image folder
+   
+   :type: str
+   :default: appdata/image/
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: mode
+  
+   if the player plays random or in order
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>` 
+   
+  .. py:attribute:: sound_manager
+  
+   which song should be modified ( vlc / global )
+   
+   :type: str
+   :default: base
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: img
+  
+   the current selected img 
+  
+   :type: str
+   :default: ""
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: repeat
+  
+   loop current song
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: dirs
+  
+   all the folders and subfolders already scanned
+   
+   :type: list
+   :default: []
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py:attribute:: play_favorite
+  
+   should the player play only favorites song
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: fchoose
+  
+   higher chance of picking in favorite when choosing random
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: holders
+  
+   user defined command
+   
+   :type: list
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py:attribute:: graphic_manager
+  
+   the interface that should be used
+   
+   :type: str
+   :default: base
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: confirmation
+  
+   confirmation message for some functions
+   
+   :type: str
+   :default: Your Choice
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: show
+  
+   show the image
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py::attribute:: word
+  
+   show lyrics when there are some
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py::atribute:: base_soundmap
+  
+   default codec for midi file
+   
+   :type: str
+   :default: appdata/midi_codec/default.sf2
+   
+  .. py:attribute:: addaptive_bar
+  
+   should bar size change with song lenght
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: color 
+   
+   the bar change color
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: true_color
+  
+   show the images in true color (24bit)
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+     
+  .. py:attribute:: nearest
+  
+   use nearest neighbourg algorithm to speed up image gen
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py:attribute:: invert
+  
+   invert image color
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: center
+  
+   center the main display
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: autoaddapt
+  
+   auto addapt to terminal size change 
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: last_song
+  
+   name of the last played song before closing program
+   
+   :type: str
+   :default: ""
+   :def: :py:meth:`App.init_param() <init_param>`
+  
+  .. py:attribute:: auto_last_song
+  
+   launch last played song at start
+   
+   :type: bool
+   :default : True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: playlist
+  
+   name of the current playlist
+   
+   :type: str
+   :default: ""
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: save_param
+  
+   save the param when quitting
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: playlist_type
+  
+   what kind of playlist it is ( album , artist , playlist )
+   
+   :type: str
+   :default: ""
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: quickselect
+  
+   remove confirmations when possible
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: waitlist
+  
+   directy send song to waiting list when selecting
+   
+   :type: bool
+   :default: False
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+  .. py:attribute:: discordRP
+  
+   enable discord rich presence
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_param() <init_param>`
+   
+   
+   
+   
+   
 
 --------
 
@@ -187,6 +429,7 @@ main
    :param song: song passed through at class creation
    :type song: str
    
+   -----
    
    :def:
      * :py:attr:`App.stay <App.stay>`
@@ -211,6 +454,21 @@ main
   .. py:method:: main(self)
 
    start the system , initiating everything
+  
+  :use:
+     * :py:attr:`App.logger <App.logger>`
+     * :py:attr:`App.files <App.files>`
+     * :py:attr:`App.sound_manager <App.sound_manager>`
+     * :py:attr:`App.exterior <App.exterior>`
+     * :py:attr:`App.exterior_song <App.exterior_song>`
+     * :py:attr:`App.song <App.song>`
+     * :py:attr:`App.separator <App.separator>`
+     * :py:attr:`App.playlist <App.playlist>`
+     * :py:attr:`App.last_song <App.last_song>`
+     * :py:attr:`App.auto_last_song <App.auto_last_song>`
+     * :py:attr:`App.path_to_file <App.path_to_file>`
+    
+  ----------
 
   :call:
    * :py:meth:`App.get_param() <get_param>`
@@ -242,6 +500,14 @@ main
 
    :param space: if it also tell to put space
    :type space: bool
+   
+   :use:
+    * :py:attr:`App.logger <App.logger>`
+    * :py:attr:`App.song <App.song>`
+    * :py:attr:`App.word <App.word>`
+    * :py:attr:`App.words <app.words>`
+    * :py:attr:`App.last_word <app.last_word>`
+    
    
    :called by:
      
@@ -363,7 +629,8 @@ Param
     .. py:method:: init_param(self)
 
        allow to load necessary variables for the param methods before starting
-
+       
+       
 
     .. py:method:: get_param(self)
        
