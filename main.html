@@ -1,0 +1,1631 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChimkenMuziks Devellopement Doc &mdash; ChimkenMuziks-Dev  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="ChimkenMuziks-Dev documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ChimkenMuziks-Dev
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ChimkenMuziks Devellopement Doc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#variable">Variable</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#App"><code class="docutils literal notranslate"><span class="pre">App</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#App.stay"><code class="docutils literal notranslate"><span class="pre">App.stay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.exterior"><code class="docutils literal notranslate"><span class="pre">App.exterior</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.exterior_song"><code class="docutils literal notranslate"><span class="pre">App.exterior_song</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.sysname"><code class="docutils literal notranslate"><span class="pre">App.sysname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.separator"><code class="docutils literal notranslate"><span class="pre">App.separator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.sys_architecture"><code class="docutils literal notranslate"><span class="pre">App.sys_architecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.pause"><code class="docutils literal notranslate"><span class="pre">App.pause</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.bar"><code class="docutils literal notranslate"><span class="pre">App.bar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.search"><code class="docutils literal notranslate"><span class="pre">App.search</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.player"><code class="docutils literal notranslate"><span class="pre">App.player</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.played"><code class="docutils literal notranslate"><span class="pre">App.played</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.to_play"><code class="docutils literal notranslate"><span class="pre">App.to_play</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.timer"><code class="docutils literal notranslate"><span class="pre">App.timer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.words"><code class="docutils literal notranslate"><span class="pre">App.words</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#App.input"><code class="docutils literal notranslate"><span class="pre">App.input</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lecteur">Lecteur</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Song"><code class="docutils literal notranslate"><span class="pre">Song</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Song.__init__"><code class="docutils literal notranslate"><span class="pre">Song.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Image"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Image.__init__"><code class="docutils literal notranslate"><span class="pre">Image.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#main">main</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_main"><code class="docutils literal notranslate"><span class="pre">init_main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#n_input"><code class="docutils literal notranslate"><span class="pre">n_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#display"><code class="docutils literal notranslate"><span class="pre">display()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_input"><code class="docutils literal notranslate"><span class="pre">get_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wind"><code class="docutils literal notranslate"><span class="pre">wind()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set_timer"><code class="docutils literal notranslate"><span class="pre">set_timer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#end_timer"><code class="docutils literal notranslate"><span class="pre">end_timer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#param_center"><code class="docutils literal notranslate"><span class="pre">param_center()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reset_settings"><code class="docutils literal notranslate"><span class="pre">reset_settings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#external">external</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#external_call"><code class="docutils literal notranslate"><span class="pre">external_call()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external_return"><code class="docutils literal notranslate"><span class="pre">external_return()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#command">Command</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_command"><code class="docutils literal notranslate"><span class="pre">init_command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sort_command"><code class="docutils literal notranslate"><span class="pre">sort_command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edit_command"><code class="docutils literal notranslate"><span class="pre">edit_command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#help_menu"><code class="docutils literal notranslate"><span class="pre">help_menu()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#param">Param</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_param"><code class="docutils literal notranslate"><span class="pre">init_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_param"><code class="docutils literal notranslate"><span class="pre">get_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#write_param"><code class="docutils literal notranslate"><span class="pre">write_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#files">Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_file"><code class="docutils literal notranslate"><span class="pre">init_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_file"><code class="docutils literal notranslate"><span class="pre">get_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edit_dirs"><code class="docutils literal notranslate"><span class="pre">edit_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create_dirs_links"><code class="docutils literal notranslate"><span class="pre">create_dirs_links()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nselect_dir"><code class="docutils literal notranslate"><span class="pre">nselect_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select_dir"><code class="docutils literal notranslate"><span class="pre">select_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#switch_dir"><code class="docutils literal notranslate"><span class="pre">switch_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#find_file"><code class="docutils literal notranslate"><span class="pre">find_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check_adress"><code class="docutils literal notranslate"><span class="pre">check_adress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#change_main_path"><code class="docutils literal notranslate"><span class="pre">change_main_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_word"><code class="docutils literal notranslate"><span class="pre">get_word()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#change_extension"><code class="docutils literal notranslate"><span class="pre">change_extension()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#image">Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_image"><code class="docutils literal notranslate"><span class="pre">init_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_img"><code class="docutils literal notranslate"><span class="pre">get_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gen_img"><code class="docutils literal notranslate"><span class="pre">gen_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#display_img"><code class="docutils literal notranslate"><span class="pre">display_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select_img"><code class="docutils literal notranslate"><span class="pre">select_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_script"><code class="docutils literal notranslate"><span class="pre">load_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#screen_mode"><code class="docutils literal notranslate"><span class="pre">screen_mode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_download"><code class="docutils literal notranslate"><span class="pre">init_download()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yt_search"><code class="docutils literal notranslate"><span class="pre">yt_search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dl_yt_playlist"><code class="docutils literal notranslate"><span class="pre">dl_yt_playlist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thread_loop"><code class="docutils literal notranslate"><span class="pre">thread_loop()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#song">Song</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_song"><code class="docutils literal notranslate"><span class="pre">init_song()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_songs"><code class="docutils literal notranslate"><span class="pre">load_songs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#play_song"><code class="docutils literal notranslate"><span class="pre">play_song()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choose_song"><code class="docutils literal notranslate"><span class="pre">_choose_song()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#play"><code class="docutils literal notranslate"><span class="pre">_play()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#play_last"><code class="docutils literal notranslate"><span class="pre">play_last()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#historic"><code class="docutils literal notranslate"><span class="pre">historic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select_song"><code class="docutils literal notranslate"><span class="pre">_select_song()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select"><code class="docutils literal notranslate"><span class="pre">select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#select_fav"><code class="docutils literal notranslate"><span class="pre">select_fav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#most_played"><code class="docutils literal notranslate"><span class="pre">most_played()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#play_now"><code class="docutils literal notranslate"><span class="pre">play_now()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#play_midi"><code class="docutils literal notranslate"><span class="pre">play_midi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convert_midi"><code class="docutils literal notranslate"><span class="pre">convert_midi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#default_midi"><code class="docutils literal notranslate"><span class="pre">default_midi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_metadata"><code class="docutils literal notranslate"><span class="pre">get_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#printimage">printimage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_printer"><code class="docutils literal notranslate"><span class="pre">init_printer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#closest"><code class="docutils literal notranslate"><span class="pre">closest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gen_image_data"><code class="docutils literal notranslate"><span class="pre">gen_image_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#print_image_to_screen"><code class="docutils literal notranslate"><span class="pre">print_image_to_screen()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#playlist">playlist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_playlist"><code class="docutils literal notranslate"><span class="pre">init_playlist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add_to_playlist"><code class="docutils literal notranslate"><span class="pre">add_to_playlist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playlist_manager"><code class="docutils literal notranslate"><span class="pre">playlist_manager()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_song_info"><code class="docutils literal notranslate"><span class="pre">get_song_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_playlist"><code class="docutils literal notranslate"><span class="pre">load_playlist()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#update">update</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#current_time"><code class="docutils literal notranslate"><span class="pre">current_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init_update"><code class="docutils literal notranslate"><span class="pre">init_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_logic"><code class="docutils literal notranslate"><span class="pre">update_logic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_display"><code class="docutils literal notranslate"><span class="pre">update_display()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connect_to_discord"><code class="docutils literal notranslate"><span class="pre">connect_to_discord()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_discord_status"><code class="docutils literal notranslate"><span class="pre">update_discord_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pause_discord_status"><code class="docutils literal notranslate"><span class="pre">pause_discord_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#is_finished"><code class="docutils literal notranslate"><span class="pre">is_finished()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data">Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#write_song_database"><code class="docutils literal notranslate"><span class="pre">write_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create_song_database"><code class="docutils literal notranslate"><span class="pre">create_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exec_sql_request"><code class="docutils literal notranslate"><span class="pre">exec_sql_request()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add_song_database"><code class="docutils literal notranslate"><span class="pre">add_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_song_database"><code class="docutils literal notranslate"><span class="pre">update_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_song_metadata_info"><code class="docutils literal notranslate"><span class="pre">update_song_metadata_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_song_database"><code class="docutils literal notranslate"><span class="pre">get_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#find_song_database"><code class="docutils literal notranslate"><span class="pre">find_song_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#played_database"><code class="docutils literal notranslate"><span class="pre">played_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_favorite_database"><code class="docutils literal notranslate"><span class="pre">update_favorite_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_favorite_database"><code class="docutils literal notranslate"><span class="pre">load_favorite_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_index_data"><code class="docutils literal notranslate"><span class="pre">get_index_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add_column"><code class="docutils literal notranslate"><span class="pre">add_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#drop_column"><code class="docutils literal notranslate"><span class="pre">drop_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_playlist_database"><code class="docutils literal notranslate"><span class="pre">load_playlist_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update_playlist_database"><code class="docutils literal notranslate"><span class="pre">update_playlist_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#is_in_playlist"><code class="docutils literal notranslate"><span class="pre">is_in_playlist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_column"><code class="docutils literal notranslate"><span class="pre">get_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_album"><code class="docutils literal notranslate"><span class="pre">get_album()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_album_database"><code class="docutils literal notranslate"><span class="pre">load_album_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get_artists"><code class="docutils literal notranslate"><span class="pre">get_artists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load_artist_database"><code class="docutils literal notranslate"><span class="pre">load_artist_database()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChimkenMuziks-Dev</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ChimkenMuziks Devellopement Doc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/main.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chimkenmuziks-devellopement-doc">
+<h1>ChimkenMuziks Devellopement Doc<a class="headerlink" href="#chimkenmuziks-devellopement-doc" title="Link to this heading"></a></h1>
+<section id="variable">
+<h2>Variable<a class="headerlink" href="#variable" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="App">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">App</span></span><a class="headerlink" href="#App" title="Link to this definition"></a></dt>
+<dd><p>the main class containing everything due to bad legacy code</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.stay">
+<span class="sig-name descname"><span class="pre">stay</span></span><a class="headerlink" href="#App.stay" title="Link to this definition"></a></dt>
+<dd><p>the current state of the program</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.exterior">
+<span class="sig-name descname"><span class="pre">exterior</span></span><a class="headerlink" href="#App.exterior" title="Link to this definition"></a></dt>
+<dd><p>the folder countaining song if song was indicated in command line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.exterior_song">
+<span class="sig-name descname"><span class="pre">exterior_song</span></span><a class="headerlink" href="#App.exterior_song" title="Link to this definition"></a></dt>
+<dd><p>the song indicated in command line if there was one</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.sysname">
+<span class="sig-name descname"><span class="pre">sysname</span></span><a class="headerlink" href="#App.sysname" title="Link to this definition"></a></dt>
+<dd><p>name of the os currently running the program</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.separator">
+<span class="sig-name descname"><span class="pre">separator</span></span><a class="headerlink" href="#App.separator" title="Link to this definition"></a></dt>
+<dd><p>the folder path separator depending the os</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.sys_architecture">
+<span class="sig-name descname"><span class="pre">sys_architecture</span></span><a class="headerlink" href="#App.sys_architecture" title="Link to this definition"></a></dt>
+<dd><p>the cpu architecture of the computer running the program</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.pause">
+<span class="sig-name descname"><span class="pre">pause</span></span><a class="headerlink" href="#App.pause" title="Link to this definition"></a></dt>
+<dd><p>pause the bar and the screen</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>this attribute is depracated and doesn’t work as attended anymore</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.bar">
+<span class="sig-name descname"><span class="pre">bar</span></span><a class="headerlink" href="#App.bar" title="Link to this definition"></a></dt>
+<dd><p>the current bar instance of the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[Bar]</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.search">
+<span class="sig-name descname"><span class="pre">search</span></span><a class="headerlink" href="#App.search" title="Link to this definition"></a></dt>
+<dd><p>pause the update of the screen</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>False</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.player">
+<span class="sig-name descname"><span class="pre">player</span></span><a class="headerlink" href="#App.player" title="Link to this definition"></a></dt>
+<dd><p>the vlc media instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MediaPlayer</p>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.played">
+<span class="sig-name descname"><span class="pre">played</span></span><a class="headerlink" href="#App.played" title="Link to this definition"></a></dt>
+<dd><p>the list of song played this session</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>[]</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.to_play">
+<span class="sig-name descname"><span class="pre">to_play</span></span><a class="headerlink" href="#App.to_play" title="Link to this definition"></a></dt>
+<dd><p>the waiting list containing songs that should be played next</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>[]</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.timer">
+<span class="sig-name descname"><span class="pre">timer</span></span><a class="headerlink" href="#App.timer" title="Link to this definition"></a></dt>
+<dd><p>[ to be written doc]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.words">
+<span class="sig-name descname"><span class="pre">words</span></span><a class="headerlink" href="#App.words" title="Link to this definition"></a></dt>
+<dd><p>the list of lyrics if the current song as some</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Default<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Def<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="App.input">
+<span class="sig-name descname"><span class="pre">input</span></span><a class="headerlink" href="#App.input" title="Link to this definition"></a></dt>
+<dd><p>the imput system class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadChar</p>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#init_main" title="init_main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.init_main()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="lecteur">
+<h2>Lecteur<a class="headerlink" href="#lecteur" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="Song">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Song</span></span><a class="headerlink" href="#Song" title="Link to this definition"></a></dt>
+<dd><p>A class for each song to contain basic and usefull import info for each</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Song.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Song.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – the index of the song in the database</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – the full file path of song</p></li>
+<li><p><strong>separator</strong> (<em>str</em>) – the folder separator see [self.separator]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Atribute<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> <em>(int)</em> - the index of the song in database</p></li>
+<li><p><strong>file</strong> <em>(str)</em> - the full filepath of song</p></li>
+<li><p><strong>filepathname</strong> (<em>str)</em> - the full filepath excluding extension of the song</p></li>
+<li><p><strong>extension</strong> <em>(str)</em> - the extension of the song</p></li>
+<li><p><strong>filepath</strong> <em>(str)</em> - the path to the folder in which the song is</p></li>
+<li><p><strong>finename</strong> <em>(str)</em> - the name of the file without path of songs</p></li>
+<li><p><strong>name</strong> <em>(str)</em> - the name of the file without path and extension</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Image">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="headerlink" href="#Image" title="Link to this definition"></a></dt>
+<dd><p>A class to contain basic and usefull information on an image</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Image.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Image.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>height</strong> (<em>int</em>) – the height of the image</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – the width of the image</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – an unique name to recognize it</p></li>
+<li><p><strong>image</strong> (<em>str</em>) – the image converted to printable version</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>the class atribute share the same names</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="main">
+<h2>main<a class="headerlink" href="#main" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_main">
+<span class="sig-name descname"><span class="pre">init_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_main" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the download methods before starting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> (<em>str</em>) – directory passed through at class creation</p></li>
+<li><p><strong>song</strong> (<em>str</em>) – song passed through at class creation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Def<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#App.stay" title="App.stay"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.stay</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.exterior" title="App.exterior"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.exterior</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.exterior_song" title="App.exterior_song"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.exterior_song</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.sysname" title="App.sysname"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.sysname</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.separator" title="App.separator"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.separator</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.sys_architecture" title="App.sys_architecture"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.sys_architecture</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.pause" title="App.pause"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.pause</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.bar" title="App.bar"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.bar</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.search" title="App.search"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.search</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.player" title="App.player"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.player</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.played" title="App.played"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.played</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.to_play" title="App.to_play"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.to_play</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.timer" title="App.timer"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.timer</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.words" title="App.words"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.words</span></code></a></p></li>
+<li><p><a class="reference internal" href="#App.input" title="App.input"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.input</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>start the system , initiating everything</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">call<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#get_param" title="get_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.get_param()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#connect_to_discord" title="connect_to_discord"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.connect_to_discord()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#get_img" title="get_img"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.get_img()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#check_adress" title="check_adress"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.check_adress()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#load_songs" title="load_songs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.load_songs()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#load_script" title="load_script"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.load_script()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#change_main_path" title="change_main_path"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.change_main_path()</span></code></a></p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.start_sound()</span></code> to add doc</p></li>
+<li><p><a class="reference internal" href="#display" title="display"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.display()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#get_index_data" title="get_index_data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.get_index_data()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#play_song" title="play_song"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.play_song()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#get_input" title="get_input"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.get_input()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#end" title="end"><code class="xref py py-attr docutils literal notranslate"><span class="pre">App.end()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="n_input">
+<span class="sig-name descname"><span class="pre">n_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#n_input" title="Link to this definition"></a></dt>
+<dd><p>go up one line and clear it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#display" title="Link to this definition"></a></dt>
+<dd><p>tell the update loop to update the display when possible</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>space</strong> (<em>bool</em>) – if it also tell to put space</p>
+</dd>
+<dt class="field-even">Called by<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_input">
+<span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_input" title="Link to this definition"></a></dt>
+<dd><p>read the user input and execute corresponding command</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_all">
+<span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_all" title="Link to this definition"></a></dt>
+<dd><p>launch all the loading functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wind">
+<span class="sig-name descname"><span class="pre">wind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pause</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wind" title="Link to this definition"></a></dt>
+<dd><p>execute various simple task</p>
+<dl class="field-list">
+<dt class="field-odd">Mode<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="line-block">
+<div class="line">1  : forward</div>
+<div class="line">2  : rewind</div>
+<div class="line">3  : volume up</div>
+<div class="line">4  : volume down</div>
+<div class="line">5  : deafen</div>
+<div class="line">6  : pause</div>
+<div class="line">7  : quit</div>
+<div class="line">15 : rewind to start</div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="set_timer">
+<span class="sig-name descname"><span class="pre">set_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#set_timer" title="Link to this definition"></a></dt>
+<dd><p>allow user to set a timer with multiple option see [TIMER]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="end_timer">
+<span class="sig-name descname"><span class="pre">end_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#end_timer" title="Link to this definition"></a></dt>
+<dd><p>execute end instruction fo timer , see [TIMER]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="param_center">
+<span class="sig-name descname"><span class="pre">param_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#param_center" title="Link to this definition"></a></dt>
+<dd><p>allow user to modify supported parameter</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reset_settings">
+<span class="sig-name descname"><span class="pre">reset_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reset_settings" title="Link to this definition"></a></dt>
+<dd><p>ask user if he want to reset setting and respond accordingly</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="external">
+<h2>external<a class="headerlink" href="#external" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="external_call">
+<span class="sig-name descname"><span class="pre">external_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#external_call" title="Link to this definition"></a></dt>
+<dd><p>execute code in the terminal outside off python</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">param arg<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the command with it’s argument to be executed</p>
+</dd>
+<dt class="field-even">type arg<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">param shell<span class="colon">:</span></dt>
+<dd class="field-odd"><p>whether it should be excuted in shell or not</p>
+</dd>
+<dt class="field-even">type shell<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>shell should not be used as it is depracated and a security risk</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="external_return">
+<span class="sig-name descname"><span class="pre">external_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#external_return" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p>allow to execute code in the terminal and return the output</p>
+<dl class="field-list simple">
+<dt class="field-odd">param args<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the command with the argument that should be used</p>
+</dd>
+<dt class="field-even">type args<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="command">
+<h2>Command<a class="headerlink" href="#command" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_command">
+<span class="sig-name descname"><span class="pre">init_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_command" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the command methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sort_command">
+<span class="sig-name descname"><span class="pre">sort_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sort_command" title="Link to this definition"></a></dt>
+<dd><p>sort command from longest to shortest and then by alphabetical</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>this allow to make sure there are no command overshadowing another</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="edit_command">
+<span class="sig-name descname"><span class="pre">edit_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#edit_command" title="Link to this definition"></a></dt>
+<dd><p>allow the user to modify the exting command for new ones</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>it check to see if command already exist and doesn’t allow to modify help command</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="help_menu">
+<span class="sig-name descname"><span class="pre">help_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#help_menu" title="Link to this definition"></a></dt>
+<dd><p>show the user all the commands</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="param">
+<h2>Param<a class="headerlink" href="#param" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_param">
+<span class="sig-name descname"><span class="pre">init_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_param" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the param methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_param">
+<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_param" title="Link to this definition"></a></dt>
+<dd><p>read param file and set the corresponding variable accordingly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>a field should not be removed once added , it would render all previous param file obsolete</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="write_param">
+<span class="sig-name descname"><span class="pre">write_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#write_param" title="Link to this definition"></a></dt>
+<dd><p>write the current params to file for next launch</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reset" title="Link to this definition"></a></dt>
+<dd><p>set all params to default value</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>it doesn’t ask for confirmation and directly save them , proceed with caution</p>
+</div>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_file">
+<span class="sig-name descname"><span class="pre">init_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_file" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the file methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_file">
+<span class="sig-name descname"><span class="pre">get_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_file" title="Link to this definition"></a></dt>
+<dd><p>craw through folders and return a list of all contained music files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – the folder path from which the program should start</p></li>
+<li><p><strong>file</strong> (<em>list</em>) – starting file that will be returned with the found file</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>file is used in the first place as a recursive argument and should not be modified</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="edit_dirs">
+<span class="sig-name descname"><span class="pre">edit_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#edit_dirs" title="Link to this definition"></a></dt>
+<dd><p>allow user to select folder to ignore in crawling</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="create_dirs_links">
+<span class="sig-name descname"><span class="pre">create_dirs_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_dirs_links" title="Link to this definition"></a></dt>
+<dd><p>create dict to recognize which folder each one contains</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nselect_dir">
+<span class="sig-name descname"><span class="pre">nselect_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nselect_dir" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>allow user to select a folder by walking through them and allow to see aditionnal information</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>display_dict</strong> (<em>dict</em>) – additionnal content to be display for each folder optionnally</p></li>
+<li><p><strong>start</strong> (<em>str</em>) – allow to start from a specific folder if wanted , default to media folder root</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="select_dir">
+<span class="sig-name descname"><span class="pre">select_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">print</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#select_dir" title="Link to this definition"></a></dt>
+<dd><p>allow user to select folder to enable/disable</p>
+<div class="admonition error">
+<p class="admonition-title">Error</p>
+<p>This Function is deprecated and should not be used</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="switch_dir">
+<span class="sig-name descname"><span class="pre">switch_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#switch_dir" title="Link to this definition"></a></dt>
+<dd><p>change the state of a folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>word</strong> (<em>int</em>) – the index inhte list of the folder to switch</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="find_file">
+<span class="sig-name descname"><span class="pre">find_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_file" title="Link to this definition"></a></dt>
+<dd><p>return the list of file countaining a special string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>word</strong> (<em>str</em>) – the string to search in all the songs name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="check_adress">
+<span class="sig-name descname"><span class="pre">check_adress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#check_adress" title="Link to this definition"></a></dt>
+<dd><p>check if media folder path countain at least one media else ask the user to change until it does</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="change_main_path">
+<span class="sig-name descname"><span class="pre">change_main_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#change_main_path" title="Link to this definition"></a></dt>
+<dd><p>makes the user reselect media folder path and reload the songs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_word">
+<span class="sig-name descname"><span class="pre">get_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_word" title="Link to this definition"></a></dt>
+<dd><p>extract song lyrics from corresponding file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="change_extension">
+<span class="sig-name descname"><span class="pre">change_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#change_extension" title="Link to this definition"></a></dt>
+<dd><p>use ffmpeg to convert media to another format then reload the songs , also prompting the user to remove the original file</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="image">
+<h2>Image<a class="headerlink" href="#image" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_image">
+<span class="sig-name descname"><span class="pre">init_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_image" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the image methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_img">
+<span class="sig-name descname"><span class="pre">get_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_img" title="Link to this definition"></a></dt>
+<dd><p>craws through the default image folder and save the files in memory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gen_img">
+<span class="sig-name descname"><span class="pre">gen_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gen_img" title="Link to this definition"></a></dt>
+<dd><p>chose between thumbnail if it exist or default image and launch a thread to generatr it for the current terminal size</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="display_img">
+<span class="sig-name descname"><span class="pre">display_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#display_img" title="Link to this definition"></a></dt>
+<dd><p>chose between thumbnail if it exist or default image and directly ask to print it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="select_img">
+<span class="sig-name descname"><span class="pre">select_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#select_img" title="Link to this definition"></a></dt>
+<dd><p>allow user to chose a default picture to be used or keep it random when there are no thumbnail</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_script">
+<span class="sig-name descname"><span class="pre">load_script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_script" title="Link to this definition"></a></dt>
+<dd><p>WIP : currently does nothing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="screen_mode">
+<span class="sig-name descname"><span class="pre">screen_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#screen_mode" title="Link to this definition"></a></dt>
+<dd><p>WIP : should not be used</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="download">
+<h2>Download<a class="headerlink" href="#download" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_download">
+<span class="sig-name descname"><span class="pre">init_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_download" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the download methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yt_search">
+<span class="sig-name descname"><span class="pre">yt_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yt_search" title="Link to this definition"></a></dt>
+<dd><p>allow user to search on youtube and select from the first 10 result a media to download , then load it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dl_yt_playlist">
+<span class="sig-name descname"><span class="pre">dl_yt_playlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dl_yt_playlist" title="Link to this definition"></a></dt>
+<dd><p>allow user to enter a youtube link and to download song/playlist + check all have been download</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>a thread is created while it’s downloading to keep the player up and running</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thread_loop">
+<span class="sig-name descname"><span class="pre">thread_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thread_loop" title="Link to this definition"></a></dt>
+<dd><p>run the update logic of the player while downloading playlist</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="song">
+<h2>Song<a class="headerlink" href="#song" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_song">
+<span class="sig-name descname"><span class="pre">init_song</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_song" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the download methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_songs">
+<span class="sig-name descname"><span class="pre">load_songs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_songs" title="Link to this definition"></a></dt>
+<dd><p>load all songs in memory including favorites ,playlist also create dirs_link and update the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reset</strong> (<em>Bool</em>) – if the screen and player should be stopped</p>
+</dd>
+<dt class="field-even">Calls<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#get_file" title="get_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_file()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#create_dirs_links" title="create_dirs_links"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_dirs_links()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>when deleting a song for exemple you should reset to avoid error from unknown file</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="play_song">
+<span class="sig-name descname"><span class="pre">play_song</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#play_song" title="Link to this definition"></a></dt>
+<dd><p>chose a song if necessary , loads lyrics , convert midi to playable , add song to played song and update the timer if necessary</p>
+<p>then launch <a class="reference internal" href="#play" title="_play"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_play</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>choose</strong> (<em>Bool</em>) – tell the method if it should select a new song</p>
+</dd>
+<dt class="field-even">Called by<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="choose_song">
+<span class="sig-name descname"><span class="pre">_choose_song</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#choose_song" title="Link to this definition"></a></dt>
+<dd><p>choose a song depending on waiting list, current playlist , favorite and options</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="play">
+<span class="sig-name descname"><span class="pre">_play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#play" title="Link to this definition"></a></dt>
+<dd><p>subsitute file path to converted midi path if needed , then send it to vlc to be played and ask to gen image</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="play_last">
+<span class="sig-name descname"><span class="pre">play_last</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#play_last" title="Link to this definition"></a></dt>
+<dd><p>launch previous played song if there’s one</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="historic">
+<span class="sig-name descname"><span class="pre">historic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#historic" title="Link to this definition"></a></dt>
+<dd><p>show user the list of played song</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="select_song">
+<span class="sig-name descname"><span class="pre">_select_song</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">play_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#select_song" title="Link to this definition"></a></dt>
+<dd><p>allow user to select song from media list and to modify or play it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_list</strong> (<em>list</em>) – the list of song media available</p></li>
+<li><p><strong>display_list</strong> (<em>list</em>) – the list of what should be displayed for each song</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – the text to be displayed above the display</p></li>
+<li><p><strong>play_next</strong> (<em>bool</em>) – should song be played directly without displaying option menu</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#select" title="Link to this definition"></a></dt>
+<dd><p>allow user to select song from media list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="select_fav">
+<span class="sig-name descname"><span class="pre">select_fav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#select_fav" title="Link to this definition"></a></dt>
+<dd><p>allow user to select song from favorite media list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="most_played">
+<span class="sig-name descname"><span class="pre">most_played</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#most_played" title="Link to this definition"></a></dt>
+<dd><p>allow user to select song from all time played media list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="play_now">
+<span class="sig-name descname"><span class="pre">play_now</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#play_now" title="Link to this definition"></a></dt>
+<dd><p>allow user to select song from waitinglist and immediatly play it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="play_midi">
+<span class="sig-name descname"><span class="pre">play_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#play_midi" title="Link to this definition"></a></dt>
+<dd><p>allow to create a mp3 file with a midi and a codec selected by the user</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="convert_midi">
+<span class="sig-name descname"><span class="pre">convert_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soundmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'appdata/cache/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#convert_midi" title="Link to this definition"></a></dt>
+<dd><p>convert song to mp3 file and save it in cache using selected codec</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>soundmap</strong> (<em>str</em>) – the codec to be used filepath</p></li>
+<li><p><strong>destination</strong> (<em>str</em>) – the folder where the converted file will be kept</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="default_midi">
+<span class="sig-name descname"><span class="pre">default_midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#default_midi" title="Link to this definition"></a></dt>
+<dd><p>allow user to select default codec to be used with midi</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_metadata">
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_metadata" title="Link to this definition"></a></dt>
+<dd><p>check if there a thumbnail embedded in file and extract it if possible</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="printimage">
+<h2>printimage<a class="headerlink" href="#printimage" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_printer">
+<span class="sig-name descname"><span class="pre">init_printer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_printer" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the printimage methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="closest">
+<span class="sig-name descname"><span class="pre">closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#closest" title="Link to this definition"></a></dt>
+<dd><p>depracated ans should not be used</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gen_image_data">
+<span class="sig-name descname"><span class="pre">gen_image_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gen_image_data" title="Link to this definition"></a></dt>
+<dd><p>generate unique string to be printed to show the chosen image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to image</p></li>
+<li><p><strong>top_offset</strong> (<em>int</em>) – how many line should not be counted from terminal size</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="print_image_to_screen">
+<span class="sig-name descname"><span class="pre">print_image_to_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#print_image_to_screen" title="Link to this definition"></a></dt>
+<dd><p>directly print chosen image to screen</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to image</p></li>
+<li><p><strong>top_offset</strong> (<em>int</em>) – how many line should not be counted from terminal size</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>this method is depracated , it should not be used</p>
+</div>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="playlist">
+<h2>playlist<a class="headerlink" href="#playlist" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_playlist">
+<span class="sig-name descname"><span class="pre">init_playlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_playlist" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the playlist methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="add_to_playlist">
+<span class="sig-name descname"><span class="pre">add_to_playlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_to_playlist" title="Link to this definition"></a></dt>
+<dd><p>allow user to add current song to a playlist including favorites</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="playlist_manager">
+<span class="sig-name descname"><span class="pre">playlist_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#playlist_manager" title="Link to this definition"></a></dt>
+<dd><p>allow user to manage playlists</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_song_info">
+<span class="sig-name descname"><span class="pre">get_song_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_song_info" title="Link to this definition"></a></dt>
+<dd><p>read metadata of song , return artist and album</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>song</strong> (<em>str</em>) – song to check</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_playlist">
+<span class="sig-name descname"><span class="pre">load_playlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_playlist" title="Link to this definition"></a></dt>
+<dd><p>load file corresponding to playlist type see [playlist]</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="update">
+<h2>update<a class="headerlink" href="#update" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py function">
+<dt class="sig sig-object py" id="current_time">
+<span class="sig-name descname"><span class="pre">current_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#current_time" title="Link to this definition"></a></dt>
+<dd><p>return time to format hour:minute</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="init_update">
+<span class="sig-name descname"><span class="pre">init_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_update" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the update methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_logic">
+<span class="sig-name descname"><span class="pre">update_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_logic" title="Link to this definition"></a></dt>
+<dd><p>the update loop for all the logic</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_display">
+<span class="sig-name descname"><span class="pre">update_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_display" title="Link to this definition"></a></dt>
+<dd><p>the update loop for all the display parts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="connect_to_discord">
+<span class="sig-name descname"><span class="pre">connect_to_discord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#connect_to_discord" title="Link to this definition"></a></dt>
+<dd><p>try to connect to discord with rich presence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_discord_status">
+<span class="sig-name descname"><span class="pre">update_discord_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_discord_status" title="Link to this definition"></a></dt>
+<dd><p>try to update rich presence with current song</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pause_discord_status">
+<span class="sig-name descname"><span class="pre">pause_discord_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pause_discord_status" title="Link to this definition"></a></dt>
+<dd><p>try to update rich presence with current song paused</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="is_finished">
+<span class="sig-name descname"><span class="pre">is_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#is_finished" title="Link to this definition"></a></dt>
+<dd><p>return state of program</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="end">
+<span class="sig-name descname"><span class="pre">end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#end" title="Link to this definition"></a></dt>
+<dd><p>end sequence of the program</p>
+<dl class="field-list simple">
+<dt class="field-odd">Called by<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="data">
+<h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
+<blockquote>
+<div><dl class="py method">
+<dt class="sig sig-object py" id="init_data">
+<span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#init_data" title="Link to this definition"></a></dt>
+<dd><p>allow to load necessary variables for the download methods before starting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="write_song_database">
+<span class="sig-name descname"><span class="pre">write_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#write_song_database" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>add one to played count of selected song in database</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>song</strong> (<em>str</em>) – the name of the song to be updated</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="create_song_database">
+<span class="sig-name descname"><span class="pre">create_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_song_database" title="Link to this definition"></a></dt>
+<dd><p>create song table in database if it don’t exist already</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="exec_sql_request">
+<span class="sig-name descname"><span class="pre">exec_sql_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#exec_sql_request" title="Link to this definition"></a></dt>
+<dd><p>execute given request and save the change in the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>list</em>) – request to be executed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="add_song_database">
+<span class="sig-name descname"><span class="pre">add_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_song_database" title="Link to this definition"></a></dt>
+<dd><p>add individual song in the database and return with newly created index see [SONG]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>song</strong> (<em>str</em>) – file to add to database</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_song_database">
+<span class="sig-name descname"><span class="pre">update_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_song_database" title="Link to this definition"></a></dt>
+<dd><p>add list of songs to the database and ask to read metadata to add album and playlist later</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – list of songs to add to database</p>
+</dd>
+</dl>
+<p>:type file : list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_song_metadata_info">
+<span class="sig-name descname"><span class="pre">update_song_metadata_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_song_metadata_info" title="Link to this definition"></a></dt>
+<dd><p>get artist and album info of file , then add a request to queue to add info into database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – song to process</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_song_database">
+<span class="sig-name descname"><span class="pre">get_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_song_database" title="Link to this definition"></a></dt>
+<dd><p>return the list of all song’s name with their corresponding artist and album</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="find_song_database">
+<span class="sig-name descname"><span class="pre">find_song_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_song_database" title="Link to this definition"></a></dt>
+<dd><p>return song ( see [SONG] ) corresponding to index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num</strong> (<em>int</em>) – the index of song you’re searching</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="played_database">
+<span class="sig-name descname"><span class="pre">played_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#played_database" title="Link to this definition"></a></dt>
+<dd><p>return list of all song already played ordered by most played</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_favorite_database">
+<span class="sig-name descname"><span class="pre">update_favorite_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_favorite_database" title="Link to this definition"></a></dt>
+<dd><p>change favorite state of current song in database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<em>bool</em>) – new favorite state</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_favorite_database">
+<span class="sig-name descname"><span class="pre">load_favorite_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_favorite_database" title="Link to this definition"></a></dt>
+<dd><p>return list of all favorite songs ( see [SONG] ) in database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_index_data">
+<span class="sig-name descname"><span class="pre">get_index_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_index_data" title="Link to this definition"></a></dt>
+<dd><p>return index of song with corresponding name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nom</strong> (<em>str</em>) – the song you’re searching</p>
+</dd>
+<dt class="field-even">Called by<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#id0" title="main"><code class="xref py py-meth docutils literal notranslate"><span class="pre">App.main()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="add_column">
+<span class="sig-name descname"><span class="pre">add_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_column" title="Link to this definition"></a></dt>
+<dd><p>add a column to song table corresponding to a new playlist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>column</strong> (<em>str</em>) – name of the new column</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="drop_column">
+<span class="sig-name descname"><span class="pre">drop_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colum</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drop_column" title="Link to this definition"></a></dt>
+<dd><p>remove a column to song table coresponding to an old playlist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>column</strong> (<em>str</em>) – name of the existing column</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_playlist_database">
+<span class="sig-name descname"><span class="pre">load_playlist_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_playlist_database" title="Link to this definition"></a></dt>
+<dd><p>if there is a selected playlist load the corresponding songs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="update_playlist_database">
+<span class="sig-name descname"><span class="pre">update_playlist_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#update_playlist_database" title="Link to this definition"></a></dt>
+<dd><p>update corresponsing playlist status for selected song</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>playlist</strong> (<em>str</em>) – the choosen playlist</p></li>
+<li><p><strong>value</strong> (<em>bool</em>) – the new state of the song for the playlist</p></li>
+<li><p><strong>song</strong> (<em>str</em>) – the selected song name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="is_in_playlist">
+<span class="sig-name descname"><span class="pre">is_in_playlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">song</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#is_in_playlist" title="Link to this definition"></a></dt>
+<dd><p>check if selected song is in a specific playlist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>playlist</strong> (<em>str</em>) – playlist to check</p></li>
+<li><p><strong>song</strong> (<em>str</em>) – selected song</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_column">
+<span class="sig-name descname"><span class="pre">get_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_column" title="Link to this definition"></a></dt>
+<dd><p>return list of playlist names in database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_album">
+<span class="sig-name descname"><span class="pre">get_album</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_album" title="Link to this definition"></a></dt>
+<dd><p>return list off all album in database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_album_database">
+<span class="sig-name descname"><span class="pre">load_album_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_album_database" title="Link to this definition"></a></dt>
+<dd><p>load list of songs corresponding to current album</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="get_artists">
+<span class="sig-name descname"><span class="pre">get_artists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_artists" title="Link to this definition"></a></dt>
+<dd><p>return lsit of all artist in database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="load_artist_database">
+<span class="sig-name descname"><span class="pre">load_artist_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load_artist_database" title="Link to this definition"></a></dt>
+<dd><p>load all song corresponding to current</p>
+</dd></dl>
+
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ChimkenMuziks-Dev documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Sand;rickarockFR.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
