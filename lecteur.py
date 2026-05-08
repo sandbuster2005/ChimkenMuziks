@@ -121,8 +121,6 @@ parser.add_argument("--song")
 #parser.add_argument("--dir", required="--song" in sys.argv)
 
 args = parser.parse_args()
-print(args)
-input()
 if args.song:
     app = App(args.song)
     
