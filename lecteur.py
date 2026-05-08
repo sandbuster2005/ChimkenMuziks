@@ -19,7 +19,7 @@ import datetime
 
 
 class App:
-    def __init__( self, directory = "" , song = "", logging_level = logging.DEBUG ):
+    def __init__( self, song = "", logging_level = logging.DEBUG ):
 
         #self.logger = {}
         #self.logging_level = logging_level
@@ -56,7 +56,7 @@ class App:
         self.logger["main"].debug("initializing methods")
         
         self.init_param()
-        self.init_main( directory , song)
+        self.init_main(song)
         self.init_sound()
         self.init_battery()
         self.init_command()
@@ -117,12 +117,14 @@ class App:
     
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-s', "--song")
-parser.add_argument("--dir", required="--song" in sys.argv)
+parser.add_argument("--song")
+#parser.add_argument("--dir", required="--song" in sys.argv)
 
 args = parser.parse_args()
-if args.dir:
-    app = App(args.dir,args.song)
+print(args)
+input()
+if args.song:
+    app = App(args.song)
     
 else:
     app = App()

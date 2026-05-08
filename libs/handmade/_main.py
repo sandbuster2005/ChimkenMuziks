@@ -17,10 +17,9 @@ import platform
 import os
 
 
-def init_main( self, directory, song ):
+def init_main( self, song ):
     #process arg passed with the start command
-    self.exterior = directory
-    self.exterior_song = song
+    
     
     #check problem with windows
     self.sysname = sysname
@@ -31,6 +30,10 @@ def init_main( self, directory, song ):
     else:
         self.separator = '/'
         
+    self.exterior_song = song
+    self.exterior = song.rsplit(self.separator , 1)[0]
+    
+    
     self.sys_architecture = platform.machine()
     self.stay = True  # False pour quiter le lecteur
     self.pause = 0  # pour mettre en pause le lecteur+la barre

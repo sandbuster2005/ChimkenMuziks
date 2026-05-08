@@ -98,7 +98,7 @@ def _choose_song(self):
         self.song = self.to_play.pop()
 
     else:
-        if self.playlist:# choose in playlist if there one
+        if self.playlist and not self.exterior:# choose in playlist if there one
             if self.playlist_files:
                 files = self.playlist_files
                 self.logger["song"].debug("choosing song in playlist")
