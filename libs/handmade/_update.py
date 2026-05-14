@@ -157,9 +157,11 @@ def update_logic(self):
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause and self.stay:
-                    self.logger["update"].info("song finished, next one")
-                    self.play_song((1 - self.repeat))
-                    self.display()
+                    sleep(1)
+                    if not self.player.is_playing():
+                        self.logger["update"].info("song finished, next one")
+                        self.play_song((1 - self.repeat))
+                        self.display()
             
 
 
