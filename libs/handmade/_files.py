@@ -9,6 +9,7 @@ from .terminal import up,wipe,out
 from ..readchar import readchar
 from .terminal import home,wipe
 import re
+import stat
 
 def init_file( self ):
     self.files = []# chanson chargé
@@ -313,7 +314,8 @@ def check_adress( self ):
     cette fonction permet de verifier si l'adresse existe et est un dossier
     """
     self.logger["file"].info("checking file path")
-    if not isdir( self.path_to_file ) or self.path_to_file == "":
+    mode = os.stat(self.path_to_file).st_mode
+    if not stat.S_ISDIR( mode ) or self.path_to_file == "":
         self.logger["file"].warning("path to file incorrect , asking User for correct one")
         while not isdir( self.path_to_file ):
             
