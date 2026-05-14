@@ -147,6 +147,7 @@ def get_index_data(self,nom):
     self.logger["data"].info("fetching indexes")
 
     for x in nom:
+        print(x)
         cursor.execute("SELECT id_song FROM song WHERE nom = ?" ,[x])
         result.append(cursor.fetchone()[0])
         

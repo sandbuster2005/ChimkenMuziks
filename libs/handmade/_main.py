@@ -33,6 +33,9 @@ def init_main( self, song ):
     self.exterior_song = song
     self.exterior = song.rsplit(self.separator , 1)[0]
     
+    if self.exterior:
+        self.separator += self.separator
+    
     
     self.sys_architecture = platform.machine()
     self.stay = True  # False pour quiter le lecteur
@@ -82,9 +85,12 @@ def main( self ):
     
     if self.exterior: # if an argument was pasted from command line
         if self.exterior_song:
-            self.logger["main"].info("loading song from command line")
+            print(self.exterior_song)
             self.exterior_song = clear_adjacent( self.exterior_song, [ "/" ], 2 )
             self.exterior_song = "//".join( self.exterior_song.rsplit( "/", 1 ) )
+            self.logger["main"].info("loading song from command line")
+            print(self.exterior_song)
+            #self.update_song_database( [ self.exterior_song ] )
             self.song = self.Song(self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ,self.separator )
             self.logger["main"].debug(f"loaded {self.song}")
             self.play_song(0)

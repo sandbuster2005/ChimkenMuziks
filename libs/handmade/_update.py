@@ -150,7 +150,10 @@ def update_logic(self):
 
             if self.database_requests_pool != []:
                 request = self.database_requests_pool.pop()
-                self.exec_sql_request( request )
+                try:
+                    self.exec_sql_request( request )
+                except:
+                    self.database_requests_pool.append(request)
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause and self.stay:
