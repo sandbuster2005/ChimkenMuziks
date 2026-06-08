@@ -309,27 +309,39 @@ def find_file( self, word ):
     
     return sorted(files,key = lambda x: x[1] )#sort by index
 
-def check_adress( self ):
+def check_adress( self , first = 1):
     """
     cette fonction permet de verifier si l'adresse existe et est un dossier
     """
     self.logger["file"].info("checking file path")
-    mode = os.stat(self.path_to_file).st_mode
-    if not stat.S_ISDIR( mode ) or self.path_to_file == "":
-        self.logger["file"].warning("path to file incorrect , asking User for correct one")
-        while not isdir( self.path_to_file ):
-            
-            try:
-                self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
-            
-            except:
-                self.path_to_file = self.ask( "chemin du dossier musique: " )
-                
-                if self.path_to_file[-1] != self.separator:
-                    self.path_to_file += self.separator
-        self.logger["file"].info(f" new path to file : {self.path_to_file}")
     
-        self.write_param()
+    try:
+        mode = os.stat(self.path_to_file).st_mode
+    
+    except:
+        self.path_to_file = ""
+
+    if self.path_to_file !=  "":
+        if not stat.S_ISDIR( mode ) :
+            self.path_to_file = ""
+    
+    if  self.path_to_file == "":
+        self.logger["file"].warning("path to file incorrect , asking User for correct one")
+        try:
+            self.path_to_file = str( self.external_return( [ "xplr" ], ) )[ 2:-3 ] + self.separator
+            
+        except:
+            self.path_to_file = self.ask( "chemin du dossier musique: " )
+                
+            if self.path_to_file[-1] != self.separator:
+                self.path_to_file += self.separator
+        
+        self.check_adress( first = 0)
+        
+        if first:
+            self.logger["file"].info(f" new path to file : {self.path_to_file}")
+    
+            self.write_param()
     
     
 def change_main_path( self ):

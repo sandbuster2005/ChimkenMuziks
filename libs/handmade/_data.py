@@ -218,10 +218,11 @@ def get_column(self):
 def get_albums(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT DISTINCT album FROM song WHERE album IS NOT NULL")
+    cursor.execute("SELECT DISTINCT album FROM song WHERE album IS NOT NULL and nom LIKE ? ", [ self.path_to_file + "%" ])
     result =  cursor.fetchall()
     base.commit()
     base.close()
+    print( [ x[0] for x in result ] )
     return [ x[0] for x in result ]
 
 def load_album_database(self):
@@ -237,7 +238,7 @@ def load_album_database(self):
 def get_artists(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT DISTINCT artist FROM song WHERE artist IS NOT NULL")
+    cursor.execute("SELECT DISTINCT artist FROM song WHERE artist IS NOT NULL and nom LIKE ? ", [ self.path_to_file + "%" ])
     result = cursor.fetchall()
     base.commit()
     base.close()
@@ -246,7 +247,7 @@ def get_artists(self):
 def load_artist_database(self):
     base = sqlite3.connect("appdata/cache/data.db")
     cursor = base.cursor()
-    cursor.execute("SELECT id_song,nom FROM song WHERE (artist LIKE ? OR artist LIKE ? )",["%"+self.playlist+"/", "%" + self.playlist])
+    cursor.execute("SELECT id_song,nom FROM song WHERE (artist LIKE ? OR artist LIKE ? ) and",["%"+self.playlist+"/", "%" + self.playlist])
     result =  cursor.fetchall()
     base.commit()
     base.close()

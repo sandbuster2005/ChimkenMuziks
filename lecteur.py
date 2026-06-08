@@ -107,6 +107,9 @@ class App:
         
         def __repr__(self):
             return self.file
+        
+        def __eq__(self, other):            
+            return self.index == other.index
     
     class Image:
         def __init__(self, height , width, name, image = "" ):

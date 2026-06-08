@@ -104,6 +104,7 @@ def _choose_song(self):
                 self.logger["song"].debug("choosing song in playlist")
             else:
                 playlist = ""
+                files = self.files
 
         elif self.play_favorite: #choose in favorite if the option is on
             if self.favorite:

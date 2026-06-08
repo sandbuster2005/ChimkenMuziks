@@ -103,8 +103,8 @@ def main( self ):
             if isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]:
                 self.logger["main"].info("loading last played song")
                 self.last_song[ 0 ] = int( self.last_song[ 0 ] )
-                self.song = self.Song( self.last_song[0] , self.last_song[1], self.separator )
                 
+                self.song = self.Song( self.last_song[0] , self.last_song[1], self.separator )
                 self.play_song(0)
                 
 
