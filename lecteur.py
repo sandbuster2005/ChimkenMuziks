@@ -90,12 +90,17 @@ class App:
     colorama.init()
 
     class Song:
-        def __init__(self, index , file , separator ):
+        def __init__(self, index , file , separator , metadata = {}):
             self.index = index
             self.file = file
             self.filepathname, self.extension = self.file.rsplit( ".",1 )
             self.filepath, self.filename = self.file.rsplit( separator, 1 )
             self.name = self.filename.rsplit( ".",1 )[0]
+            self.metadata = metadata
+            
+            # Default values for mandatory metadata entries:
+            if 'track' not in self.metadata:
+                self.metadata['track'] = 0
             
         def __str__(self):
             return self.file

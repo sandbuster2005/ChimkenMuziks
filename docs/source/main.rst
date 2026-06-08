@@ -8,11 +8,11 @@ Variable
 
  .. py:class:: App
   
-  the main class containing everything due to bad legacy code
+  The main class. Contains everything as a remnant of bad, outdated code.
   
   .. py:attribute:: stay
    
-   the current state of the program
+   The current state of the program.
    
    :type: bool
    :default: True
@@ -20,7 +20,7 @@ Variable
    
   .. py:attribute:: exterior
   
-   the folder countaining song if song was indicated in command line
+   The folder containing the song specified by a launch argument. Is only set when the app is launched with a song as a parameter, and is not updated further beyond that.
    
    :type: str
    :default: None
@@ -28,7 +28,7 @@ Variable
    
   .. py:attribute:: exterior_song
   
-   the song indicated in command line if there was one
+   The song that was specified as a launch argument. Is only set when the app is launched with a song as a parameter, and is not updated further beyond that.
    
    :type: str
    :default: None
@@ -36,39 +36,39 @@ Variable
    
   .. py:attribute:: sysname
  
-   name of the os currently running the program
+   The name of the OS the app is currently running on.
    
    :type: str
    :def: :py:meth:`App.init_main() <init_main>`
    
   .. py:attribute:: separator
   
-   the folder path separator depending the os 
+   The folder path separator depending the os. (should hopefully be replaced by os.path.sep, which already does exactly this)
    
    :type: str
    :def: :py:meth:`App.init_main() <init_main>`
    
   .. py:attribute:: sys_architecture
   
-   the cpu architecture of the computer running the program
+   The CPU architecture of the computer running the program.
    
    :type: str
    :def: :py:meth:`App.init_main() <init_main>`
    
   .. py:attribute:: pause
   
-   pause the bar and the screen
+   Defines if the screen and progress bar are currently paused.
    
    :type: bool
    :Default: False
    :Def: :py:meth:`App.init_main() <init_main>`
    
    .. warning::
-    this attribute is depracated and doesn't work as attended anymore
+    This attribute is deprecated and no longer works as intended.
     
   .. py:attribute:: bar
   
-   the current bar instance of the player
+   The player's current instance of Bar.
    
    :type: [Bar]
    :Default: None
@@ -76,7 +76,7 @@ Variable
    
   .. py:attribute:: search
    
-   pause the update of the screen
+   Defines if the screen still gets updated.
    
    :type: bool
    :default: False
@@ -84,14 +84,14 @@ Variable
    
   .. py:attribute:: player
   
-   the vlc media instance
+   The player's instance of the VLCMediaPlayer object.
    
    :type: MediaPlayer
    :def: :py:meth:`App.init_main() <init_main>`
    
   .. py:attribute:: played
   
-   the list of song played this session
+   The list of song played during this session.
    
    :type: List
    :default: []
@@ -99,7 +99,7 @@ Variable
    
   .. py:attribute:: to_play
   
-   the waiting list containing songs that should be played next
+   The queue containing songs that should be played next.
    
    :type: list
    :default: []
@@ -107,7 +107,7 @@ Variable
    
   .. py:attribute:: timer
   
-   [ to be written doc]
+   [ Documentation not yet completed. ]
    
    :type: dict
    :default: None
@@ -115,7 +115,7 @@ Variable
    
   .. py:attribute:: words
   
-   the list of lyrics if the current song as some
+   The synced lyrics of the current song, if applicable.
    
    :type: list
    :default: None
@@ -123,21 +123,21 @@ Variable
    
   .. py:attribute:: input 
   
-   the imput system class
+   Instance of the class used for input detection.
    
    :type: ReadChar
    :def: :py:meth:`App.init_main() <init_main>`
    
   .. py:attribute:: path_to_file
    
-   the path to root of music folder
+   The path of the user-defined root of the music folder.
    
    :type: str
    :def: :py:meth:`App.init_param() <init_param>`
   
   .. py:attribute:: path_to_image
   
-   the path to root of image folder
+   The path of the user-defined root of the image folder.
    
    :type: str
    :default: appdata/image/
@@ -145,7 +145,7 @@ Variable
    
   .. py:attribute:: mode
   
-   if the player plays random or in order
+   Defines if songs are shuffled or not.
    
    :type: bool
    :default: True

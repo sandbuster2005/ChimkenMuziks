@@ -3,6 +3,7 @@ import os
 import threading
 from os.path import isfile
 from .utils import *
+from tinytag import TinyTag
 
 def init_data(self):
     self.database_requests_pool = []
@@ -230,7 +231,7 @@ def load_album_database(self):
     result =  cursor.fetchall()
     base.commit()
     base.close()
-    self.playlist_files = [  self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1])]
+    self.playlist_files = [  self.Song( x[0],x[1], self.separator , TinyTag.get(x[1]).as_dict() ) for x in result if isfile(x[1])]#, key=lambda x: x.metadata['track'])
 
 
 def get_artists(self):
