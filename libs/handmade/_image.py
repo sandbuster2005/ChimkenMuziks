@@ -15,6 +15,7 @@ def init_image( self ):
     self.thumbnail = None
     self.screen = None
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
+    self.image = None
 
 
     #if self.sysname == 'nt':

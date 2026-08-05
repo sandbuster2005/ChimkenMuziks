@@ -7,10 +7,13 @@ from tinytag import TinyTag
 
 def init_data(self):
     self.database_requests_pool = []
+    self.thread_pool = []
+    self.thread_count = 0
+    self.database = f"{self.appdirs.user_data_dir}/data.db"
 
 def write_song_database(self,song):
     self.create_song_database()
-    base =  sqlite3.connect("appdata/cache/data.db")
+    base =  sqlite3.connect(self.database)
     cursor = base.cursor()
     requete = """
     UPDATE song
@@ -23,7 +26,7 @@ def write_song_database(self,song):
     base.close()
 
 def create_song_database(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     requete = """
     create table if not exists song(
@@ -41,7 +44,7 @@ def create_song_database(self):
     base.close()
 
 def exec_sql_request( self, request ):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute(request[0] , request[1] )
     base.commit()
@@ -49,7 +52,7 @@ def exec_sql_request( self, request ):
 
 def add_song_database(self, song):
     self.create_song_database()
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     s = clear_adjacent(song,["/"],2)
     s= "//".join( s.rsplit("/",1) )
@@ -61,7 +64,7 @@ def add_song_database(self, song):
 
 def update_song_database(self, file):
     self.create_song_database()
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     name, artist, album = self.get_song_database()
     self.logger["data"].info("updating song database")
@@ -72,16 +75,23 @@ def update_song_database(self, file):
 
             cursor.execute(' INSERT OR IGNORE INTO song (nom,played,favorite,artist,album) VALUES (?,"0","0",?,?)',
                                 [x, None, None])
-            thread.start()
+            
+            if self.tag_loading:
+                self.thread_pool.append( thread )
+                self.thread_count += 1
+                #thread.start()
 
         else:
             if artist[name.index(x)] is None or album[name.index(x)] is None:
                 thread = threading.Thread(target = self.update_song_metadata_info, kwargs={"file": x})
-                thread.start()
+                
+                if self.tag_loading:
+                    self.thread_pool.append( thread )
+                    self.thread_count += 1 
+                #thread.start()
 
     base.commit()
     base.close()
-
 
 def update_song_metadata_info(self, file):
     artist, album = self.get_song_info(file)
@@ -96,7 +106,7 @@ def update_song_metadata_info(self, file):
 
 def get_song_database(self):
     self.create_song_database()
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT nom, artist,album FROM song")
     result = cursor.fetchall()
@@ -105,7 +115,7 @@ def get_song_database(self):
     return [ x[0] for x in result ], [x[1] for x in result ],[x[2] for x in result ]
 
 def find_song_database(self,num):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT id_song,nom FROM song WHERE id_song = ?",[num])
     result = cursor.fetchall()
@@ -114,14 +124,14 @@ def find_song_database(self,num):
     base.close()
 
 def played_database(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT id_song, nom, played FROM song WHERE played != 0 ORDER BY played DESC")
     return cursor.fetchall()
 
     
 def update_favorite_database(self,mode):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute( "UPDATE song SET favorite = ? where nom = ?",[ mode, self.song.file ] )
     base.commit()
@@ -129,7 +139,7 @@ def update_favorite_database(self,mode):
     
 def load_favorite_database(self):
     self.create_song_database()
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     self.logger["data"].info("loading favorites")
     cursor.execute( " SELECT id_song,nom FROM song WHERE favorite = '1'")
@@ -142,7 +152,7 @@ def load_favorite_database(self):
     base.close()
     
 def get_index_data(self,nom):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     result = []
     self.logger["data"].info("fetching indexes")
@@ -154,14 +164,14 @@ def get_index_data(self,nom):
     return result
 
 def add_column(self,column):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute(f"ALTER TABLE song ADD COLUMN {column} INTEGER")
     base.commit()
     base.close()
     
 def drop_column(self,column):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute(f"ALTER TABLE song DROP COLUMN {column} ")
     base.commit()
@@ -169,7 +179,7 @@ def drop_column(self,column):
 
 def load_playlist_database(self):
     if self.playlist:
-        base = sqlite3.connect("appdata/cache/data.db")
+        base = sqlite3.connect(self.database)
         cursor = base.cursor()
         cursor.execute(f" SELECT id_song,nom FROM song WHERE {self.playlist} = '1' ")
         result = cursor.fetchall()
@@ -182,7 +192,7 @@ def update_playlist_database(self, playlist, value , song = None):
         song = self.song.file
     
     self.logger["data"].debug(f"setting {song} value {value} for {playlist} ")
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute( f"UPDATE song SET {playlist} = ? where nom = ?",[ value, song ] )
     base.commit()
@@ -191,7 +201,7 @@ def update_playlist_database(self, playlist, value , song = None):
 def is_in_playlist(self,playlist , song = None):
     if song == None:
         song = self.song.file
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     
     self.logger["data"].debug(f"checking if {song} in {playlist }")
@@ -207,7 +217,7 @@ def is_in_playlist(self,playlist , song = None):
         return 0
     
 def get_column(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("select name from pragma_table_info('song') as tblInfo")
     result = cursor.fetchall()
@@ -216,7 +226,7 @@ def get_column(self):
     return [ x[0]for x in result ][6:] # the first 6 are other data and not playlist
 
 def get_albums(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT DISTINCT album FROM song WHERE album IS NOT NULL and nom LIKE ? ", [ self.path_to_file + "%" ])
     result =  cursor.fetchall()
@@ -226,7 +236,7 @@ def get_albums(self):
     return [ x[0] for x in result ]
 
 def load_album_database(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT id_song,nom FROM song WHERE (album LIKE ? OR album LIKE ? )",["%"+self.playlist+"/", "%" + self.playlist])
     result =  cursor.fetchall()
@@ -236,7 +246,7 @@ def load_album_database(self):
 
 
 def get_artists(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT DISTINCT artist FROM song WHERE artist IS NOT NULL and nom LIKE ? ", [ self.path_to_file + "%" ])
     result = cursor.fetchall()
@@ -245,7 +255,7 @@ def get_artists(self):
     return [ x[0] for x in result]
 
 def load_artist_database(self):
-    base = sqlite3.connect("appdata/cache/data.db")
+    base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT id_song,nom FROM song WHERE (artist LIKE ? OR artist LIKE ? ) and",["%"+self.playlist+"/", "%" + self.playlist])
     result =  cursor.fetchall()

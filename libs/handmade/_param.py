@@ -2,7 +2,7 @@
 from .ffiles import *
 
 def init_param( self ):
-    self.param = "appdata/param.txt"#fichier de sauvegarde des paramétre
+    self.param = f"{self.appdirs.user_config_dir}/param.txt"#fichier de sauvegarde des paramétre
 
     #              [ param name, tooltip ,defaut value ,type ,param center ?]
     self.params =  [
@@ -21,7 +21,7 @@ def init_param( self ):
                    [ "show", "afficher l'image ", 1 , "bool", True ],
                    [ "word", "afficher les fichier paroles", 1 , "bool", True ],
                    [ "base_soundmap", "codec midi par default" , "appdata/midi_codec/default.sf2" , "str", False ],
-                   [ "addaptive_bar", "taille de la bar proportionnel", 1, bool, True ],
+                   [ "addaptive_bar", "taille de la bar proportionnel", 1, "bool", True ],
                    [ "color", "la bar change de couleur", 0 , "bool", True ],
                    [ "true_color", "passe les image en true color", 1 ,"bool", False ],
                    [ "nearest", "utilise nearest neighbor pour accélérer l'affichage de l'image", 0, "bool", True ],
@@ -35,7 +35,9 @@ def init_param( self ):
                    [ "playlist_type","type de playlist", "", "str" , False],
                    [ "quickselect" , "remove need for confirmation when possible", 0, "bool", True ],
                    [ "waitlist" , "automatically send song when searching in waiting list ", 0 , "bool", True ],
-                   [ "discordRP" , "allow app to send playing media to discord status" , 1 , "bool" , True ]
+                   [ "discordRP" , "allow app to send playing media to discord status" , 1 , "bool" , True ],
+                   [ "preloading", "allow to preload next song for remote server or usb", 0, "bool", True ],
+                   [ "tag_loading", "load metadata for unknown songs", 1 , "bool", True ]
                    ]
     
     for x in self.params:

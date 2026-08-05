@@ -1,5 +1,7 @@
 import os
 import random
+import threading
+import shutil
 from time import strftime, monotonic, sleep , time as timeS
 from libs.progress.bar import Bar
 from math import floor,ceil
@@ -54,7 +56,6 @@ def update_logic(self):
             self.changed.append("volume")
 
 
-
     if self.song:
         if not self.bar:
             if self.player.get_length() > 0:
@@ -97,6 +98,9 @@ def update_logic(self):
                 if not "bar" in self.changed:
                     self.changed.append("bar")
                     self.logger["update"].trace("bar changed ")
+    
+                
+                
 
             if self.word:
 
@@ -147,6 +151,10 @@ def update_logic(self):
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
                 self.song_saved = True
                 self.write_song_database( self.song.file )
+                
+                if self.preloading:
+                    self.thread_pool.append( threading.Thread(target = self.preload_song) )
+                
 
             if self.database_requests_pool != []:
                 request = self.database_requests_pool.pop()
@@ -154,10 +162,17 @@ def update_logic(self):
                     self.exec_sql_request( request )
                 except:
                     self.database_requests_pool.append(request)
+                    
+            
+            if threading.active_count() < 2 and self.thread_pool and self.player.is_playing():
+                self.thread_pool.pop().start()
+                
+            if not self.thread_pool and self.thread_count:
+                self.thread_count = 0
 
             if self.bar:
                 if not self.player.is_playing() and not self.pause and self.stay:
-                    sleep(1)
+                    sleep(2)
                     if not self.player.is_playing():
                         self.logger["update"].info("song finished, next one")
                         self.play_song((1 - self.repeat))
@@ -211,7 +226,10 @@ def update_display(self, value ):
 
                 if self.playlist:
                     string = self.playlist + "   " + string
-
+                
+                if self.thread_pool:
+                    string = f"Loading({( self.thread_count - len( self.thread_pool ) ) }/{self.thread_count})" + "   " + string
+                
                 if self.timer:
                     string += "   " + f"timer :{self.timer['remaining']} {self.timer['display']}"
 
@@ -350,7 +368,15 @@ def pause_discord_status(self):
         self.logger["discord"].debug("status paused")
         self.discord_connected = True  
             
-            
+
+def preload_song(self):
+    self._choose_song( preload = 1 )
+    shutil.copy(self.next_song.file, f"{self.appdirs.user_cache_dir}/preload")
+    self.logger["update"].info("preloaded song")
+   
+   
+   
+   
 def is_finished(self):
     if not self.stay:
         return True

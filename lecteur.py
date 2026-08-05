@@ -2,9 +2,13 @@
 #made by sand
 import argparse
 import sys
-from ChimkenJournalism import Journal
 import logging
 import datetime
+import os 
+from ChimkenJournalism import Journal
+from appdirs import AppDirs
+
+
 
 #debug levels :
     #NOTSET : 0
@@ -17,19 +21,27 @@ import datetime
     #CRITICAL : 50
 
 
-
 class App:
     def __init__( self, song = "", logging_level = logging.DEBUG ):
 
-        #self.logger = {}
-        #self.logging_level = logging_level
-        #self.log_formatter = logging.Formatter(fmt="%(asctime)s %(name)s | %(levelname)s | %(message)s")
-
-        #self.log_file_handler = logging.FileHandler(f"log/{str(datetime.datetime.now()).replace(':','_')}.log")
-        #self.log_file_handler.setFormatter( self.log_formatter )
-        #self.log_file_handler.setLevel( self.logging_level )
-
-        #self.new_logger("main")
+        self.appdirs = AppDirs("ChimkenMuziks","sand")
+        try:
+            os.mkdir(self.appdirs.user_data_dir)
+            os.mkdir(self.appdirs.user_cache_dir)
+            os.mkdir(self.appdirs.user_log_dir)
+            os.mkdir(self.appdirs.user_config_dir)
+        
+        except:
+            pass
+        
+        if os.path.isfile('appdata/param.txt') and not os.path.isfile(AppDirs("ChimkenMuziks","sand").user_config_dir+'/param.txt'):
+            os.rename('appdata/param.txt', AppDirs("ChimkenMuziks","sand").user_config_dir+'/param.txt')
+        
+        if os.path.isfile('appdata/cache/data.db')and not os.path.isfile(AppDirs("ChimkenMuziks","sand").user_data_dir+'/data.db'):
+            os.rename('appdata/cache/data.db', AppDirs("ChimkenMuziks","sand").user_config_dir+'/data.db')
+            
+        
+        
         conf ={
             "default" :{
                 "level": logging_level,
@@ -37,7 +49,7 @@ class App:
                 "loggers": ["main", "param", "command", "file", "image", "download", "song", "data", "update"],
                 "handlers":[
                     {
-                    "name" : f"log/{str(datetime.datetime.now()).replace(':','_')}.log",
+                    "name" : f"{self.appdirs.user_log_dir}/{str(datetime.datetime.now()).replace(':','_')}.log",
                     "type" : "file",
                     "level": 0
                     }      
@@ -49,11 +61,10 @@ class App:
         self.logger.add_level("TRACE",5)
         self.logger.add_level("BULLSHIT",1)
         
-        
-        
         self.logger["main"].info("APP STARTED")
 
         self.logger["main"].debug("initializing methods")
+        
         
         self.init_param()
         self.init_main(song)
@@ -85,7 +96,7 @@ class App:
     from libs.handmade._printimage import print_image_to_screen, init_printer, gen_image_data
     from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database, find_song_database, played_database, update_song_metadata_info, exec_sql_request
     from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist
-    from libs.handmade._update import init_update , is_finished , update_logic , update_display,update_discord_status,connect_to_discord,pause_discord_status,end
+    from libs.handmade._update import init_update , is_finished , update_logic , update_display,update_discord_status,connect_to_discord,pause_discord_status,end,preload_song
     import colorama.__init__ as colorama
     colorama.init()
 

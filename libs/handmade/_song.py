@@ -6,9 +6,11 @@ import midi2audio as midi2audio
 from os import listdir
 from os.path import isfile, splitext, dirname
 from tinytag import TinyTag
+import threading
 def init_song( self ):
     #SONG variables
     self.song = None# currently playing song
+    self.next_song = None # allow pre-loading of song
     self.last_word = -1 # pos in current lyrics if there are
 
 def load_songs( self , reset = 1 ):
@@ -58,10 +60,12 @@ def play_song( self ,choose = 1):
     
     if len( self.files ) != 0: # if there are song
 
-
-        if choose:
+        if self.next_song:
+           self.song = self.next_song
+           
+        elif choose:
             self._choose_song()
-            
+       
         self.get_words()# check if there are a lyric file
         
         if self.song.extension =="mid": # if its a midi convert it with a midi codec to a playable version
@@ -87,7 +91,7 @@ def play_song( self ,choose = 1):
                 self.end_timer()
 
 
-def _choose_song(self):
+def _choose_song(self, preload = 0):
     """
     cette fonction permet de:
     choisir une chanson aléatoire : mode 0
@@ -95,7 +99,7 @@ def _choose_song(self):
     """
     self.logger["song"].info("choosing song")
     if self.to_play != []:
-        self.song = self.to_play.pop()
+        song = self.to_play.pop()
 
     else:
         if self.playlist and not self.exterior:# choose in playlist if there one
@@ -131,22 +135,31 @@ def _choose_song(self):
                     files = self.favorite
                     self.logger["song"].debug("choosing in favorite")
 
-            self.song = files[randint(0, len(files) - 1)]  # chanson aleatoire
+            song = files[randint(0, len(files) - 1)]  # chanson aleatoire
 
 
         if self.mode == 0: # in order
             self.logger["song"].debug("choosing via order:")
 
             if not self.song:# if its first song playing
-                self.song = files[0]
+                song = files[0]
 
             else:
                 if self.song not in files: # if there's a problem fall back to global
                     files = self.files
 
-                self.song = files[ (files.index( self.song ) + 1) % len(files) ]  # chanson suivante : index+1
+                song = files[ (files.index( self.song ) + 1) % len(files) ]  # chanson suivante : index+1
+                
+                
+    if not preload:
+        self.song = song
+        
+    else:
+        self.next_song = song
+        
+        
 
-    self.logger["song"].debug(f"chose {self.song}")
+    self.logger["song"].debug(f"chose {song}")
 
 def _play( self ):
     """
@@ -160,13 +173,21 @@ def _play( self ):
 
     if ".mid" in self.song.file:# if its a midi played converted version
         self.logger["song"].info(f"playing midi file")
-        self.player.set_mrl("appdata/cache/" + self.song.name + ".wav")
-
+        self.player.set_mrl(self.appdirs.user_cache_dir + "/" + self.song.name + ".wav")
+    
+    elif self.next_song:
+        self.next_song = None
+        self.logger["song"].info("using preloaded")
+        self.player.set_mrl( f"{self.appdirs.user_cache_dir}/preload" )# skip loading song
+        
     else:
         self.player.set_mrl( self.song.file )# load song
     
     if self.show:
-        self.gen_image()
+        self.thread_pool.append( threading.Thread(target = self.gen_image) )
+        self.thread_count += 1
+        
+        
         
     self.song_saved = False  # tell backend is can save a play in the database
     self.bar = None # reset bar
@@ -314,11 +335,14 @@ def play_midi(self):
     if  word < len( outs ):
         self.convert_midi( "appdata/midi_codec/" + outs[ word ] )
         
-def convert_midi(self,soundmap = ""  , destination = "appdata/cache/" ):
+def convert_midi(self,soundmap = ""  , destination = "" ):
     """
     cette fonction permet de stocker temporairement un fichier mp3 crée a partir d'un fichier midi
     """
     #TODO test the fonction
+    if destination == "":
+        destination = self.appdirs.user_cache_dir + "/"
+        
     if soundmap == "":
         soundmap = self.base_soundmap
         
@@ -353,8 +377,8 @@ def get_metadata(self):
     if image :
         self.logger["song"].info("found img")
         image = image.data
-        write_file("appdata/cache/preview", image , mode = "wb")
-        image = "appdata/cache/preview"
+        write_file(f"{self.appdirs.user_cache_dir}/preview", image , mode = "wb")
+        image = f"{self.appdirs.user_cache_dir}/preview"
         
     elif tag.album :
         for j in [splitext(self.song.file )[0], dirname(self.song.file)+self.separator+tag.album]:
@@ -363,8 +387,8 @@ def get_metadata(self):
                     self.logger["song"].info("found img")
 
                     with open(i, mode = "rb") as file:
-                        write_file("appdata/cache/preview", file.read(), mode = "wb")
-                        image = "appdata/cache/preview"
+                        write_file(f"{self.appdirs.user_cache_dir}/preview", file.read(), mode = "wb")
+                        image = f"{self.appdirs.user_cache_dir}/preview"
                     
     self.thumbnail = image
     

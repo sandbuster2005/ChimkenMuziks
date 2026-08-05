@@ -365,6 +365,29 @@ Variable
    :default: True
    :def: :py:meth:`App.init_param() <init_param>`
    
+   .. py:attribute:: next_song
+  
+   allow preloading of next song
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_song() <init_song>`
+   
+   .. py:attribute:: threading_pool
+  
+   avoid absurd number of paralel thread by putting them in the same place
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_data() <init_data>`
+   
+   .. py:attribute:: thread_count
+  
+   count number of created song
+   
+   :type: bool
+   :default: True
+   :def: :py:meth:`App.init_data() <init_data>`
    
    
    

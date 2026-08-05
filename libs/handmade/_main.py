@@ -163,6 +163,7 @@ def get_input( self ):
 
     if all_numbers( got, len( self.files ), 1 ):#chanson selectionné
             self.find_song_database( int( got ) )
+            self.next_song = None
             self.play_song( 0 )
             
     if self.search:#recherche terminé
