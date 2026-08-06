@@ -1,4 +1,5 @@
 #made by sand
+from youtube_search import YoutubeSearch
 from random import randint
 from .utils import *
 from .ffiles import *
@@ -67,6 +68,7 @@ def play_song( self ,choose = 1):
             self._choose_song()
        
         self.get_words()# check if there are a lyric file
+        self.get_url()
         
         if self.song.extension =="mid": # if its a midi convert it with a midi codec to a playable version
             self.play_midi()
@@ -193,6 +195,22 @@ def _play( self ):
     self.bar = None # reset bar
     self.player.play()
     self.display()
+    
+    
+def get_url(self):
+    if self.yt_links:  
+        data = YoutubeSearch( self.song.file, max_results = 1 ).to_dict()
+        
+        if data:
+            self.url = "https://www.youtube.com" + data[0].get("url_suffix")
+        else:
+            self.url = None
+    
+    else:
+        self.url = None
+    
+    
+    
     
     
 def play_last( self ):

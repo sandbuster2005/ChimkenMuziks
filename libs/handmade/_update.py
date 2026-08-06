@@ -8,7 +8,7 @@ from math import floor,ceil
 from pypresence import  Presence, ActivityType, StatusDisplayType
 from .terminal import *
 from .utils import closest, white
-
+from youtube_search import YoutubeSearch
 
 
 def current_time():
@@ -21,6 +21,7 @@ def init_update(self):
     self.current_time = current_time()
     self.time = {"vlc": 0 , "python": 0 }
     self.time_check = [False, 0, 0, 0]
+    self.url = None
 
 def update_logic(self):
     if self.timer:
@@ -327,18 +328,30 @@ def connect_to_discord(self):
 
 
 
-def update_discord_status(self):
+def update_discord_status(self):        
     try :
         self.logger["discord"].debug("updating status...")
-        self.RPC.update(
-            activity_type = ActivityType.LISTENING,
-            status_display_type = StatusDisplayType.NAME ,
-            name = self.song.name,
-            state = "ChimkenMuziks",
-            start = timeS() - self.bar.index,
-            end = timeS() + self.bar.max - self.bar.index
-            )
-        
+        if self.url:
+            self.RPC.update(
+                activity_type = ActivityType.LISTENING,
+                status_display_type = StatusDisplayType.DETAILS ,
+                details = self.song.name,
+                details_url = self.url,
+                state = "ChimkenMuziks",
+                start = timeS() - self.bar.index,
+                end = timeS() + self.bar.max - self.bar.index,
+                )
+        else:
+            self.RPC.update(
+                activity_type = ActivityType.LISTENING,
+                status_display_type = StatusDisplayType.DETAILS ,
+                details = self.song.name,
+                state = "ChimkenMuziks",
+                start = timeS() - self.bar.index,
+                end = timeS() + self.bar.max - self.bar.index,
+                )
+
+            
     except:
         self.logger["discord"].debug("update failed")
         self.discord = False

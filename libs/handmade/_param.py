@@ -37,7 +37,8 @@ def init_param( self ):
                    [ "waitlist" , "automatically send song when searching in waiting list ", 0 , "bool", True ],
                    [ "discordRP" , "allow app to send playing media to discord status" , 1 , "bool" , True ],
                    [ "preloading", "allow to preload next song for remote server or usb", 0, "bool", True ],
-                   [ "tag_loading", "load metadata for unknown songs", 1 , "bool", True ]
+                   [ "tag_loading", "load metadata for unknown songs", 1 , "bool", True ],
+                   [ "yt_links", "add auto generated youtube link to discord status", 1 ,"bool", True]
                    ]
     
     for x in self.params:
