@@ -61,11 +61,17 @@ def play_song( self ,choose = 1):
     
     if len( self.files ) != 0: # if there are song
 
-        if self.next_song:
-           self.song = self.next_song
+        
            
-        elif choose:
-            self._choose_song()
+        if choose:
+            if self.next_song:
+               self.song = self.next_song
+               
+            else:
+                self._choose_song()
+        
+        else:
+            self.next_song = None
        
         self.get_words()# check if there are a lyric file
         self.get_url()
@@ -258,6 +264,7 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 
     self.logger["song"].info("showing select song menu to user")
     self.logger["song"].trace(f"display menu : {', '.join( display_list ) }")
+    
     self.logger["song"].trace(f"file list : { file_list }")
 
     song_index= self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )

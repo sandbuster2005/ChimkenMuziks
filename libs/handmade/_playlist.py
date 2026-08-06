@@ -47,9 +47,9 @@ def add_to_playlist(self):
             
             
 def playlist_manager(self):
-    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist"], self.update_logic)
+    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist","show playlist"], self.update_logic)
     
-    if  word < 5:
+    if  word < 6:
         playlists = self.get_column()
         
         if word == 3:
@@ -128,21 +128,28 @@ def playlist_manager(self):
                 print("no playlist")
                 input("press any key to continue")
 
-        elif word == 4 and playlists:
+        elif 6 > word > 3 and playlists:
             playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
-            res = 0
-            indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
-            files = [ song for song in self.files ]
             
-            while res < len(self.files):
-                menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
-                res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
+            
+            if word == 4:
+                res = 0
+                indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
+                files = [ song for song in self.files ]
                 
-                if res < len(self.files):
-                    song = files[ res ]
-                    indexes[ song.index ] = 1 - indexes[ song.index ]
-                    self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
-
+                while res < len(self.files):
+                    menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
+                    res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
+                    
+                    if res < len(self.files):
+                        song = files[ res ]
+                        indexes[ song.index ] = 1 - indexes[ song.index ]
+                        self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
+            
+            if word == 5:
+                files = [ song for song in self.files if self.is_in_playlist(playlists[playlist], song.file ) ]
+                self._select_song(files ,text = playlists[playlist] , play_next = True )
+            
 
 
 
