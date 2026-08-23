@@ -202,10 +202,52 @@ class Display:
 
         return None
 
-
+    
+    def recursive_menu(self, menu):
+        pass
+    
     def change_confirmation(self) -> None:
         """
         cette fonction permet de changer le prompt par defaut de
         la fonction ask_list
         """
         self.confirmation = self.ask( "new choice prompt" )
+        
+        
+'''        
+sub_menu_select = {
+    "show" : [ show_playlist , {1 : "type" , 2 : "playlist" } ] ,
+    "select" : [ load_playlist, { 1 : "type" , 2 : "playlist" } ]
+    }
+
+
+menu = {
+  "return to file mode": self.clear_playlist,
+  "select playlist":
+  {
+      "album" :
+      { album : sub_menu_select for album in self.get_album() },
+      
+      "artist" :
+      { artist : sub_menu_select for artist in self.get_artist() },
+      
+      "playlist" :
+      { playlist : sub_menu_select for playlist in self.get_playlist() }
+      
+  },
+  "manage playlist":
+  {
+      "create playlist": self.add_new_playlist,
+      
+      "remove playlist": self.remove_playlist,
+      
+      "add song to playlist":
+      { playlist : [ self.edit_playlist, { 2 : "playlist" } ] for playlist in self.get_playlist() },
+
+      "export playlist":
+      { playlist : [self.export_playlist, { 2 : "playlist" } ] for playlist in self.get_playlist() }
+   }
+
+        }
+    
+'''

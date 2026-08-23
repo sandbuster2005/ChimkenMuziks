@@ -64,14 +64,14 @@ def main( self ):
         
     self.logger["image"].info("loading imgs")
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
-
     self.check_adress()#see if current file adress exist
 
     self.load_songs()#try to load the song
 
+    
     self.load_script()
     
-        
+    
     if len( self.files) == 0:
         while len( self.files ) == 0:# if folder is empty
             self.logger["main"].warning( "music folder is empty" )
@@ -98,9 +98,11 @@ def main( self ):
     else:
         if self.playlist: #load playlist if there's one
             self.load_playlist()
+
+        if self.last_song != [] and self.auto_last_song: #launch last played sont if configured to
             
-        if self.last_song and self.auto_last_song: #launch last played sont if configured to
-            if isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]:
+            #f isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]
+            if isfile(self.last_song[1]) :
                 self.logger["main"].info("loading last played song")
                 self.last_song[ 0 ] = int( self.last_song[ 0 ] )
                 

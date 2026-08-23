@@ -74,7 +74,6 @@ def play_song( self ,choose = 1):
             self.next_song = None
        
         self.get_words()# check if there are a lyric file
-        self.get_url()
         
         if self.song.extension =="mid": # if its a midi convert it with a midi codec to a playable version
             self.play_midi()
@@ -191,15 +190,23 @@ def _play( self ):
     else:
         self.player.set_mrl( self.song.file )# load song
     
+    self.song_saved = False  # tell backend is can save a play in the database
+    self.bar = None # reset bar
+    self.player.play()
+    
     if self.show:
         self.thread_pool.append( threading.Thread(target = self.gen_image) )
+        self.logger["song"].debug("add image gen thread to pool")
+        self.thread_count += 1
+        
+    if self.yt_links:
+        self.thread_pool.append( threading.Thread( target = self.get_url ) )
+        self.logger["song"].debug("add yt link thread to pool")
         self.thread_count += 1
         
         
         
-    self.song_saved = False  # tell backend is can save a play in the database
-    self.bar = None # reset bar
-    self.player.play()
+    
     self.display()
     
     

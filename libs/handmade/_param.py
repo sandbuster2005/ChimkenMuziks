@@ -33,12 +33,12 @@ def init_param( self ):
                    [ "playlist" , "nom de la playlist actuel", "", "str", False ],
                    [ "save_param", "sauvegarder les parametres en quitant", 1, "bool" , True],
                    [ "playlist_type","type de playlist", "", "str" , False],
-                   [ "quickselect" , "remove need for confirmation when possible", 0, "bool", True ],
-                   [ "waitlist" , "automatically send song when searching in waiting list ", 0 , "bool", True ],
-                   [ "discordRP" , "allow app to send playing media to discord status" , 1 , "bool" , True ],
-                   [ "preloading", "allow to preload next song for remote server or usb", 0, "bool", True ],
-                   [ "tag_loading", "load metadata for unknown songs", 1 , "bool", True ],
-                   [ "yt_links", "add auto generated youtube link to discord status", 1 ,"bool", True]
+                   [ "quickselect" , "retire les options de confirmationq", 0, "bool", True ],
+                   [ "waitlist" , "met les chansons selectionné dans la file d'attente au lieu de jouer", 0 , "bool", True ],
+                   [ "discordRP" , "activer discord rich presence" , 1 , "bool" , True ],
+                   [ "preloading", "charge les chason en avance (serveur distant/usb)", 0, "bool", True ],
+                   [ "tag_loading", "charger les metadata pour les nouvelles chansons", 1 , "bool", True ],
+                   [ "yt_links", "ajoute un lien youtube automatique au RPC discord", 1 ,"bool", True]
                    ]
     
     for x in self.params:

@@ -153,8 +153,8 @@ def update_logic(self):
                 self.song_saved = True
                 self.write_song_database( self.song.file )
                 
-                if self.preloading:
-                    self.thread_pool.append( threading.Thread(target = self.preload_song) )
+                if self.preloading and not True :
+                    self.thread_pool.append( threading.Thread(target = self.preload_song ) )
                 
 
             if self.database_requests_pool != []:
@@ -172,8 +172,8 @@ def update_logic(self):
                 self.thread_count = 0
 
             if self.bar:
-                if not self.player.is_playing() and not self.pause and self.stay:
-                    sleep(2)
+                if not self.player.is_playing() and not self.pause and self.stay and threading.active_count() <2:
+                    sleep(1)
                     if not self.player.is_playing():
                         self.logger["update"].info("song finished, next one")
                         self.play_song((1 - self.repeat))

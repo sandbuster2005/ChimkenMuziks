@@ -47,115 +47,95 @@ def add_to_playlist(self):
             
             
 def playlist_manager(self):
-    word = self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist","show playlist"], self.update_logic)
-    
-    if  word < 6:
-        playlists = self.get_column()
+    playlists = self.get_column()
+    match self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist","show playlist"], self.update_logic) :
         
-        if word == 3:
-            self.playlist = ""
         
-        elif word == 1:
-            white(4)
-            word = self.ask( "new playlist name:" )
+        case 0:
             
-            if word.lower() not in ( playlists + ["id_song","nom","played","favorite",""]   ):
-                self.add_column( word.lower() )
-                
-        elif word == 0:
             albums = self.get_albums()
+            artists = self.get_artists()
+            
             albums = remove_list ( [ x.split("/") for x in albums] )
+            artists = remove_list ( [ x.split("/") for x in artists ] )
             
             if not type(albums) == list:
                 albums = [ albums ]
-            
-            albums = [ x  for y,x in enumerate( albums )  if x not in albums[:y] ]
-
-            artists = self.get_artists()
-            artists = remove_list ( [ x.split("/") for x in artists ] )
             if not type(artists) == list:
                 artists = [ artists ]
             
-            artists = [ x  for y,x in enumerate( artists)  if x not in artists[:y] ]
+            albums = [ x  for y,x in enumerate( albums )  if x not in albums[:y] ]
+            artists = [ x  for y,x in enumerate( artists )  if x not in artists[:y] ]
             
-            self.tooltips = []
+            total = [ playlists, albums, artists, [ ] ]
+            tooltip = ["playlist","album","artist"]
             
-            if playlists or albums or artists:
-                white()
-                new = self.asker.menu_deroulant(["playlist","album","artist"],self.update_logic)
-                
-                if new < 3:
-                    
-                    if new == 0 and playlists:
-                        res = self.asker.menu_deroulant( playlists,self.update_logic,search = True )
-                        white()
-                        if res < len(playlists):
-                            self.playlist = playlists[  res ]
-                            self.playlist_type = "playlist"
-                            self.load_playlist()
-                            self.song = None
-                            self.play_song()
-                    
-                    elif new == 1 and albums:
-                        res = self.asker.menu_deroulant( albums ,self.update_logic , search = True)
-                        white()
-                        if res < len( albums ):
-                            self.playlist = albums[  res ]
-                            self.playlist_type = "album"
-                            self.load_playlist()
-                            self.song = None
-                            self.play_song()
-                        
-                    elif new == 2 and artists:
-                        res = self.asker.menu_deroulant( artists,self.update_logic,search = True )
-                        white()
-                        if res < len( artists ):
-                            self.playlist = artists[  res  ]
-                            self.playlist_type = "artist"
-                            self.load_playlist()
-                            self.song = None
-                            self.play_song()
-       
-        elif word == 2:
             white()
-            new = self.asker.menu_deroulant( playlists,self.update_logic , search = True )
+            choice = self.asker.menu_deroulant( tooltip ,self.update_logic)
             
-            if new < len( playlists ):
-                 if self.playlist!= playlists [ new ]:
-                    self.drop_column( playlists[ new ] )
+            if total[ choice ]:
+                white()
+                res = self.asker.menu_deroulant( total[choice], self.update_logic, search = True )
+            
+                if res < len( total[choice] ):
+                    self.playlist = total[choice][  res ]
+                    self.playlist_type = tooltip[choice]
+                    self.load_playlist()
+                    self.song = None
+                    self.play_song()
+
+            
+        case 1:
+            white(4)
+            word = self.ask( "new playlist name:" )
+        
+            if word.lower() not in ( playlists + ["id_song","nom","played","favorite",""]   ):
+                self.add_column( word.lower() )
+                
+                     
+        case 2:
+            white()
+            word = self.asker.menu_deroulant( playlists,self.update_logic , search = True )
+        
+            if word < len( playlists ):
+                 if self.playlist != playlists[ word ] :
+                    self.drop_column( playlists[ word ] )
 
             else:
                 print("no playlist")
                 input("press any key to continue")
-
-        elif 6 > word > 3 and playlists:
+                      
+    
+    
+        case 3:
+            self.playlist = ""
+            
+            
+            
+        case 4:
             playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
             
+            indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
+            files = [ song for song in self.files ]
+            res = 0
             
-            if word == 4:
-                res = 0
-                indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
-                files = [ song for song in self.files ]
+            while res < len(self.files):
+                menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
+                res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
                 
-                while res < len(self.files):
-                    menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
-                    res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
+                if res < len(self.files):
+                    song = files[ res ]
+                    indexes[ song.index ] = 1 - indexes[ song.index ]
+                    self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
                     
-                    if res < len(self.files):
-                        song = files[ res ]
-                        indexes[ song.index ] = 1 - indexes[ song.index ]
-                        self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
-            
-            if word == 5:
-                files = [ song for song in self.files if self.is_in_playlist(playlists[playlist], song.file ) ]
-                self._select_song(files ,text = playlists[playlist] , play_next = True )
-            
-
-
-
-
-            
-        
+                    
+                        
+        case 5:
+            playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
+            files = [ song for song in self.files if self.is_in_playlist(playlists[playlist], song.file ) ]
+            self._select_song(files ,text = playlists[playlist] , play_next = True )
+    
+ 
     self.display()
                 
 def get_song_info(self,song):
