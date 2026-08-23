@@ -109,6 +109,7 @@ def edit_playlist(self,playlist):
 def show_playlist(self, playlist ,ptype):
     if ptype != "playlist":
         input("not yet supported press any key to continue")
+        return 1
     
     self._select_song(self.get_playlist(playlist) ,text = playlist , play_next = True )
     return 1
