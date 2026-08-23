@@ -220,7 +220,7 @@ class Display:
         
         while not done:
             display_menu = [ keys for keys in menu.keys() ]
-            select = self.menu_deroulant( display_menu , *args , text = text, cursor = select )
+            select = self.menu_deroulant( display_menu , *args , text = text, cursor = select, search = True  )
             
             if select < len(display_menu): # user selected an option
                 key = display_menu[select]
