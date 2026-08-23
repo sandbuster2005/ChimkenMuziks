@@ -1,4 +1,5 @@
 from .utils import *
+from .terminal import *
 from tinytag import TinyTag
 def init_playlist(self):
     pass
@@ -48,96 +49,99 @@ def add_to_playlist(self):
             
 def playlist_manager(self):
     playlists = self.get_column()
-    match self.asker.menu_deroulant( ["select playlist","add playlist","remove playlist","return to file mode","add to playlist","show playlist"], self.update_logic) :
-        
-        
-        case 0:
-            
-            albums = self.get_albums()
-            artists = self.get_artists()
-            
-            albums = remove_list ( [ x.split("/") for x in albums] )
-            artists = remove_list ( [ x.split("/") for x in artists ] )
-            
-            if not type(albums) == list:
-                albums = [ albums ]
-            if not type(artists) == list:
-                artists = [ artists ]
-            
-            albums = [ x  for y,x in enumerate( albums )  if x not in albums[:y] ]
-            artists = [ x  for y,x in enumerate( artists )  if x not in artists[:y] ]
-            
-            total = [ playlists, albums, artists, [ ] ]
-            tooltip = ["playlist","album","artist"]
-            
-            white()
-            choice = self.asker.menu_deroulant( tooltip ,self.update_logic)
-            
-            if total[ choice ]:
-                white()
-                res = self.asker.menu_deroulant( total[choice], self.update_logic, search = True )
-            
-                if res < len( total[choice] ):
-                    self.playlist = total[choice][  res ]
-                    self.playlist_type = tooltip[choice]
-                    self.load_playlist()
-                    self.song = None
-                    self.play_song()
+    
+    sub_menu_select = {
+    "show" : [ self.show_playlist , {1 : "ptype" , 2 : "playlist" } ] ,
+    "select" : [ self.load_new_playlist, { 1 : "ptype" , 2 : "playlist" } ]
+    }
 
-            
-        case 1:
-            white(4)
-            word = self.ask( "new playlist name:" )
-        
-            if word.lower() not in ( playlists + ["id_song","nom","played","favorite",""]   ):
-                self.add_column( word.lower() )
-                
-                     
-        case 2:
-            white()
-            word = self.asker.menu_deroulant( playlists,self.update_logic , search = True )
-        
-            if word < len( playlists ):
-                 if self.playlist != playlists[ word ] :
-                    self.drop_column( playlists[ word ] )
 
-            else:
-                print("no playlist")
-                input("press any key to continue")
-                      
+    menu = {
+      "return to file mode": self.clear_playlist,
+      "select playlist":
+      {
+          "album" :
+          { album : sub_menu_select for album in self.get_albums() },
+          
+          "artist" :
+          { artist : sub_menu_select for artist in self.get_artists() },
+          
+          "playlist" :
+          { playlist : sub_menu_select for playlist in playlists }
+          
+      },
+      "manage playlist":
+      {
+          "create playlist": self.add_new_playlist,
+          
+          "remove playlist":
+          { playlist : [  self.remove_playlist , { 2 : "playlist" } ] for playlist in playlists },
+          
+          "add song to playlist":
+          { playlist : [ self.edit_playlist, { 2 : "playlist" } ] for playlist in playlists },
+
+          "export playlist":
+          { playlist : [ "self.export_playlist", { 2 : "playlist" } ] for playlist in playlists }
+       }
+
+            }
+        
+    self.asker.recursive_menu(menu, self.update_logic , text = "test" , values = [] )
     
-    
-        case 3:
-            self.playlist = ""
-            
-            
-            
-        case 4:
-            playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
-            
-            indexes = { song.index : self.is_in_playlist(playlists[playlist], song.file ) for song in self.files }
-            files = [ song for song in self.files ]
-            res = 0
-            
-            while res < len(self.files):
-                menu = [ f"{ str( song.index ) }: *{ song.filename }*"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
-                res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
-                
-                if res < len(self.files):
-                    song = files[ res ]
-                    indexes[ song.index ] = 1 - indexes[ song.index ]
-                    self.update_playlist_database( playlists[playlist] , indexes[ song.index ], song.file )
-                    
-                    
-                        
-        case 5:
-            playlist = self.asker.menu_deroulant(playlists, self.update_logic, search = True )
-            files = [ song for song in self.files if self.is_in_playlist(playlists[playlist], song.file ) ]
-            self._select_song(files ,text = playlists[playlist] , play_next = True )
-    
- 
     self.display()
-                
+    
+
+def edit_playlist(self,playlist):
+    indexes = { song.index : self.is_in_playlist(playlist, song.file ) for song in self.files }
+    files = [ song for song in self.files ]
+    res = 0
+    
+    while res < len(self.files):
+        menu = [ f"\x1b[38;2;0;255;0m{ str( song.index ) }: *{ song.filename }*\033[0m"  if indexes[ song.index ] else f"{ str( song.index ) }: { song.filename }" for song in self.files ]
+        res = self.asker.menu_deroulant(menu , self.update_logic, search = True, cursor = res )
+        
+        if res < len(self.files):
+            song = files[ res ]
+            indexes[ song.index ] = 1 - indexes[ song.index ]
+            self.update_playlist_database( playlist , indexes[ song.index ], song.file )
+
+
+def show_playlist(self, playlist ,ptype):
+    if ptype != "playlist":
+        input("not yet supported press any key to continue")
+    
+    self._select_song(self.get_playlist(playlist) ,text = playlist , play_next = True )
+    return 1
+
+
+def add_new_playlist(self):
+    white()
+    word = self.ask( "new playlist name:" )
+
+    if word.lower() not in ( self.get_column() + ["id_song","nom","played","favorite",""]   ):
+        self.add_column( word.lower() )
+    
+    return 1
+
+def clear_playlist(self):
+    self.playlist = ""
+    return 1
+
+def load_new_playlist(self,playlist, ptype):
+    self.playlist = playlist
+    self.playlist_type = ptype
+    self.load_playlist()
+    self.song = None
+    self.play_song()
+    return 1
+    
+def remove_playlist(self, playlist):
+    self.drop_column( playlist )
+    return 1
+
+
+
+
 def get_song_info(self,song):
     try:
         tag = TinyTag.get(song , image = True)

@@ -274,7 +274,7 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
     
     self.logger["song"].trace(f"file list : { file_list }")
 
-    song_index= self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
+    song_index = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
 
     if song_index < len( file_list ):
         song = file_list[ song_index ]

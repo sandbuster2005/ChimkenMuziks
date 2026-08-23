@@ -58,6 +58,7 @@ def main( self ):
     """
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 
     """
+    
     self.get_param()#get param from file if it exists else create it
     
     self.connect_to_discord()
@@ -99,7 +100,7 @@ def main( self ):
         if self.playlist: #load playlist if there's one
             self.load_playlist()
 
-        if self.last_song != [] and self.auto_last_song: #launch last played sont if configured to
+        if self.last_song and self.auto_last_song: #launch last played sont if configured to
             
             #f isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]
             if isfile(self.last_song[1]) :

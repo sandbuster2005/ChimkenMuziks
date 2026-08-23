@@ -89,11 +89,22 @@ class Display:
 
         else:
             return None
-
+    
+    
+    def change_confirmation(self) -> None:
+        """
+        cette fonction permet de changer le prompt par defaut de
+        la fonction ask_list
+        """
+        self.confirmation = self.ask( "new choice prompt" )
+        
+        
     def menu_deroulant(self, menu, *args, text="", cursor=0, search=False, word_search = "" ):
 
         if self.graphic_manager == "base":
-
+            
+            white()
+            home()
             size = floor(os.get_terminal_size().lines / 2) -1
             lenght = os.get_terminal_size().columns
             chrs_search = [chr(x) for x in range(32, 127)] + [ Key.BACKSPACE ]
@@ -201,28 +212,56 @@ class Display:
             return global_pos
 
         return None
+        
+    
+    def recursive_menu(self, menu, *args , text = "" , values = [] ):
+        done = False
+        select = 0 
+        
+        while not done:
+            display_menu = [ keys for keys in menu.keys() ]
+            select = self.menu_deroulant( display_menu , *args , text = text, cursor = select )
+            
+            if select < len(display_menu): # user selected an option
+                key = display_menu[select]
+                
+                
+                if type(menu[key]) == dict: # sub menu 
+                    values.append(key)
+                    return_value = self.recursive_menu(menu[key], *args , text = key, values = values )
+                    values.pop()
+                    
+                elif type(menu[key]) == list:# need args
+                    
+                    kwargs = { item : (values + [key] )[ index ] for index,item in menu[key][1].items() }
+                    return_value = menu[key][0](**kwargs)
+                    
+                else : # assuming function or method
+                    pass
+                    return_value = menu[key]() # execute
+                    
+                if return_value:
+                    return 1 
+            
+            else:
+                done = True
+            
+            
+            
+        
+        
+#song_index = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
 
-    
-    def recursive_menu(self, menu):
-        pass
-    
-    def change_confirmation(self) -> None:
-        """
-        cette fonction permet de changer le prompt par defaut de
-        la fonction ask_list
-        """
-        self.confirmation = self.ask( "new choice prompt" )
-        
-        
+
 '''        
 sub_menu_select = {
-    "show" : [ show_playlist , {1 : "type" , 2 : "playlist" } ] ,
-    "select" : [ load_playlist, { 1 : "type" , 2 : "playlist" } ]
+    "show" : [ "show_playlist" , {1 : "type" , 2 : "playlist" } ] ,
+    "select" : [ "load_playlist", { 1 : "type" , 2 : "playlist" } ]
     }
 
 
 menu = {
-  "return to file mode": self.clear_playlist,
+  "return to file mode": "self.clear_playlist",
   "select playlist":
   {
       "album" :
@@ -237,15 +276,15 @@ menu = {
   },
   "manage playlist":
   {
-      "create playlist": self.add_new_playlist,
+      "create playlist": "self.add_new_playlist",
       
-      "remove playlist": self.remove_playlist,
+      "remove playlist": "self.remove_playlist",
       
       "add song to playlist":
-      { playlist : [ self.edit_playlist, { 2 : "playlist" } ] for playlist in self.get_playlist() },
+      { playlist : [ "self.edit_playlist", { 2 : "playlist" } ] for playlist in self.get_playlist() },
 
       "export playlist":
-      { playlist : [self.export_playlist, { 2 : "playlist" } ] for playlist in self.get_playlist() }
+      { playlist : [ "self.export_playlist", { 2 : "playlist" } ] for playlist in self.get_playlist() }
    }
 
         }

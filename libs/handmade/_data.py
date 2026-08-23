@@ -216,6 +216,16 @@ def is_in_playlist(self,playlist , song = None):
     else:
         return 0
     
+
+def get_playlist(self,playlist):
+    base = sqlite3.connect(self.database)
+    cursor = base.cursor()
+    cursor.execute(f" SELECT id_song,nom FROM song WHERE {playlist} = '1' ")
+    result = cursor.fetchall()
+    base.commit()
+    base.close()
+    return [ self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1]) ]
+    
 def get_column(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()

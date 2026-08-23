@@ -46,7 +46,7 @@ class App:
             "default" :{
                 "level": logging_level,
                 "format": "%(asctime)s | %(name)s | %(levelname)s | %(message)s",
-                "loggers": ["main", "param", "command", "file", "image", "download", "song", "data", "update"],
+                "loggers": ["main", "param", "command", "file", "image", "download", "song", "data", "update", "discord"],
                 "handlers":[
                     {
                     "name" : f"{self.appdirs.user_log_dir}/{str(datetime.datetime.now()).replace(':','_')}.log",
@@ -94,8 +94,8 @@ class App:
     from libs.handmade._song import init_song, _choose_song, load_songs, play_song, play_last, historic, select, _play, play_midi, convert_midi, default_midi, get_metadata, most_played, select_fav,_select_song,play_now,get_url
     from libs.handmade._main import init_main, main, get_input, load_all, wind, display, set_timer, param_center, clear_cache, n_input, reset_settings, end_timer
     from libs.handmade._printimage import print_image_to_screen, init_printer, gen_image_data
-    from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database, find_song_database, played_database, update_song_metadata_info, exec_sql_request
-    from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist
+    from libs.handmade._data import init_data, write_song_database, create_song_database, update_song_database, get_index_data, update_favorite_database, load_favorite_database, add_song_database, add_column, drop_column, get_column, load_playlist_database, is_in_playlist, update_playlist_database, get_albums, get_artists, load_album_database, load_artist_database, get_song_database, find_song_database, played_database, update_song_metadata_info, exec_sql_request,get_playlist  
+    from libs.handmade._playlist import init_playlist, playlist_manager , add_to_playlist, get_song_info, load_playlist, remove_playlist, load_new_playlist,clear_playlist, add_new_playlist, show_playlist, edit_playlist
     from libs.handmade._update import init_update , is_finished , update_logic , update_display,update_discord_status,connect_to_discord,pause_discord_status,end,preload_song
     import colorama.__init__ as colorama
     colorama.init()
