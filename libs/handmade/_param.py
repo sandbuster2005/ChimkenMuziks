@@ -52,7 +52,7 @@ def get_param( self , param = ""):
     self.logger["param"].info("loading param")
     data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
     data = remove_list( data )
-    co = [ data[ x ][ 0 ] for x in range( len( data ) ) ]
+    co = [ data[ x ][ 0 ] for x in range( len( data ) ) if data[ x ] ]
     param = [ x[ 0 ] for x in self.params ]
     for y,x in enumerate( co ):
 
