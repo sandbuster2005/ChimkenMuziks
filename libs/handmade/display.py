@@ -239,54 +239,53 @@ class Display:
                 else : # assuming function or method
                     pass
                     return_value = menu[key]() # execute
-                    
+                
                 if return_value:
-                    return 1 
+                    if return_value == 1:
+                        return 1
+                    
+                    if return_value == 2:
+                        return [ value for value in values ]
+                    
+                    return return_value 
             
             else:
                 done = True
-            
-            
-            
         
         
-#song_index = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
-
-
-'''        
-sub_menu_select = {
-    "show" : [ "show_playlist" , {1 : "type" , 2 : "playlist" } ] ,
-    "select" : [ "load_playlist", { 1 : "type" , 2 : "playlist" } ]
-    }
-
-
-menu = {
-  "return to file mode": "self.clear_playlist",
-  "select playlist":
-  {
-      "album" :
-      { album : sub_menu_select for album in self.get_album() },
-      
-      "artist" :
-      { artist : sub_menu_select for artist in self.get_artist() },
-      
-      "playlist" :
-      { playlist : sub_menu_select for playlist in self.get_playlist() }
-      
-  },
-  "manage playlist":
-  {
-      "create playlist": "self.add_new_playlist",
-      
-      "remove playlist": "self.remove_playlist",
-      
-      "add song to playlist":
-      { playlist : [ "self.edit_playlist", { 2 : "playlist" } ] for playlist in self.get_playlist() },
-
-      "export playlist":
-      { playlist : [ "self.export_playlist", { 2 : "playlist" } ] for playlist in self.get_playlist() }
-   }
-
-        }
     
-'''
+    def dynamic_recursive_menu(self, d_menu, *args, text = "" ):
+        pass
+        done = False
+        values = []
+        while not done:
+            menu = d_menu()
+            depth = 0
+            while depth < len(values):
+                if values[depth] in menu.keys():
+                    menu = menu[ values[ depth ] ]
+                    depth += 1
+                else:
+                    depth = len(values)
+            
+            if values:
+                return_value = self.recursive_menu( menu, *args, text = values[-1] , values = values )
+            
+            else:
+                return_value = self.recursive_menu( menu, *args, text = text , values = values )
+            
+            if type(return_value) == list:
+                values = return_value
+            
+            elif return_value == 1:
+                done = True
+                
+            else:
+                if values != []:
+                    values.pop()
+                    
+                else:
+                    done = True
+                
+                
+                

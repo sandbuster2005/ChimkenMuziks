@@ -45,9 +45,9 @@ def add_to_playlist(self):
                 self.update_playlist_database(playlists[  new ], value[ new  ] )
 
     self.display()
-            
-            
-def playlist_manager(self):
+
+
+def gen_playlist_menu(self):
     playlists = self.get_column()
     
     sub_menu_select = {
@@ -85,8 +85,12 @@ def playlist_manager(self):
        }
 
             }
+    
+    return menu
+            
+def playlist_manager(self):
         
-    self.asker.recursive_menu(menu, self.update_logic , text = "test" , values = [] )
+    self.asker.dynamic_recursive_menu(self.gen_playlist_menu, self.update_logic , text = "test" )
     
     self.display()
     
@@ -109,10 +113,10 @@ def edit_playlist(self,playlist):
 def show_playlist(self, playlist ,ptype):
     if ptype != "playlist":
         input("not yet supported press any key to continue")
-        return 1
+        return 2
     
     self._select_song(self.get_playlist(playlist) ,text = playlist , play_next = True )
-    return 1
+    return 2
 
 
 def add_new_playlist(self):
@@ -122,7 +126,7 @@ def add_new_playlist(self):
     if word.lower() not in ( self.get_column() + ["id_song","nom","played","favorite",""]   ):
         self.add_column( word.lower() )
     
-    return 1
+    return 2
 
 def clear_playlist(self):
     self.playlist = ""
@@ -138,7 +142,7 @@ def load_new_playlist(self,playlist, ptype):
     
 def remove_playlist(self, playlist):
     self.drop_column( playlist )
-    return 1
+    return 2
 
 
 
