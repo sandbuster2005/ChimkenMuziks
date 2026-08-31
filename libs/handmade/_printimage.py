@@ -1,6 +1,7 @@
 import os
 import sys
 from .terminal import out , tbackground
+from .utils import export
 import imageio as iio
 try:
     import numpy
@@ -8,7 +9,9 @@ except:
     raise "numpy not installed "
 else:
     pass
-def init_printer(self):
+
+@export
+def init_printimage(self):
     self.color_codes = [(12,12,12),
                (197,15,31),
                (19,161,14),
@@ -43,6 +46,7 @@ def init_printer(self):
                106,
                107]
 
+@export
 def closest(colors,color):
     colors = numpy.array(colors)
     color = numpy.array(color)
@@ -58,6 +62,7 @@ def closest(colors,color):
     else:
         return index_of_smallest
 
+@export
 def gen_image_data(self, path, top_offset = 0):
     self.image = None
     name = self.song.index
@@ -139,7 +144,7 @@ def gen_image_data(self, path, top_offset = 0):
     
     
     
-    
+@export   
 def print_image_to_screen(self, path, top_offset=0):
     self.search = True
     size = os.get_terminal_size()

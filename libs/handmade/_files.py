@@ -11,9 +11,11 @@ from .terminal import home,wipe
 import re
 import stat
 
-def init_file( self ):
+@export
+def init_files( self ):
     self.files = []# chanson chargé
-        
+
+@export
 def get_file( self, path, files = [] ):
     """
     cette fonction permet de récuperer tout les fichier waw,mp3 et m4a dans un dossier et sous dossiers,
@@ -48,7 +50,7 @@ def get_file( self, path, files = [] ):
     self.logger["file"].trace(f" files : {files} ")
     return sorted( files ,key = lambda x: x.rsplit( self.separator, 1 )[ 1 ].lower() )#sorted by music name
 
-
+@export
 def edit_dirs(self):
     """
     cette fonction permet a l'utilisateur d'activer/desactiver des dossiers
@@ -85,7 +87,8 @@ def edit_dirs(self):
     self.select_dir( self.switch_dir )
     """
     self.load_songs()
-    
+ 
+@export
 def create_dirs_links(self):
     result = {}
     dirs = [ self.path_to_file if self.path_to_file[-1]!="/" else self.path_to_file[:-1] ] + [ folder[ 0 ] for folder in self.dirs ]
@@ -103,6 +106,7 @@ def create_dirs_links(self):
     
     self.dirs_links = result
 
+@export
 def nselect_dir(self, display_dict = {} ,start = "" ):
     if self.path_to_file[-1] != "/":
         root = self.path_to_file
@@ -151,7 +155,7 @@ def nselect_dir(self, display_dict = {} ,start = "" ):
                 
         
         
-          
+@export        
 def select_dir( self ,func =print , lim = -1 , retour = 0):
     """
     cette fonction permet d'activer/desactiver des dossiers de la liste de dossier sous dossier
@@ -277,6 +281,7 @@ def select_dir( self ,func =print , lim = -1 , retour = 0):
             print("")
         self.display(space = True)
 
+@export
 def switch_dir( self, word ):
     """
     cette fonction permet d'activer ou desactiver un dossier de la liste
@@ -284,7 +289,7 @@ def switch_dir( self, word ):
     self.dirs[ word ][ 1 ] = str( 1 - int( self.dirs[ word ][ 1 ] ) )
     self.logger["file"].debug(f" {self.dirs[word][0]} set to {self.dirs[word][1]}")
   
-  
+@export
 def find_file( self, word ):
     """
     cette fonction renvoie une liste contentant toute les chaine de charactères de la liste de chanson chargés
@@ -309,6 +314,7 @@ def find_file( self, word ):
     
     return sorted(files,key = lambda x: x[1] )#sort by index
 
+@export
 def check_adress( self , first = 1):
     """
     cette fonction permet de verifier si l'adresse existe et est un dossier
@@ -343,7 +349,7 @@ def check_adress( self , first = 1):
     
             self.write_param()
     
-    
+@export   
 def change_main_path( self ):
     """
     cette fonction permet de changer l'adresse des chansons
@@ -352,7 +358,8 @@ def change_main_path( self ):
     self.path_to_file = ""
     self.check_adress()#obviously "" is not good
     self.load_songs()
-            
+
+@export
 def get_words(self):
     """
     cette fonction permet de recuperer les paroles d'un fichier .lrc et de les passer
@@ -390,6 +397,7 @@ def get_words(self):
             self.words = [ [0.0 , "" ] ] + data
             self.logger["file"].debug(f"lyrics : {self.words} ")
 
+@export
 def change_extension(self, song):
     """
     cette fonction permet de convertir les fichier musique a l'aide de ffmpeg

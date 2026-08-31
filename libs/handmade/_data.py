@@ -5,12 +5,14 @@ from os.path import isfile
 from .utils import *
 from tinytag import TinyTag
 
+@export
 def init_data(self):
     self.database_requests_pool = []
     self.thread_pool = []
     self.thread_count = 0
     self.database = f"{self.appdirs.user_data_dir}/data.db"
 
+@export
 def write_song_database(self,song):
     self.create_song_database()
     base =  sqlite3.connect(self.database)
@@ -25,6 +27,7 @@ def write_song_database(self,song):
     base.commit()
     base.close()
 
+@export
 def create_song_database(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -43,6 +46,7 @@ def create_song_database(self):
     base.commit()
     base.close()
 
+@export
 def exec_sql_request( self, request ):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -50,6 +54,7 @@ def exec_sql_request( self, request ):
     base.commit()
     base.close()
 
+@export
 def add_song_database(self, song):
     self.create_song_database()
     base = sqlite3.connect(self.database)
@@ -62,6 +67,7 @@ def add_song_database(self, song):
     result = cursor.fetchall()
     return [ self.Song ( result[ 0 ][0],result[ 0 ][1] , self.separator )  ]
 
+@export
 def update_song_database(self, file):
     self.create_song_database()
     base = sqlite3.connect(self.database)
@@ -93,6 +99,7 @@ def update_song_database(self, file):
     base.commit()
     base.close()
 
+@export
 def update_song_metadata_info(self, file):
     artist, album = self.get_song_info(file)
 
@@ -104,6 +111,7 @@ def update_song_metadata_info(self, file):
 
     self.database_requests_pool.append(["UPDATE song SET artist = ? , album = ? where nom = ?", [artist, album, file]])
 
+@export
 def get_song_database(self):
     self.create_song_database()
     base = sqlite3.connect(self.database)
@@ -114,6 +122,7 @@ def get_song_database(self):
     base.close()
     return [ x[0] for x in result ], [x[1] for x in result ],[x[2] for x in result ]
 
+@export
 def find_song_database(self,num):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -123,20 +132,22 @@ def find_song_database(self,num):
     base.commit()
     base.close()
 
+@export
 def played_database(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute("SELECT id_song, nom, played FROM song WHERE played != 0 ORDER BY played DESC")
     return cursor.fetchall()
 
-    
+@export  
 def update_favorite_database(self,mode):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute( "UPDATE song SET favorite = ? where nom = ?",[ mode, self.song.file ] )
     base.commit()
     base.close()
-    
+  
+@export
 def load_favorite_database(self):
     self.create_song_database()
     base = sqlite3.connect(self.database)
@@ -150,7 +161,8 @@ def load_favorite_database(self):
 
     base.commit()
     base.close()
-    
+  
+@export
 def get_index_data(self,nom):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -163,13 +175,15 @@ def get_index_data(self,nom):
         
     return result
 
+@export
 def add_column(self,column):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
     cursor.execute(f"ALTER TABLE song ADD COLUMN {column} INTEGER")
     base.commit()
     base.close()
-    
+
+@export
 def drop_column(self,column):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -177,6 +191,7 @@ def drop_column(self,column):
     base.commit()
     base.close()
 
+@export
 def load_playlist_database(self):
     if self.playlist:
         base = sqlite3.connect(self.database)
@@ -187,6 +202,7 @@ def load_playlist_database(self):
         base.close()
         self.playlist_files =  [  self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1]) ]
 
+@export
 def update_playlist_database(self, playlist, value , song = None):
     if not song:
         song = self.song.file
@@ -198,6 +214,7 @@ def update_playlist_database(self, playlist, value , song = None):
     base.commit()
     base.close()
 
+@export
 def is_in_playlist(self,playlist , song = None):
     if song == None:
         song = self.song.file
@@ -216,7 +233,7 @@ def is_in_playlist(self,playlist , song = None):
     else:
         return 0
     
-
+@export
 def get_playlist(self,playlist):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -225,7 +242,8 @@ def get_playlist(self,playlist):
     base.commit()
     base.close()
     return [ self.Song( x[0],x[1], self.separator ) for x in result if isfile(x[1]) ]
-    
+
+@export
 def get_column(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -235,6 +253,7 @@ def get_column(self):
     base.close()
     return [ x[0]for x in result ][6:] # the first 6 are other data and not playlist
 
+@export
 def get_albums(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -245,6 +264,7 @@ def get_albums(self):
     print( [ x[0] for x in result ] )
     return [ x[0] for x in result ]
 
+@export
 def load_album_database(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -254,7 +274,7 @@ def load_album_database(self):
     base.close()
     self.playlist_files = sorted([  self.Song( x[0],x[1], self.separator , TinyTag.get(x[1]).as_dict() ) for x in result if isfile(x[1])], key=lambda x: x.metadata['track'])
 
-
+@export
 def get_artists(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()
@@ -264,6 +284,7 @@ def get_artists(self):
     base.close()
     return [ x[0] for x in result]
 
+@export
 def load_artist_database(self):
     base = sqlite3.connect(self.database)
     cursor = base.cursor()

@@ -3,6 +3,7 @@
 from .utils import *
 from .terminal import *
 
+@export
 def init_command( self ):
         #WARNING add new command to the end
         #command , linked fonction , fonction arg , tooltip in help
@@ -45,7 +46,8 @@ def init_command( self ):
          ]
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add nn
-    
+
+@export  
 def sort_command( self ):
     """
     cette fonction permet de trier les commandes modifié par l'utilisateur
@@ -83,6 +85,7 @@ def sort_command( self ):
     self.command_pos = command
     self.logger["command"].debug(f"emmited commands : {self.command_pos}")
 
+@export
 def edit_command( self ):
     """
     cette fonction permet de de modifier les commande du programme a
@@ -114,7 +117,7 @@ def edit_command( self ):
                      
             wipe()
 
-
+@export
 def help_menu( self ):
     """
     cette fonction se sert du dico qui contient les info pour renvoier une

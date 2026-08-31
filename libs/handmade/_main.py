@@ -16,8 +16,8 @@ import random
 import platform
 import os
 
-
-def init_main( self, song ):
+@export
+def init_main(self):
     #process arg passed with the start command
     
     
@@ -30,8 +30,8 @@ def init_main( self, song ):
     else:
         self.separator = '/'
         
-    self.exterior_song = song
-    self.exterior = song.rsplit(self.separator , 1)[0]
+     
+    self.exterior = self.exterior_song.rsplit(self.separator , 1)[0]
     
     if self.exterior:
         self.separator += self.separator
@@ -53,7 +53,7 @@ def init_main( self, song ):
     self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
     
     
-    
+@export    
 def main( self ):
     """
     cette fonction est la fonction d'initialisation du programme et de fonctionnement 
@@ -68,9 +68,7 @@ def main( self ):
     self.check_adress()#see if current file adress exist
 
     self.load_songs()#try to load the song
-
-    
-    self.load_script()
+    self.load_script()#WIP
     
     
     if len( self.files) == 0:
@@ -116,7 +114,8 @@ def main( self ):
         self.get_input()#interface
 
     self.end()
-        
+
+@export
 def n_input(self):
     """
     cette fonction permet de garder une méme ligne pour l'input 
@@ -124,7 +123,7 @@ def n_input(self):
     lup()
     wipe_line()
 
-
+@export
 def display( self , space = False ):
     """
     cette fonction affiche l'image ,recupére la durée de la chanson ainsi que le nom de la chanson en cours,
@@ -150,7 +149,7 @@ def display( self , space = False ):
 
     
     
-    
+@export    
 def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
@@ -186,7 +185,7 @@ def get_input( self ):
             
         x+=1
     
-    
+@export    
 def load_all( self ):
     """
     cette fonction permet de recharger toute les images ainsi que toute les chanson et
@@ -197,7 +196,8 @@ def load_all( self ):
     self.load_songs()
     self.get_img( self.path_to_img, start = 1 ) #charge toute les image en memoire
     self.write_param()
-    
+
+@export
 def wind( self, mode, pause = False  ):
     """
     cette fonction permet de:
@@ -280,7 +280,8 @@ def wind( self, mode, pause = False  ):
         self.player.set_time( 0 )
         self.bar.index = 0
         self.changed.append("bar")
-        
+ 
+@export
 def set_timer( self ):
     """
     cette fonction permet de demander a l'utilisateur un temps avant l'arrêt en minute
@@ -310,6 +311,7 @@ def set_timer( self ):
         
     self.display()
 
+@export
 def end_timer(self):
     self.logger["main"].debug(f"called end of timer : {self.timer}")
     if self.timer["end_mode"] == "quit":
@@ -323,6 +325,8 @@ def end_timer(self):
         self.wind(6)
 
     self.timer = None
+    
+@export
 def param_center( self ):
     """
     cette fonction permet de gérer les différents paramétre boolean
@@ -346,10 +350,12 @@ def param_center( self ):
                 self.logger["main"].info(f"modified {param[word][1]} to {1 - tooltip[word][1]}")
 
     self.display()
-                
+
+@export
 def manager_manager(self):
     pass
 
+@export
 def reset_settings(self):
     """
     cette fonction permet a l'utilisateur de supprimer ses paramétre apres une CONFIRMATION
@@ -358,6 +364,7 @@ def reset_settings(self):
     if a == "o" or a == "1" or a == "y":
         self.reset()
 
+@export
 def clear_cache(self):
     """
     cette fonction permet de suprimer les fichier temporaire (thumbnail , fichier généré a partir de midi...)

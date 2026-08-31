@@ -9,6 +9,7 @@ import importlib
 import logging
 import threading
 
+@export
 def init_image( self ):
     self.img_mode = "img"
     self.img_script = "appdata.scripts.test"
@@ -16,23 +17,8 @@ def init_image( self ):
     self.screen = None
     self.imgs = []# liste des images contenu dans le chemin indiqué ,vide = random
     self.image = None
-
-
-    #if self.sysname == 'nt':
-    #    self.img_command = "libs\\win\\win32-dist\\jp2a.exe --chars=\"  \" --fill --colors"
-
-    #elif "64" in self.sys_architecture:
-    #    self.img_command = "./libs/x86/jp2a_x86 --chars=\ \  --fill --color-depth=8"
-        
-    #elif "arm" in self.sys_architecture:
-    #    self.img_command = "./libs/arm/jp2a_arm --chars=\ \  --fill --color-depth=8"
-   
-    #else:
-    #    print("WARNING: Image module not initialized, could not recognize used system")
-        
     
-    
-    
+@export  
 def get_img( self, path, start = 0 ):
     """
     cette fonction permet de lister tout les png et jpg contenu dans le dossier image du programme 
@@ -51,21 +37,13 @@ def get_img( self, path, start = 0 ):
         if isdir( path + f ):# un sous dossier existe
             self.get_img( path + f + self.separator )
             
-        #elif self.sysname == 'nt':
-        #    
-        #    if f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# c'est une image supporté par la librairie
-        #        self.imgs.append( path + f )
-        #        
-        #    if f[ -4: ] == ".png":# c'est une image précédemment non supporté par la librairie Windows
-        #        self.imgs.append( path + f )
-       
         else:
             
             if f[ -4: ] == ".png"  or f[ -4: ] == ".jpg" or f[ -4: ] == ".jpeg":# format d'image supporté par la librairie
                 self.imgs.append( path + f )
                 self.logger["image"].debug(f"found { path + f }")
 
-
+@export
 def gen_image( self ):
     self.image = "generating"
     if not ".mid" in self.song.file:
@@ -86,7 +64,7 @@ def gen_image( self ):
     
     
         
-    
+@export   
 def display_img( self ):
     """
     cette fonction affiche dans le terminal ;
@@ -109,19 +87,19 @@ def display_img( self ):
             
        if image != "" :# une image est selectionné
             
-            #self.external_call( f"{ self.img_command } { image }", True )# image selectionné
             self.print_image_to_screen(image, 5)
             print("")
             
        elif image == "" and self.imgs != []:# il y a au moins une image et aucune selcetionné
             
-            #self.external_call( f"{ self.img_command } { self.imgs[ randint( 0, len( self.imgs ) - 1) ] }", True )# image aléatoire
             self.print_image_to_screen( self.imgs[ randint( 0, len( self.imgs ) - 1) ] , 5)
             print("")
             
     if self.img_mode == "script":
         self.Screen.display()
-        
+
+
+@export       
 def select_img( self ):
     """
     cette fonction permet de choisir une image parmit la galerie ou de choisir aléatoire
@@ -146,7 +124,6 @@ def select_img( self ):
             
             else:
                 
-                #self.external_call( f"{ self.img_command }  { self.imgs[ int( word ) ] }" , True )
                 self.print_image_to_screen(self.imgs[ word  ], 5)
                 self.search = True
                 confirm = self.asker.ask("y/n ?")
@@ -158,6 +135,7 @@ def select_img( self ):
             
         self.display()
 
+@export
 def load_script(self):
     """
     WIP
@@ -165,7 +143,8 @@ def load_script(self):
     
     if self.img_script != "":
         self.Screen = importlib.import_module( self.img_script ).Screen()
-        
+
+@export
 def screen_mode(self):
     """
     WIP

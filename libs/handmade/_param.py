@@ -1,6 +1,8 @@
 #made by sand
 from .ffiles import *
+from .utils import export
 
+@export
 def init_param( self ):
     self.param = f"{self.appdirs.user_config_dir}/param.txt"#fichier de sauvegarde des paramétre
 
@@ -45,6 +47,7 @@ def init_param( self ):
         if x[ 2 ] != -1:
             setattr(self,x[ 0 ], x[ 2 ] )
 
+@export
 def get_param( self , param = ""):
     """
     cette fonction permet de recuperer les variables cité dans le fichier  param si presence de celle si
@@ -77,6 +80,7 @@ def get_param( self , param = ""):
 
     self.sort_command()
 
+@export
 def write_param( self , param = ""):
     """
     cette fonction permet d'enregistrer les variable cité dans le fichier param
@@ -94,6 +98,7 @@ def write_param( self , param = ""):
     write_file( self.param, data )
     self.logger["param"].info("saved param")
 
+@export
 def reset( self ):
     """
     cette fonction permet de remmetre a 0 les parrametre actuel et

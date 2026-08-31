@@ -1,5 +1,7 @@
 #made by sand
 from math import log,floor
+import sys
+
 def white( x : int = 60 ) -> None:
     """
     cette fonction passe un nombre x de ligne
@@ -203,3 +205,13 @@ def scroll_text( text : str , pos : int, size : int, direction : int) -> str:
     result = text[ max( 0, direction + pos ) : size + direction + pos ]
     print( result )
     return result
+
+
+def export(fn):
+    mod = sys.modules[fn.__module__]
+    if hasattr(mod, '__all__'):
+        mod.__all__.append(fn.__name__)
+    else:
+        mod.__all__ = [fn.__name__]
+    return fn
+

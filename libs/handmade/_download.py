@@ -6,9 +6,11 @@ from os.path import isdir
 import yt_dlp
 import threading
 
+@export
 def init_download( self ):
     pass
 
+@export
 def yt_search( self ):
     """
     cette fonction permert de faire une recherche sur youtube et de télécharger l'audio d'une video,
@@ -75,7 +77,7 @@ def yt_search( self ):
 
             #self.external_call( [ f"yt-dlp -q -x --embed-thumbnail --audio-format { extension } -o { path }download/{ title } { link } " ], shell = True )# telechargement en externe en .mp3
 
-
+@export
 def dl_yt_playlist( self ):
     """
     cette fonction permet d'enregistre une chanson/ playlist de chanson  a partir de son url
@@ -146,7 +148,7 @@ def dl_yt_playlist( self ):
 
             self.display()
 
-
+@export
 def thread_loop(self):
     while self.thread:
         self.update_logic()

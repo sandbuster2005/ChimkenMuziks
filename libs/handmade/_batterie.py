@@ -1,12 +1,14 @@
 #made by sand
 #not used anymore
+from .utils import export
 
-def init_battery( self ):
+@export
+def init_batterie( self ):
     self.battery = [ 0, 0 ]#valeur brut de la batterie et moment du relevé
     self.battery_life = None# temps restant estimé
     self.battery_exist = self.battery_check()
 
-
+@export
 def battery_check( self ):
     """
     cette fonction permet de verifier si l'appareil posséde une batterie
@@ -22,7 +24,7 @@ def battery_check( self ):
     else:
         self.battery_exist = True
     
-    
+@export    
 def get_battery( self ):
     """
     cette fonction permet d'obtenir le pourcentage de batterie restant
@@ -32,7 +34,7 @@ def get_battery( self ):
         
     return value.split( "\n", 1 )[ 0 ]
 
-
+@export
 def get_battery_life( self ):
     """
     cette fonction permet de calculer le temps d'utilisation de l'ordinateur

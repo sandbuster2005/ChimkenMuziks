@@ -1,10 +1,12 @@
 from .utils import *
 from .terminal import *
 from tinytag import TinyTag
+
+@export
 def init_playlist(self):
     pass
 
-
+@export
 def add_to_playlist(self):
     if self.song in self.favorite:
         fav = "remove from favorite"
@@ -46,7 +48,7 @@ def add_to_playlist(self):
 
     self.display()
 
-
+@export
 def gen_playlist_menu(self):
     playlists = self.get_column()
     
@@ -87,7 +89,8 @@ def gen_playlist_menu(self):
             }
     
     return menu
-            
+
+@export
 def playlist_manager(self):
         
     self.asker.dynamic_recursive_menu(self.gen_playlist_menu, self.update_logic , text = "test" )
@@ -95,6 +98,7 @@ def playlist_manager(self):
     self.display()
     
 
+@export
 def edit_playlist(self,playlist):
     indexes = { song.index : self.is_in_playlist(playlist, song.file ) for song in self.files }
     files = [ song for song in self.files ]
@@ -109,7 +113,7 @@ def edit_playlist(self,playlist):
             indexes[ song.index ] = 1 - indexes[ song.index ]
             self.update_playlist_database( playlist , indexes[ song.index ], song.file )
 
-
+@export
 def show_playlist(self, playlist ,ptype):
     if ptype != "playlist":
         input("not yet supported press any key to continue")
@@ -118,7 +122,7 @@ def show_playlist(self, playlist ,ptype):
     self._select_song(self.get_playlist(playlist) ,text = playlist , play_next = True )
     return 2
 
-
+@export
 def add_new_playlist(self):
     white()
     word = self.ask( "new playlist name:" )
@@ -128,10 +132,12 @@ def add_new_playlist(self):
     
     return 2
 
+@export
 def clear_playlist(self):
     self.playlist = ""
     return 1
 
+@export
 def load_new_playlist(self,playlist, ptype):
     self.playlist = playlist
     self.playlist_type = ptype
@@ -140,13 +146,14 @@ def load_new_playlist(self,playlist, ptype):
     self.play_song()
     return 1
     
+@export
 def remove_playlist(self, playlist):
     self.drop_column( playlist )
     return 2
 
 
 
-
+@export
 def get_song_info(self,song):
     try:
         tag = TinyTag.get(song , image = True)
@@ -157,6 +164,7 @@ def get_song_info(self,song):
     else:
         return [tag.artist , tag.album]
 
+@export
 def load_playlist(self):
     if self.playlist_type == "playlist":
         self.load_playlist_database()

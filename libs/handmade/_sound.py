@@ -1,9 +1,11 @@
 #made by sand
+from .utils import export
 try :
     import alsaaudio
 except:
     pass
 
+@export
 def init_sound( self ):
     self.mute = 0
     
@@ -15,7 +17,8 @@ def init_sound( self ):
         
     else:
         self.audio_linux=True
-    
+
+@export
 def start_sound( self ):
     """
     cette fonction permet de demmarer les gestionnaire de son externe
@@ -26,7 +29,7 @@ def start_sound( self ):
         
     self.volume = self.get_volume()
     
-  
+@export 
 def change_sound_manager( self ):
     """
     cette fonction permet de changer le gestionnaire
@@ -43,7 +46,7 @@ def change_sound_manager( self ):
             self.sound_manager = "alsa"
             self.display()
     
-    
+@export   
 def get_volume( self ):
     """
     cette fonction renvoie le volume actuel
@@ -56,7 +59,7 @@ def get_volume( self ):
         volume = self.mixer.getvolume()[ 0 ]
         return volume
         
-        
+@export        
 def set_volume(self):
     """
     cette fonction permet de mettre le volume a une valeur predéfini
@@ -67,7 +70,7 @@ def set_volume(self):
     if self.sound_manager == "alsa":
         self.mixer.setvolume( self.volume )
        
-       
+@export      
 def deafen(self):
     """
     cette fonction permet de rendre audible/mettre en sourdine 

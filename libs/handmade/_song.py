@@ -8,12 +8,15 @@ from os import listdir
 from os.path import isfile, splitext, dirname
 from tinytag import TinyTag
 import threading
+
+@export
 def init_song( self ):
     #SONG variables
     self.song = None# currently playing song
     self.next_song = None # allow pre-loading of song
     self.last_word = -1 # pos in current lyrics if there are
 
+@export
 def load_songs( self , reset = 1 ):
     """
     cette fonction permet de charge en memoire les chanson de la playlist selectionné/toute
@@ -54,6 +57,7 @@ def load_songs( self , reset = 1 ):
     self.load_favorite_database()
     self.load_playlist()
 
+@export
 def play_song( self ,choose = 1):
     """
     cette fonction lance le choix de chanson et la joue
@@ -97,7 +101,7 @@ def play_song( self ,choose = 1):
             if self.timer["update_mode"] in ["song","time-song"] and self.timer["remaining"] < 1:
                 self.end_timer()
 
-
+@export
 def _choose_song(self, preload = 0):
     """
     cette fonction permet de:
@@ -168,6 +172,7 @@ def _choose_song(self, preload = 0):
 
     self.logger["song"].debug(f"chose {song}")
 
+@export
 def _play( self ):
     """
     cette fonction lance la musique actuel ,l'ajoute a l'historique et affiche l intérface
@@ -209,7 +214,7 @@ def _play( self ):
     
     self.display()
     
-    
+@export    
 def get_url(self):
     if self.yt_links:  
         data = YoutubeSearch( self.song.file, max_results = 1 ).to_dict()
@@ -225,7 +230,7 @@ def get_url(self):
     
     
     
-    
+@export    
 def play_last( self ):
     """
     cette fonction permet de jouer la chanson precedante a condition qu'il y en est une
@@ -236,7 +241,7 @@ def play_last( self ):
         self.song = self.played[ -1 ]
         self.play_song( choose = 0 )
         
-        
+@export        
 def historic( self ):
     """
     cette fonction affiche l'historique d'écoute de la session 
@@ -263,7 +268,7 @@ def old_select( self ):
 """
 
 
-
+@export
 def _select_song( self , file_list , display_list = None , text = "", play_next = False ):
     white()
     if display_list == None:
@@ -333,15 +338,17 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 
     self.display()
 
+@export
 def select( self ):
     self.logger["song"].info("showing song gallery to the User")
     self._select_song( self.files, text = "song library" )
 
+@export
 def select_fav( self ):
     self.logger["song"].info("showing favorite song to the User")
     self._select_song( self.favorite, text = "favorite songs" )
 
-
+@export
 def most_played( self ):
     liste = self.played_database()
     display_list = [ f"{ str(x[2]) }: {x[1].rsplit('/',1)[1]}" for x in liste ]
@@ -349,7 +356,7 @@ def most_played( self ):
     self.logger["song"].info("showing most played song to the User")
     self._select_song( liste , display_list, "most played")
 
-
+@export
 def play_now( self ):
     if self.to_play:
         display_list = [f"{ song.name }" for song in self.to_play ]
@@ -357,6 +364,7 @@ def play_now( self ):
         self.logger["song"].info("showing to be played song to the User")
         self._select_song(liste, display_list, "to be played", play_next = True )
 
+@export
 def play_midi(self):
     """
     cette fonction permet de produire un fichier mp3 a partir un fichier midi selectionner et un codec selectionné
@@ -366,7 +374,8 @@ def play_midi(self):
     
     if  word < len( outs ):
         self.convert_midi( "appdata/midi_codec/" + outs[ word ] )
-        
+ 
+@export
 def convert_midi(self,soundmap = ""  , destination = "" ):
     """
     cette fonction permet de stocker temporairement un fichier mp3 crée a partir d'un fichier midi
@@ -383,7 +392,8 @@ def convert_midi(self,soundmap = ""  , destination = "" ):
     if not isfile(destination) :
         fs = midi2audio.FluidSynth(soundmap)
         fs.midi_to_audio(self.song.file ,destination )
-        
+
+@export
 def default_midi(self):
     """
     cette fonction permet a l'utillisteur de selectionner un codec par defaut pour les fichier midi pour eviter les interuptions futur
@@ -396,7 +406,8 @@ def default_midi(self):
         self.base_soundmap = f"appdata/midi_codec/{ choice[ int( word ) ] }"
 
     self.logger["song"].debug(f"new base soundmap : {self.base_soundmap}")
-        
+
+@export
 def get_metadata(self):
     """
     cette fonction permet de recuperer la miniature d'un fichier si elle existe 

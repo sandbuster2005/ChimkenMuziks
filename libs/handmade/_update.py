@@ -5,15 +5,15 @@ import shutil
 from time import strftime, monotonic, sleep , time as timeS
 from libs.progress.bar import Bar
 from math import floor,ceil
-from pypresence import  Presence, ActivityType, StatusDisplayType
 from .terminal import *
-from .utils import closest, white
+from .utils import closest, white, export
 from youtube_search import YoutubeSearch
 
 
 def current_time():
     return strftime('%H %M').split(" ")
 
+@export
 def init_update(self):
     self.term_size = os.get_terminal_size()
     self.changed = []
@@ -23,6 +23,7 @@ def init_update(self):
     self.time_check = [False, 0, 0, 0]
     self.url = None
 
+@export
 def update_logic(self):
     if self.timer:
         if self.timer["remaining"] < 1 and self.timer["update_mode"] == "time":
@@ -180,7 +181,7 @@ def update_logic(self):
                         self.display()
             
 
-
+@export
 def update_display(self, value ):
     self.logger["update"].bullshit("display loop")
     if not self.search:
@@ -304,84 +305,8 @@ def update_display(self, value ):
                 out(value)
                 self.logger["update"].trace("updated bar")
                 self.changed.remove("bar")
-
-
-def connect_to_discord(self):
-    self.discord = True
-    self.discord_connected = False
-    self.logger["discord"].debug("connecting to discord...")
-    if self.discordRP:
-        client_id = "1495534597419700264"
-        try:
-            self.RPC = Presence( client_id )
-            self.RPC.connect()
             
-        except:
-            self.logger["discord"].debug("connection failed")
-            self.discord = False
-            
-            self.discord_connected = False
-            
-        else:
-            self.logger["discord"].debug("connected")
-            self.discord_connected = True    
-
-
-
-def update_discord_status(self):        
-    try :
-        self.logger["discord"].debug("updating status...")
-        if self.url:
-            self.RPC.update(
-                activity_type = ActivityType.LISTENING,
-                status_display_type = StatusDisplayType.DETAILS ,
-                details = self.song.name,
-                details_url = self.url,
-                state = "ChimkenMuziks",
-                start = timeS() - self.bar.index,
-                end = timeS() + self.bar.max - self.bar.index,
-                )
-        else:
-            self.RPC.update(
-                activity_type = ActivityType.LISTENING,
-                status_display_type = StatusDisplayType.DETAILS ,
-                details = self.song.name,
-                state = "ChimkenMuziks",
-                start = timeS() - self.bar.index,
-                end = timeS() + self.bar.max - self.bar.index,
-                )
-
-            
-    except:
-        self.logger["discord"].debug("update failed")
-        self.discord = False
-        self.discord_connected = False
-            
-
-    else:
-        self.logger["discord"].debug("updated status")
-        self.discord_connected = True           
-
-
-def pause_discord_status(self):
-    try :
-        self.logger["discord"].debug("pausing status...")
-        self.RPC.update(
-            activity_type = ActivityType.LISTENING,
-            status_display_type = StatusDisplayType.NAME ,
-            name = "Paused",
-            state = "ChimkenMuziks", 
-            )
-    except:
-        self.logger["discord"].debug("pausing failed")
-        self.discord = False
-        self.discord_connected = False
-
-    else:
-        self.logger["discord"].debug("status paused")
-        self.discord_connected = True  
-            
-
+@export
 def preload_song(self):
     self._choose_song( preload = 1 )
     shutil.copy(self.next_song.file, f"{self.appdirs.user_cache_dir}/preload")
@@ -389,20 +314,18 @@ def preload_song(self):
    
    
    
-   
+@export   
 def is_finished(self):
     if not self.stay:
         return True
     return False
 
-
+@export
 def end(self):
     self.stay = False
     self.logger["update"].info("EXITING APP")
     self.player.stop()
-    if self.discord_connected:
-        self.RPC.clear()
-        self.RPC.close()
+    self.exit_discord()
         
     if self.save_param:
         self.write_param()

@@ -1,11 +1,13 @@
 from ..readchar import readchar
 from math import ceil,floor
-from .utils import white
+from .utils import white,export
 from .display import *
 
+@export
 def init_display( self ):
     self.asker = Display()
-    
+
+@export
 def out( self, text ):
     """
     cette fonction permet d'afficher un message text a l'utilisateur
@@ -14,6 +16,7 @@ def out( self, text ):
         print( text , )
 
 
+@export
 def ask( self, text , quick = 0 ):
     """
     cette fonction permet de demander une valeur a l'utilisateur
@@ -23,6 +26,7 @@ def ask( self, text , quick = 0 ):
 
 
 
+@export
 def show_list( self, liste, num = True , start = 0):
     """
     cette fonction permet d afficher les elements d'une liste un
@@ -42,7 +46,8 @@ def show_list( self, liste, num = True , start = 0):
             for x in liste:
                 print( x )
   
-  
+
+@export
 def ask_list( self, liste, text = "" , num = True):
     """
     cette fonction affiche a l'utilisateur une liste et lui demande
@@ -80,7 +85,7 @@ def ask_list( self, liste, text = "" , num = True):
             return self.ask( f"{ text }" )
     
 
-
+@export
 def change_confirmation( self ):
     """
     cette fonction permet de changer le prompt par defaut de
