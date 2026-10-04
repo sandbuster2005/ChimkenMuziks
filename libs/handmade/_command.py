@@ -47,7 +47,7 @@ def init_command( self ):
     #abcdefghijklmnopqrstuvwxyz+- :list des commande utilisé de base
     #dl bb pl add nn
 
-@export  
+@export
 def sort_command( self ):
     """
     cette fonction permet de trier les commandes modifié par l'utilisateur
@@ -60,25 +60,25 @@ def sort_command( self ):
     command = sorted( command, key = lambda s: ( -len( s ) ) )
     x = 0
     missing = ""
-    
+
     while x < len( command ) and missing == "":
-        
+
         if len( command[ x ] ) == 1:
             missing = command[ x ]
-            
+
         x += 1
-        
+
     command=[ command[ x ] * ( 1 - ( ( len( command[ x - 1 ] ) > 1 ) == ( len( command[ x ] ) == 1 ) == ( len( command[ x + 1 ] ) == 1 ) == True ) ) + "h" * ( ( len( command [ x - 1 ] ) > 1 ) == (len ( command[ x ] ) == 1 ) == ( len( command[ x + 1 ] ) == 1 ) ==  True ) for x in range( len( command ) ) ]
-    
+
     if "h" in command:
         command = command[ :command.index( "h" ) + 1 ]+[ missing ] + command[ command.index( "h" ) + 1 :]
-        
+
     elif len( command[0] ) == 1 :
         command = [ "h" ] + command
-        
+
     elif len( command[ 0 ] ) > 1:
         command += [ "h" ]
-        
+
     command = [ base.index(command[x]) for x in range(len(command) ) ]
 
 
@@ -98,15 +98,15 @@ def edit_command( self ):
         self.help_menu()#show current commands
         print(a)#show last message
         cmd = self.ask("enter current command call :")
-        
+
         if cmd == "h":
             self.out( "help cannot be modified" ) # in case the user forget the change
             return
-        
+
         if cmd in commands:
             self.logger["command"].debug(f"selected : {cmd}")
             key = self.ask( "new command call :" )
-            
+
             if not all_numbers( key ) and key != "":
                  if key not in commands:#if key don't already exist
                      a = f"{  self.commands[ commands.index( cmd ) ][0] } changed to {key}"
@@ -114,7 +114,7 @@ def edit_command( self ):
                      self.commands[ commands.index( cmd ) ][0] = key # set key
                      self.write_param()
                      self.sort_command()
-                     
+
             wipe()
 
 @export
@@ -127,5 +127,3 @@ def help_menu( self ):
     menu =  [ "Input a number to play corresponding song", "Press enter to pause/unpause song" ] + [ f"{ self.commands[ x ][0] } : { self.commands[ x ][3] }" for x in range( len( self.commands ) )  ] + [" "] #entrer un nombre pour lancer la chanson correspondante / ne rien rentrer pour mettre pause
     self.search = True
     self.show_list(menu , num = False)
-    
-

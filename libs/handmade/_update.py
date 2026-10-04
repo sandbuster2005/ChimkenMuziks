@@ -61,8 +61,10 @@ def update_logic(self):
     if self.song:
         if not self.bar:
             if self.player.get_length() > 0:
-                sleep(0.01)
+                sleep(0.02)
+
                 self.logger["update"].info("creating new bar")
+
                 if self.color:
                     color = random.randint(0, 252)
                     color += 3 - (color % 3)
@@ -70,9 +72,18 @@ def update_logic(self):
                     color = "white"
 
                 lenght = self.player.get_length()
-                self.bar = Bar(f"", max = floor( lenght / 1000 ), color = color, addaptative_bar = self.addaptive_bar,
+                self.bar = Bar(f"", max = floor( lenght / 1000 ),
+                    color = color, addaptative_bar = self.addaptive_bar,
                                center = self.center)
-                
+
+                metadata = {
+                    "mpris:trackid" : ( "o", f"/org/chimkenmuziks/track/{self.song.index}"),
+                    "mpris:length":  ( "x", lenght * 1000 ),
+                    "xesam:title":   ( "s", self.song.name )
+                }
+
+                self.send_to_dbus( "metadata", metadata )
+
                 if self.discord and self.discordRP:
                    self.update_discord_status()
 
@@ -97,12 +108,17 @@ def update_logic(self):
 
             if self.bar.index  < floor( time / 1000 ):# or self.bar.index > floor( self.time / 1000 ) :
                 self.bar.index = floor( time / 1000 )
+                self.send_to_dbus("position", int( time * 1000 )  )
+
                 if not "bar" in self.changed:
                     self.changed.append("bar")
                     self.logger["update"].trace("bar changed ")
-    
-                
-                
+
+
+
+
+
+
 
             if self.word:
 
@@ -138,12 +154,12 @@ def update_logic(self):
                     self.changed.append("display")
 
                 self.logger["update"].debug(f"terminal size changed to {self.term_size}")
-                
+
             if self.discordRP and not self.discord_connected and self.discord:
                 self.connect_to_discord()
                 self.update_discord_status()
                 self.discord_connected = True
-                
+
             if not self.discordRP and self.discord_connected and self.discord:
                 self.RPC.clear()
                 self.RPC.close()
@@ -153,10 +169,17 @@ def update_logic(self):
             if not self.song_saved and self.bar.index * 2 > self.bar.max:
                 self.song_saved = True
                 self.write_song_database( self.song.file )
-                
+
                 if self.preloading and not True :
                     self.thread_pool.append( threading.Thread(target = self.preload_song ) )
-                
+
+            if self.MPRIS:
+                if self.MPRIS.action_queue:
+                    action = self.MPRIS.action_queue.pop()
+                    action = self.dbus_command[action]
+                    self.logger["update"].debug(f"received via dbus : {action}")
+                    action[0]( *action[1] )# action[0] is a fonction and action[1] is an argument dict
+
 
             if self.database_requests_pool != []:
                 request = self.database_requests_pool.pop()
@@ -164,22 +187,22 @@ def update_logic(self):
                     self.exec_sql_request( request )
                 except:
                     self.database_requests_pool.append(request)
-                    
-            
-            if threading.active_count() < 2 and self.thread_pool and self.player.is_playing():
+
+
+            if threading.active_count() < 3 and self.thread_pool and self.player.is_playing():
                 self.thread_pool.pop().start()
-                
+
             if not self.thread_pool and self.thread_count:
                 self.thread_count = 0
 
             if self.bar:
-                if not self.player.is_playing() and not self.pause and self.stay and threading.active_count() <2:
+                if not self.player.is_playing() and not self.pause and self.stay and threading.active_count() <3:
                     sleep(1)
                     if not self.player.is_playing():
                         self.logger["update"].info("song finished, next one")
                         self.play_song((1 - self.repeat))
                         self.display()
-            
+
 
 @export
 def update_display(self, value ):
@@ -204,7 +227,7 @@ def update_display(self, value ):
 
             self.logger["update"].trace("updated lyric")
             self.changed.remove("word")
-        
+
 
         if self.song:
             if "time" in self.changed or "timer" in self.changed or "volume" in self.changed or "display" in self.changed:
@@ -214,9 +237,9 @@ def update_display(self, value ):
                     #self.display_img()
                     #self.logger["update"].debug("printed image ")
                     ldown( self.term_size.lines  )
-                        
+
                 time_string = f"{ self.current_time[0] }:{ self.current_time[1] }"
-                
+
                 sleep(0.05)
                 self.volume = self.get_volume()
                 volume_string = f"{self.volume}%"
@@ -228,30 +251,30 @@ def update_display(self, value ):
 
                 if self.playlist:
                     string = self.playlist + "   " + string
-                
+
                 if self.thread_pool:
                     string = f"Loading({( self.thread_count - len( self.thread_pool ) ) }/{self.thread_count})" + "   " + string
-                
+
                 if self.timer:
                     string += "   " + f"timer :{self.timer['remaining']} {self.timer['display']}"
 
                 space = floor((self.term_size.columns - len(string)) / 2)
 
-                name = self.song.name 
-                
-                
+                name = self.song.name
+
+
 
                 if self.song in self.favorite:
                     name = "*" + name + "*"
-                
+
                 if len(name) > self.term_size.columns:
                     name = name[:self.term_size.columns]
-                    
+
                 if len(string) > self.term_size.columns:
                     string = string[:self.term_size.columns]
-                    
-                
-                    
+
+
+
                 space_name = floor((self.term_size.columns - len(name)) / 2)
 
                 if self.bar:
@@ -283,7 +306,7 @@ def update_display(self, value ):
                     self.changed.remove("display")
 
                 self.logger["update"].trace("updated main display")
-            
+
             if "image" in self.changed:
                 if self.image and self.show :
                     if self.image.name == self.song.index:
@@ -291,7 +314,7 @@ def update_display(self, value ):
                         lup( 4 + self.image.height )
                         out( self.image.image )
                         ldown( 4 )
-                
+
                 self.changed.append("bar")
                 self.changed.remove("image")
 
@@ -305,16 +328,16 @@ def update_display(self, value ):
                 out(value)
                 self.logger["update"].trace("updated bar")
                 self.changed.remove("bar")
-            
+
 @export
 def preload_song(self):
     self._choose_song( preload = 1 )
     shutil.copy(self.next_song.file, f"{self.appdirs.user_cache_dir}/preload")
     self.logger["update"].info("preloaded song")
-   
-   
-   
-@export   
+
+
+
+@export
 def is_finished(self):
     if not self.stay:
         return True
@@ -326,6 +349,6 @@ def end(self):
     self.logger["update"].info("EXITING APP")
     self.player.stop()
     self.exit_discord()
-        
+
     if self.save_param:
         self.write_param()

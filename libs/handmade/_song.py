@@ -28,32 +28,32 @@ def load_songs( self , reset = 1 ):
     if self.exterior:
         self.logger["song"].info(f"loading song from {self.exterior}")
         self.files = self.get_file( self.exterior, [] )
-    
+
     else:
         self.logger["song"].info(f"loading song from {self.path_to_file}")
         self.files = self.get_file( self.path_to_file, [] )
 
     #TODO check self.played if song deleted
-    
+
     self.create_dirs_links()
     self.update_song_database( self.files )
 
     self.indexs = self.get_index_data( self.files )
     self.logger["song"].debug(f"loaded indexes : {self.indexs}")
-    
+
     #print( self.files[0] )
-    
+
     #test = self.Song (file = self.files[0], index = self.indexs[0], separator = self.separator)
-    
+
     self.files = [ self.Song( self.indexs[x] ,self.files[x] , self.separator )  for x in range( len(self.indexs) ) if isfile(self.files[x]) ]# [index in database , song file]
     if reset:
         self.song = None
         self.player.stop()
-        self.display( space = True ) 
+        self.display( space = True )
 
     self.logger["song"].info(f"loaded {len( self.files)} song in memory")
     #self.logger["song"].trace(f"file : { self.files }")
-    
+
     self.load_favorite_database()
     self.load_playlist()
 
@@ -62,23 +62,23 @@ def play_song( self ,choose = 1):
     """
     cette fonction lance le choix de chanson et la joue
     """
-    
+
     if len( self.files ) != 0: # if there are song
 
-        
-           
+
+
         if choose:
             if self.next_song:
                self.song = self.next_song
-               
+
             else:
                 self._choose_song()
-        
+
         else:
             self.next_song = None
-       
+
         self.get_words()# check if there are a lyric file
-        
+
         if self.song.extension =="mid": # if its a midi convert it with a midi codec to a playable version
             self.play_midi()
 
@@ -160,15 +160,15 @@ def _choose_song(self, preload = 0):
                     files = self.files
 
                 song = files[ (files.index( self.song ) + 1) % len(files) ]  # chanson suivante : index+1
-                
-                
+
+
     if not preload:
         self.song = song
-        
+
     else:
         self.next_song = song
-        
-        
+
+
 
     self.logger["song"].debug(f"chose {song}")
 
@@ -176,9 +176,9 @@ def _choose_song(self, preload = 0):
 def _play( self ):
     """
     cette fonction lance la musique actuel ,l'ajoute a l'historique et affiche l intérface
-    
+
     limite:
-    une musique doit étre selectionné au préalable 
+    une musique doit étre selectionné au préalable
     """
 
     self.logger["song"].info(f"playing {self.song.file}")
@@ -186,51 +186,50 @@ def _play( self ):
     if ".mid" in self.song.file:# if its a midi played converted version
         self.logger["song"].info(f"playing midi file")
         self.player.set_mrl(self.appdirs.user_cache_dir + "/" + self.song.name + ".wav")
-    
+
     elif self.next_song:
         self.next_song = None
         self.logger["song"].info("using preloaded")
         self.player.set_mrl( f"{self.appdirs.user_cache_dir}/preload" )# skip loading song
-        
+
     else:
         self.player.set_mrl( self.song.file )# load song
-    
+
     self.song_saved = False  # tell backend is can save a play in the database
     self.bar = None # reset bar
     self.player.play()
-    
+
     if self.show:
         self.thread_pool.append( threading.Thread(target = self.gen_image) )
         self.logger["song"].debug("add image gen thread to pool")
         self.thread_count += 1
-        
+
     if self.yt_links:
         self.thread_pool.append( threading.Thread( target = self.get_url ) )
         self.logger["song"].debug("add yt link thread to pool")
         self.thread_count += 1
-        
-        
-        
-    
+
+
+
     self.display()
-    
-@export    
+
+@export
 def get_url(self):
-    if self.yt_links:  
+    if self.yt_links:
         data = YoutubeSearch( self.song.file, max_results = 1 ).to_dict()
-        
+
         if data:
             self.url = "https://www.youtube.com" + data[0].get("url_suffix")
         else:
             self.url = None
-    
+
     else:
         self.url = None
-    
-    
-    
-    
-@export    
+
+
+
+
+@export
 def play_last( self ):
     """
     cette fonction permet de jouer la chanson precedante a condition qu'il y en est une
@@ -240,11 +239,11 @@ def play_last( self ):
         self.played.pop()
         self.song = self.played[ -1 ]
         self.play_song( choose = 0 )
-        
-@export        
+
+@export
 def historic( self ):
     """
-    cette fonction affiche l'historique d'écoute de la session 
+    cette fonction affiche l'historique d'écoute de la session
     """
     self.logger["song"].info("showing played song to user")
     self.logger["song"].debug(f"played : {self.played }")
@@ -254,7 +253,7 @@ def historic( self ):
 def old_select( self ):
 """
     #cette fonction permet de chercher une chanson dans la liste chargé de chanson et l'affiche
-    
+
     #limite:
     #cette fonction demande une chaine de charactére a rechercher dans les données de l'utilisateur
 """
@@ -276,7 +275,7 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 
     self.logger["song"].info("showing select song menu to user")
     self.logger["song"].trace(f"display menu : {', '.join( display_list ) }")
-    
+
     self.logger["song"].trace(f"file list : { file_list }")
 
     song_index = self.asker.menu_deroulant( display_list , self.update_logic, text = text ,  search = True )
@@ -284,7 +283,7 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
     if song_index < len( file_list ):
         song = file_list[ song_index ]
         self.logger["song"].debug(f"user selected {song} ")
-        
+
         """
         if self.song == None :
             self.song = song
@@ -295,7 +294,7 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
                 self.to_play = [ song ] + self.to_play
                 self.logger["song"].debug(f" added { song } to be played")
         """
-        
+
         if play_next:
 
             self.song = song
@@ -307,34 +306,34 @@ def _select_song( self , file_list , display_list = None , text = "", play_next 
 
         else:
             choice = self.asker.menu_deroulant( ["play now","add to waitlist", "delete ", "move", "rename", "convert"], self.update_logic )
-            if choice == 0:# 
+            if choice == 0:#
                 self.song = song
                 self.play_song( choose = 0 )
-                
+
             if choice == 1: # add to waitlist
                 if song not in self.to_play:
                     self.to_play = [ song ] + self.to_play
                     self.logger["song"].debug(f" added { song } to be played")
-            
+
             if choice == 2:#delete
                 rm_file( song.file )
                 self.load_songs( reset = 0 )
-            
-            if choice == 3:#move 
+
+            if choice == 3:#move
                 new_dir = str( self.select_dir( retour = 1 ) )
                 if new_dir:
                     mv_file( song.file, self.dirs[ int( new_dir ) ][ 0 ] + self.separator + song.filename )
                     self.load_songs( reset = 0 )
-            
+
             if choice == 4:#rename
                 new_name = self.ask( "new_name :" )
                 mv_file( song.file, song.filepath + new_name + "." + song.extension )
                 self.load_songs( reset = 0 )
-                
+
             if choice == 5:#extension
                 self.change_extension(song)
 
-            
+
 
     self.display()
 
@@ -371,10 +370,10 @@ def play_midi(self):
     """
     outs = listdir("appdata/midi_codec")
     word = self.asker.menu_deroulant(outs,self.update_logic)
-    
+
     if  word < len( outs ):
         self.convert_midi( "appdata/midi_codec/" + outs[ word ] )
- 
+
 @export
 def convert_midi(self,soundmap = ""  , destination = "" ):
     """
@@ -383,12 +382,12 @@ def convert_midi(self,soundmap = ""  , destination = "" ):
     #TODO test the fonction
     if destination == "":
         destination = self.appdirs.user_cache_dir + "/"
-        
+
     if soundmap == "":
         soundmap = self.base_soundmap
-        
+
     destination = destination + self.song.name + ".wav"
-    
+
     if not isfile(destination) :
         fs = midi2audio.FluidSynth(soundmap)
         fs.midi_to_audio(self.song.file ,destination )
@@ -410,19 +409,19 @@ def default_midi(self):
 @export
 def get_metadata(self):
     """
-    cette fonction permet de recuperer la miniature d'un fichier si elle existe 
+    cette fonction permet de recuperer la miniature d'un fichier si elle existe
     """
     self.logger["song"].info("checking song metadata")
     tag = TinyTag.get(self.song.file , image = True)
     artist = tag.artist
     image = tag.images.any
-    
+
     if image :
         self.logger["song"].info("found img")
         image = image.data
         write_file(f"{self.appdirs.user_cache_dir}/preview", image , mode = "wb")
         image = f"{self.appdirs.user_cache_dir}/preview"
-        
+
     elif tag.album :
         for j in [splitext(self.song.file )[0], dirname(self.song.file)+self.separator+tag.album]:
             for i in [j+'.jpg', j+'.jpeg', j+'.png']:
@@ -432,6 +431,5 @@ def get_metadata(self):
                     with open(i, mode = "rb") as file:
                         write_file(f"{self.appdirs.user_cache_dir}/preview", file.read(), mode = "wb")
                         image = f"{self.appdirs.user_cache_dir}/preview"
-                    
+
     self.thumbnail = image
-    

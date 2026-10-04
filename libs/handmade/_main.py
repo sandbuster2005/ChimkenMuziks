@@ -19,28 +19,28 @@ import os
 @export
 def init_main(self):
     #process arg passed with the start command
-    
-    
+
+
     #check problem with windows
     self.sysname = sysname
-    
+
     if sysname == 'nt':
         self.separator = '\\'
-        
+
     else:
         self.separator = '/'
-        
-     
+
+
     self.exterior = self.exterior_song.rsplit(self.separator , 1)[0]
-    
+
     if self.exterior:
         self.separator += self.separator
-    
-    
+
+
     self.sys_architecture = platform.machine()
     self.stay = True  # False pour quiter le lecteur
     self.pause = 0  # pour mettre en pause le lecteur+la barre
-    self.bar = None   # la barre de progression du temps de la chanson 
+    self.bar = None   # la barre de progression du temps de la chanson
     self.search = False   # pour mettre en pause l afichhage le temps de finir une recherche
     os.environ["VLC_VERBOSE"] = str("-1") # retire les message de warning vlc cassant l affichage
     self.player = vlc.MediaPlayer()  # lecteur
@@ -50,27 +50,41 @@ def init_main(self):
     self.words = None # parole si existante
     self.input = ReadChar() # systeme d'input
 
+
+    try:
+        from ChimkenMPRIS import MPRIS_server
+        self.MPRIS = MPRIS_server()
+    except:
+        self.MPRIS = False
+
+
+
     self.logger["main"].debug(f" user on { self.sysname } { self.sys_architecture }  ")
-    
-    
-@export    
+
+
+@export
 def main( self ):
     """
-    cette fonction est la fonction d'initialisation du programme et de fonctionnement 
+    cette fonction est la fonction d'initialisation du programme et de fonctionnement
     """
-    
+
+
     self.get_param()#get param from file if it exists else create it
-    
+
+
     self.connect_to_discord()
-        
+
+
+    self.launch_mpris()
+
     self.logger["image"].info("loading imgs")
     self.get_img( self.path_to_img,start = 1 )#scan all image in repertory
     self.check_adress()#see if current file adress exist
 
     self.load_songs()#try to load the song
     self.load_script()#WIP
-    
-    
+
+
     if len( self.files) == 0:
         while len( self.files ) == 0:# if folder is empty
             self.logger["main"].warning( "music folder is empty" )
@@ -81,7 +95,7 @@ def main( self ):
     if self.sound_manager != "base":#base sound manager need a media playing to get volume
         self.start_sound()
         self.display()
-    
+
     if self.exterior: # if an argument was pasted from command line
         if self.exterior_song:
             print(self.exterior_song)
@@ -93,23 +107,23 @@ def main( self ):
             self.song = self.Song(self.get_index_data( [ self.exterior_song ] )[ 0 ], self.exterior_song ,self.separator )
             self.logger["main"].debug(f"loaded {self.song}")
             self.play_song(0)
-    
+
     else:
         if self.playlist: #load playlist if there's one
             self.load_playlist()
 
         if self.last_song and self.auto_last_song: #launch last played sont if configured to
-            
+
             #f isfile(self.last_song[1]) and self.path_to_file in self.last_song[1]
             if isfile(self.last_song[1]) :
                 self.logger["main"].info("loading last played song")
                 self.last_song[ 0 ] = int( self.last_song[ 0 ] )
-                
+
                 self.song = self.Song( self.last_song[0] , self.last_song[1], self.separator )
                 self.play_song(0)
-                
 
-        
+
+
     while self.stay:
         self.get_input()#interface
 
@@ -118,7 +132,7 @@ def main( self ):
 @export
 def n_input(self):
     """
-    cette fonction permet de garder une méme ligne pour l'input 
+    cette fonction permet de garder une méme ligne pour l'input
     """
     lup()
     wipe_line()
@@ -128,7 +142,7 @@ def display( self , space = False ):
     """
     cette fonction affiche l'image ,recupére la durée de la chanson ainsi que le nom de la chanson en cours,
     le volume de la musique ainsi que creer la bar de progression si besoin
-    
+
     limite:
     il est nécessaire qu'une chanson soit selectionné
     """
@@ -147,9 +161,9 @@ def display( self , space = False ):
                 self.changed.append("word") #previens l"affichage d'un changement
 
 
-    
-    
-@export    
+
+
+@export
 def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
@@ -167,25 +181,25 @@ def get_input( self ):
             self.find_song_database( int( got ) )
             self.next_song = None
             self.play_song( 0 )
-            
+
     if self.search:#recherche terminé
         self.display()
         self.search = False
-        
+
     if not got and self.song:#pause
         self.wind( 6 )
-        
+
     x = 0
     stop = False
     while x < len( self.commands) and not stop:#executer la première commande contenu dans la chaine donné par l utilisateur
         if   self.commands[ ( index := self.command_pos[ x ] ) ][0] in got:#prenant en compte les modification de l'utilisateur et eviter que les plus petite command shadow les plus grande
             self.commands[ index ][1]( *self.commands[ index ][2] )#lancer la function souhaité
-            
+
             stop = True
-            
+
         x+=1
-    
-@export    
+
+@export
 def load_all( self ):
     """
     cette fonction permet de recharger toute les images ainsi que toute les chanson et
@@ -211,7 +225,7 @@ def wind( self, mode, pause = False  ):
     jouer la chanson en boucle : mode 8
     de jouer en aleatoire/dans l'ordre : mode 9
     et actualise l'affichage a chaque fois
-    
+
     limite:
     le volume du son est compris entre 0 et 100%
     """
@@ -220,7 +234,7 @@ def wind( self, mode, pause = False  ):
             self.player.set_time( min( self.player.get_length() - 1000, self.player.get_time() + 10000 ) )
             self.logger["main"].info("fowarded 10 sec")
             self.changed.append("bar")
-            
+
     if mode == 2:# recule de 10 seconde
         if self.bar:
             self.player.set_time( max( 0, self.player.get_time() - 10000 ) )
@@ -238,8 +252,8 @@ def wind( self, mode, pause = False  ):
         self.logger["main"].info("up volume by 5")
         self.logger["main"].debug("f new volume: {self.volume}")
         sleep(0.001)
-        
-        
+
+
     if mode == 4:# baisse le volume de 5
         self.volume = max( 0, self.volume - 5 )
         self.set_volume()
@@ -250,27 +264,20 @@ def wind( self, mode, pause = False  ):
 
         self.logger["main"].info("down volume by 5")
         self.logger["main"].debug("f new volume: {self.volume}")
-            
 
-        
-        
+
+
+
     if mode == 5:# mute the music
         self.deafen()
 
-    if mode == 6:# pause the music
-        self.pause = 1 - self.pause
-        
-        if self.song and self.discord and self.discordRP:
-              
-            if self.pause:
-                self.pause_discord_status()
-                
-            elif not self.pause:
-                self.update_discord_status()
-                
-                
-        self.player.pause()
-        self.logger["main"].debug(f" pause state { self.pause }")
+    if mode == 6:# play / pause the music
+
+        if self.pause:
+            self._unpause()
+
+        else:
+            self._pause()
 
     if mode == 7:# quit the player
         self.stay = False
@@ -280,7 +287,39 @@ def wind( self, mode, pause = False  ):
         self.player.set_time( 0 )
         self.bar.index = 0
         self.changed.append("bar")
- 
+
+
+# use self.wind(6) instead : play/pause
+@export
+def _pause( self ):
+
+    self.pause = True
+    self.player.pause()
+    self.logger["main"].debug(f" pause state : True")
+
+    self.send_to_dbus("playback_status","Paused")
+
+    if self.song and self.discord and self.discordRP:
+         self.pause_discord_status()
+
+
+# use self.wind(6) instead : play/pause
+@export
+def _unpause( self ):
+
+    self.pause = False
+    self.player.pause()
+    self.logger["main"].debug(f" pause state : False")
+
+    self.send_to_dbus("playback_status","Playing")
+
+    if self.song and self.discord and self.discordRP:
+        self.update_discord_status()
+
+
+
+
+
 @export
 def set_timer( self ):
     """
@@ -295,20 +334,20 @@ def set_timer( self ):
     update = self.asker.menu_deroulant( update_menu ,self.update_logic)
     if  word < 3 and update < 3:
         #self.timer_mode = word
-        
+
         self.out( "enter nothing to delete current timer" )
         choice = self.ask( f"shutdown in  x  {update_count[update]} :" )
-    
+
         if all_numbers( choice ):
             self.timer = { "elapsed": 1 , "remaining" : int( choice ) , "start" : monotonic() , "end_mode": end_menu[  word ] , "update_mode" : update_menu[ update ], "display": display[update] }
             self.logger["main"].info("set timer")
             self.logger["main"].debug(f"timer : {self.timer}")
         else:
             self.timer = None
-        
+
     else:
-         self.timer = None 
-        
+         self.timer = None
+
     self.display()
 
 @export
@@ -325,7 +364,7 @@ def end_timer(self):
         self.wind(6)
 
     self.timer = None
-    
+
 @export
 def param_center( self ):
     """
@@ -335,7 +374,7 @@ def param_center( self ):
     white()
     #tooltip , name , type
     param = [ [x[ 1 ],x[ 0 ],x[ 3 ] ]  for x in self.params if x[ 4 ] ]
-    
+
     while word < len( param ) :
         tooltip = [ [ x[ 0 ], getattr( self, x[ 1 ] ) ] for x in param ]
 
@@ -343,8 +382,8 @@ def param_center( self ):
         lup()
         out( " " * ( len( tooltip ) + 3 ) )
         ldown()
-        
-        
+
+
         if word < len( tooltip ):
                 setattr(self,param[  word  ][ 1 ], 1 - tooltip[  word  ][ 1 ] ) # if choice is a param , edit it
                 self.logger["main"].info(f"modified {param[word][1]} to {1 - tooltip[word][1]}")
@@ -372,5 +411,5 @@ def clear_cache(self):
     for f in listdir( "appdata/cache" ):
         self.logger["main"].info("cleared cache")
         rm_file( "appdata/cache/" + f )
-        
+
     self.display()

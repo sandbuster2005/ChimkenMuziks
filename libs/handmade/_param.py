@@ -42,10 +42,11 @@ def init_param( self ):
                    [ "tag_loading", "charger les metadata pour les nouvelles chansons", 1 , "bool", True ],
                    [ "yt_links", "ajoute un lien youtube automatique au RPC discord", 1 ,"bool", True]
                    ]
-    
+
     for x in self.params:
         if x[ 2 ] != -1:
             setattr(self,x[ 0 ], x[ 2 ] )
+
 
 @export
 def get_param( self , param = ""):
@@ -71,10 +72,10 @@ def get_param( self , param = ""):
         self.logger["param"].debug(f"{x} : {data[y]} ")
         if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
             setattr( self, x, [ data[ y ][ 1 ] ])
-        
+
         elif data[ y ][ 1 ] == "0" or data[ y ][ 1 ] == "1":
             setattr( self, x, int( data[ y ][ 1 ] ) )
-           
+
         else:
             setattr( self, x, data[ y ][ 1 ] )
 
@@ -88,10 +89,10 @@ def write_param( self , param = ""):
     if not self.stay:
         if self.song:
             self.last_song = [ self.song.index, self.song.file ]
-            
+
         else:
             self.last_song = ""
-    
+
     data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] if x != "holders" ]
     data += [ ["holders" ,[x[0] for x in self.commands] ] ]
     data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
@@ -107,6 +108,3 @@ def reset( self ):
     self.logger["param"].info("reset")
     self.__init__()#remise a 0
     self.write_param()
-
-
-
