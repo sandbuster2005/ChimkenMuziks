@@ -309,11 +309,12 @@ def update_display(self, value ):
 
             if "image" in self.changed:
                 if self.image and self.show :
-                    if self.image.name == self.song.index:
-                        self.logger["update"].trace("printed image")
-                        lup( 4 + self.image.height )
-                        out( self.image.image )
-                        ldown( 4 )
+                    if self.image != "generating":
+                        if self.image.name == self.song.index:
+                            self.logger["update"].trace("printed image")
+                            lup( 4 + self.image.height )
+                            out( self.image.image )
+                            ldown( 4 )
 
                 self.changed.append("bar")
                 self.changed.remove("image")
