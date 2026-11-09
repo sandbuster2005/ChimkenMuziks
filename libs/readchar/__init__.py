@@ -7,7 +7,6 @@ from sys import platform
 
 from ._config import config
 
-
 if platform.startswith(("linux", "darwin", "freebsd")):
     from . import _posix_key as key
     from ._posix_read import ReadChar, readchar, readkey

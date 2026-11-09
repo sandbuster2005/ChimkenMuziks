@@ -1,4 +1,5 @@
 #made by sand
+from libs.readchar import key as Key
 import subprocess
 import threading
 from .utils import export
@@ -44,3 +45,18 @@ def launch_mpris(self):
 def send_to_dbus(self, property, value):
     if self.MPRIS:
         self.MPRIS.update_queue.append( (property, value) )
+
+
+
+@export
+def parse_input(self, input ):
+    self.logger["external"].debug(f"parsing {input}")
+    input = list( input.split(":",1)[-1] )
+    if "%" in input :
+        input[ input.index("%") ] = Key.LF
+    if "<" in input:
+        input[ input.index("<") ] = Key.DOWN
+    if ">" in input:
+        input[ input.index(">") ] = Key.UP
+
+    return input

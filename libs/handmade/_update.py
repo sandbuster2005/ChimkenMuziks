@@ -176,6 +176,15 @@ def update_logic(self):
             if self.MPRIS:
                 if self.MPRIS.action_queue:
                     action = self.MPRIS.action_queue.pop()
+
+                    self.logger["Mpris"].debug("loaded action {action}")
+                    if "input" in action:
+                        self.debug_input += self.parse_input( action )
+                        print(self.debug_input)
+                        return
+
+
+
                     action = self.dbus_command[action]
                     self.logger["update"].debug(f"received via dbus : {action}")
                     action[0]( *action[1] )# action[0] is a fonction and action[1] is an argument dict

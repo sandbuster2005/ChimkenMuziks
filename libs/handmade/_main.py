@@ -49,6 +49,8 @@ def init_main(self):
     self.timer = None
     self.words = None # parole si existante
     self.input = ReadChar() # systeme d'input
+    self.debug_input = []
+    self.asker.debug_input = self.debug_input
 
 
     try:
@@ -168,7 +170,7 @@ def get_input( self ):
     """
     cette fonction est le menu principal qui permet a l'utilisateur d'interagir avec le programme
     """
-    got = ninput( self.update_logic, error = False, text = "" , before = ":",condition = self.is_finished , escape = None , Ufonc = self.update_display )
+    got = ninput( self.update_logic, error = False, text = "" , before = ":",condition = self.is_finished , escape = None , Ufonc = self.update_display, debug_input = self.debug_input )
     lup()# permet d'eviter de recharger l ecran a chaque input en conservant la ligne
     wipe_line()
 

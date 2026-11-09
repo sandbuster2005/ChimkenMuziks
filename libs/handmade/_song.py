@@ -199,6 +199,8 @@ def _play( self ):
     self.bar = None # reset bar
     self.player.play()
 
+    self.send_to_dbus("playback_status","Playing")
+
     if self.show:
         self.thread_pool.append( threading.Thread(target = self.gen_image) )
         self.logger["song"].debug("add image gen thread to pool")
@@ -412,24 +414,27 @@ def get_metadata(self):
     cette fonction permet de recuperer la miniature d'un fichier si elle existe
     """
     self.logger["song"].info("checking song metadata")
-    tag = TinyTag.get(self.song.file , image = True)
-    artist = tag.artist
-    image = tag.images.any
+    try:
+        tag = TinyTag.get(self.song.file , image = True)
+        artist = tag.artist
+        image = tag.images.any
 
-    if image :
-        self.logger["song"].info("found img")
-        image = image.data
-        write_file(f"{self.appdirs.user_cache_dir}/preview", image , mode = "wb")
-        image = f"{self.appdirs.user_cache_dir}/preview"
+        if image :
+            self.logger["song"].info("found img")
+            image = image.data
+            write_file(f"{self.appdirs.user_cache_dir}/preview", image , mode = "wb")
+            image = f"{self.appdirs.user_cache_dir}/preview"
 
-    elif tag.album :
-        for j in [splitext(self.song.file )[0], dirname(self.song.file)+self.separator+tag.album]:
-            for i in [j+'.jpg', j+'.jpeg', j+'.png']:
-                if isfile(i):
-                    self.logger["song"].info("found img")
+        elif tag.album :
+            for j in [splitext(self.song.file )[0], dirname(self.song.file)+self.separator+tag.album]:
+                for i in [j+'.jpg', j+'.jpeg', j+'.png']:
+                    if isfile(i):
+                        self.logger["song"].info("found img")
 
-                    with open(i, mode = "rb") as file:
-                        write_file(f"{self.appdirs.user_cache_dir}/preview", file.read(), mode = "wb")
-                        image = f"{self.appdirs.user_cache_dir}/preview"
+                        with open(i, mode = "rb") as file:
+                            write_file(f"{self.appdirs.user_cache_dir}/preview", file.read(), mode = "wb")
+                            image = f"{self.appdirs.user_cache_dir}/preview"
+    except :
+        image = None
 
     self.thumbnail = image

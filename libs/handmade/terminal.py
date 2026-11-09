@@ -9,6 +9,7 @@ from libs.readchar import ReadChar,key as Key
 def ninput(*arg : Callable , **kwarg) -> str:
 
     chrs : list[str] = [  chr( x ) for x in range( 32, 127 ) ]
+    debug_input: list[str] = []
     escape : any = ""
     text : str =  "input: "
     error : str  = "value not recognized / not acceptable"
@@ -42,6 +43,9 @@ def ninput(*arg : Callable , **kwarg) -> str:
         if k == "Ufonc":
             Ufonc = x
 
+        if k == "debug_input":
+            debug_input = x
+
     stop = False
     le = len(before)
     pos = len(value)
@@ -58,6 +62,11 @@ def ninput(*arg : Callable , **kwarg) -> str:
     with ReadChar() as Ninput:
         while not stop:
             a = Ninput.key()
+
+
+            if debug_input != []:
+                a = debug_input.pop(0)
+
 
             if simple and a:
                 return a
@@ -137,7 +146,7 @@ def ninput(*arg : Callable , **kwarg) -> str:
             if condition:
                 if condition():
                     return ""
-            
+
             if quick:
                 if len(value) >= quick:
                     stop = True
@@ -152,10 +161,10 @@ def out( text ):
 
 def up( x = 1 ):
     out( f'\x1b[{ x }A' )
-    
+
 def lup( x = 1 ):
     out( f'\x1b[{ x }F' )
-    
+
 def down( x = 1):#dont work for now it seem
     out ( f'\x1b[{ x }B' )
 
@@ -164,7 +173,7 @@ def ldown( x = 1 ):
 
 def left( x = 1 ):
     out( f'\x1b[{ x }D' )
-    
+
 def right( x = 1 ):
     out( f'\x1b[{ x }C' )
 
@@ -173,13 +182,13 @@ def home():
 
 def wipe():
     out( '\x1b[2J' )
-    
+
 def wipe_line():
     out( '\x1b[2K' )
 
 def save():
     out( "\x1b7" )
-    
+
 def load():
     out( "\x1b8" )
 

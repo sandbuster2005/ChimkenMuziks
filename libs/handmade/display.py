@@ -12,6 +12,7 @@ class Display:
         self.term_size = os.get_terminal_size()
         self.graphic_manager = "base"
         self.confirmation = "your choice"
+        self.debug_input = []
 
     def ask(self, text: str , *arg , **kwargs) -> str | None :
         """
@@ -19,7 +20,10 @@ class Display:
         en lui demandant text
         """
         if self.graphic_manager == "base":
-            return ninput( text = f"{ text }",*arg , **kwargs )
+            if "debug_input" in kwargs:
+                return ninput( text = f"{ text }" ,*arg , **kwargs )
+            else:
+                return ninput( text = f"{ text }", debug_input = self.debug_input ,*arg , **kwargs )
 
         else:
             return None
@@ -89,20 +93,20 @@ class Display:
 
         else:
             return None
-    
-    
+
+
     def change_confirmation(self) -> None:
         """
         cette fonction permet de changer le prompt par defaut de
         la fonction ask_list
         """
         self.confirmation = self.ask( "new choice prompt" )
-        
-        
+
+
     def menu_deroulant(self, menu, *args, text="", cursor=0, search=False, word_search = "" ):
 
         if self.graphic_manager == "base":
-            
+
             white()
             home()
             size = floor(os.get_terminal_size().lines / 2) -1
@@ -154,7 +158,7 @@ class Display:
                         else:
                             print( val )
 
-                word = ninput(text="", error=None, simple=True, quick=1, escape=None, *args)
+                word = ninput(text="", error=None, simple=True, quick=1, escape=None, debug_input = self.debug_input , *args)
 
                 if search:
 
@@ -212,48 +216,48 @@ class Display:
             return global_pos
 
         return None
-        
-    
+
+
     def recursive_menu(self, menu, *args , text = "" , values = [] ):
         done = False
-        select = 0 
-        
+        select = 0
+
         while not done:
             display_menu = [ keys for keys in menu.keys() ]
             select = self.menu_deroulant( display_menu , *args , text = text, cursor = select, search = True  )
-            
+
             if select < len(display_menu): # user selected an option
                 key = display_menu[select]
-                
-                
-                if type(menu[key]) == dict: # sub menu 
+
+
+                if type(menu[key]) == dict: # sub menu
                     values.append(key)
                     return_value = self.recursive_menu(menu[key], *args , text = key, values = values )
                     values.pop()
-                    
+
                 elif type(menu[key]) == list:# need args
-                    
+
                     kwargs = { item : (values + [key] )[ index ] for index,item in menu[key][1].items() }
                     return_value = menu[key][0](**kwargs)
-                    
+
                 else : # assuming function or method
                     pass
                     return_value = menu[key]() # execute
-                
+
                 if return_value:
                     if return_value == 1:
                         return 1
-                    
+
                     if return_value == 2:
                         return [ value for value in values ]
-                    
-                    return return_value 
-            
+
+                    return return_value
+
             else:
                 done = True
-        
-        
-    
+
+
+
     def dynamic_recursive_menu(self, d_menu, *args, text = "" ):
         pass
         done = False
@@ -267,25 +271,22 @@ class Display:
                     depth += 1
                 else:
                     depth = len(values)
-            
+
             if values:
                 return_value = self.recursive_menu( menu, *args, text = values[-1] , values = values )
-            
+
             else:
                 return_value = self.recursive_menu( menu, *args, text = text , values = values )
-            
+
             if type(return_value) == list:
                 values = return_value
-            
+
             elif return_value == 1:
                 done = True
-                
+
             else:
                 if values != []:
                     values.pop()
-                    
+
                 else:
                     done = True
-                
-                
-                
