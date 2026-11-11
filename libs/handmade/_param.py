@@ -54,7 +54,7 @@ def get_param( self , param = ""):
     cette fonction permet de recuperer les variables cité dans le fichier  param si presence de celle si
     """
     self.logger["param"].info("loading param")
-    data = get_data( self.param, [ "\n", ",,,", "###", ";;;" ] )
+    data = get_data( self.param, [ "\n", ":", ",", "|" ] )
     data = remove_list( data )
     co = [ data[ x ][ 0 ] for x in range( len( data ) ) if data[ x ] ]
     param = [ x[ 0 ] for x in self.params ]
@@ -70,17 +70,9 @@ def get_param( self , param = ""):
 
         #print(data[y],type(data[y][1]),self.params[param.index(x)][3] )
         self.logger["param"].debug(f"{x} : {data[y]} ")
-        if self.params[ param.index( x ) ][ 3 ] == "list" and type( data[ y] [ 1 ] ) != list:
-            setattr( self, x, [ data[ y ][ 1 ] ])
+        setattr( self, x, data[ y ][ 1 ] )
 
-        elif data[ y ][ 1 ] == "0" or data[ y ][ 1 ] == "1":
-            setattr( self, x, int( data[ y ][ 1 ] ) )
-
-        else:
-            setattr( self, x, data[ y ][ 1 ] )
-
-    self.sort_command()
-
+        self.sort_command()
 @export
 def write_param( self , param = ""):
     """
@@ -93,9 +85,9 @@ def write_param( self , param = ""):
         else:
             self.last_song = ""
 
-    data = [ [ x, str( getattr( self, x ) ) ] if type( getattr( self, x ) ) is int else [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] if x != "holders" ]
-    data += [ ["holders" ,[x[0] for x in self.commands] ] ]
-    data = join_list( data, [ "\n", ",,,", "###", ";;;" ] )
+    data = [ [ x, getattr( self , x ) ] for x in [ x[ 0 ] for x in self.params ] if x != "holders" ]
+    data += [ ["holders" ,[ x[0] for x in self.commands] ] ]
+    data = join_list( data, [ "\n", ":", ",", "|" ] )
     write_file( self.param, data )
     self.logger["param"].info("saved param")
 

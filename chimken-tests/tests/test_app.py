@@ -23,6 +23,7 @@ def known_bug(reason):
 
 # ---------------------------------------------------------------- startup / spec
 def test_registers_on_bus(app):
+    print( os.environ.get("DBUS_SESSION_BUS_ADDRESS" ))
     assert app.prop("Identity", ROOT_IFACE) == "ChimkenMuziks"
 
 
